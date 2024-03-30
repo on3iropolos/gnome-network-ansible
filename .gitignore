@@ -1,0 +1,7 @@
+.trunk
+*.retry
+*.scratch
+scratch
+debug.yml
+tmp/*
+!vault.yml*ansible_vault*
