@@ -49,3 +49,9 @@ Ensure Docker's bridge IP (`bip`) does not overlap with subnets of the host's ot
 Notes:
 - The contents of your `~/.aws` directory will be mounted within the container as `/root/.aws`.
 - Variables contained within the `ansible-ctrl.dockerfile` may need to be updated for your specific Mac M1 architecture.
+
+## Host Initialization
+
+For windows hosts, must run command: `choco install --package-parameters=/SSHServerFeature openssh` on the host to setup OpenSSH server.
+
+The Ansible container needs to have a variable set with `export SSH_PASSWORD="PASSWORD"`.

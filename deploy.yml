@@ -2,3 +2,7 @@
   become: true
   roles:
     - ansible-ctrl.init
+
+- hosts: windows_hosts
+  roles:
+    - template

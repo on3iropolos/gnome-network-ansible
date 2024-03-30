@@ -1,0 +1,4 @@
+- name: Create Ansible History File
+  win_file:
+    path: C:\\windows\\temp\\ansible_history
+    state: touch
