@@ -5,4 +5,4 @@
 
 - hosts: windows_hosts
   roles:
-    - template
+    - hyperv.init
