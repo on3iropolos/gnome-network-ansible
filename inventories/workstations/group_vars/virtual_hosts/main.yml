@@ -1,6 +1,6 @@
 ansible_connection: ssh
 ansible_port: 22
-ansible_user: centos
-ansible_become: true
-ansible_become_method: sudo
-ansible_ssh_private_key_file: /root/.ssh/ansible_use_aws_testing_ed25519
+ansible_user: root
+ansible_password: "{{ lookup('env', 'SSH_PASSWORD') }}"
+# ansible_become: true
+# ansible_become_method: sudo

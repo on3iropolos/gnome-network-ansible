@@ -3,6 +3,10 @@
   roles:
     - ansible-ctrl.init
 
+- hosts: virtual_hosts
+  become: true
+  roles:
+    - network.init
+
 - hosts: windows_hosts
   roles:
-    - hyperv.init
