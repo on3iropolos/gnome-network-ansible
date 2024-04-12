@@ -2,5 +2,4 @@ ansible_connection: ssh
 ansible_port: 22
 ansible_user: root
 ansible_password: "{{ lookup('env', 'SSH_PASSWORD') }}"
-# ansible_become: true
-# ansible_become_method: sudo
+ansible_ssh_common_args: -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null"

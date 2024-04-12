@@ -1,0 +1,63 @@
+- name: setup ramdisk for btrfs
+  lineinfile:
+    dest: /mnt/etc/mkinitcpio.conf
+    regexp: ^BINARIES
+    line: 'BINARIES=(btrfs)'
+  when: use_btrfs
+  notify: create_ramdisk
+
+# - name: configure modules
+#   lineinfile:
+#     dest: /mnt/etc/mkinitcpio.conf
+#     regexp: ^MODULES
+#     line: 'MODULES=(vmd)'
+
+# - name: configure kernel locations
+#   lineinfile:
+#     dest: /mnt/etc/mkinitcpio.conf
+#     regexp: ^BASEDIR
+#     line: 'BASEDIR="/boot/efi"'
+#   register: ramdisk2
+
+- name: run encryption items for ramdisk if needed
+  block:
+    - name: create random file for boot decryption
+      community.general.filesize:
+        path: /mnt/crypto_keyfile.bin
+        size: 2 MiB
+        source: /dev/urandom
+    - name: encrypt drive
+      community.crypto.luks_device:
+        device: "{{ root_part }}"
+        passphrase: "{{ encryption.password }}"
+        new_keyfile: /mnt/crypto_keyfile.bin
+    - name: setup ramdisk for disk encryption | systemd-boot
+      lineinfile:
+        dest: /mnt/etc/mkinitcpio.conf
+        regexp: ^HOOKS=
+        line: 'HOOKS=(base systemd autodetect modconf kms keyboard sd-vconsole sd-encrypt block filesystems fsck)'
+      when: bootloader == 'systemd-boot'
+    - name: setup ramdisk for disk encryption | grub
+      lineinfile:
+        dest: /mnt/etc/mkinitcpio.conf
+        regexp: ^HOOKS=
+        line: 'HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)'
+      when: bootloader == 'grub'
+    # - name: create crypttab.initramfs for systemd
+    #   lineinfile:
+    #     dest: /mnt/etc/crypttab.initramfs
+    #     # line: "cryptroot   /dev/mapper/cryptroot   /crypto_keyfile.bin"
+    #     line: "cryptroot   /dev/mapper/cryptroot   none"
+    #     create: true
+    #   register: ramdisk4
+    #   tags: test-run
+    - name: setup ramdisk for encryption file
+      lineinfile:
+        dest: /mnt/etc/mkinitcpio.conf
+        regexp: ^FILES=
+        line: 'FILES=(/crypto_keyfile.bin)'
+  notify: create_ramdisk
+  when: use_encryption
+
+- name: Flush handlers
+  meta: flush_handlers

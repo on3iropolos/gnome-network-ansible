@@ -1,0 +1,85 @@
+# Tasks to be executed by the role
+
+- name: set encryption and btrfs fact
+  set_fact:
+    use_encryption: "{{ encryption is defined and encryption.enabled }}"
+    use_btrfs: "{{ btrfs is defined and btrfs.enabled }}"
+    root_part: "{{ manual_partitions.root | default(install_drive + '2')}}"
+    boot_part: "{{ manual_partitions.boot | default(install_drive + '1')}}"
+    hostname: "{{ hostname | default(inventory_hostname | replace('_','-'))}}"
+  tags: always
+
+- name: Abort if the host is not booted from the Arch install media
+  fail:
+    msg: "This host is not booted from the Arch install media!"
+  when: ansible_nodename != 'archiso'
+
+- name: Synchronize clock via NTP
+  command: timedatectl set-ntp true
+
+- import_tasks: partitions.yaml
+  tags: partitions
+
+- import_tasks: encryption.yaml
+  tags: encryption
+  when: use_encryption
+
+- import_tasks: filesystem.yaml
+  tags: filesystem
+
+- import_tasks: btrfs.yaml
+  tags: btrfs
+  when: use_btrfs
+
+- name: Create mountpoint for boot volume
+  file:
+    path: "/mnt{{ boot_esp }}"
+    state: directory
+
+- name: Mount boot filesystem
+  mount:
+    path: "/mnt{{ boot_esp }}"
+    src: "{{ boot_part }}"
+    fstype: vfat
+    state: mounted
+
+- import_tasks: install.yaml
+  tags: install
+
+- name: Generate fstab file
+  shell: genfstab -U /mnt > /mnt/etc/fstab
+  tags: fstab
+
+- import_tasks: localization.yaml
+  tags: localization
+
+- name: Enable NetworkManger for connectivity at boot
+  command: arch-chroot /mnt systemctl enable NetworkManager
+  tags: network
+
+- name: Enable sshd
+  command: arch-chroot /mnt systemctl enable sshd
+  tags: ssh
+
+- import_tasks: hostname.yaml
+  tags: hostname
+
+- import_tasks: user.yaml
+  tags: user
+
+- import_tasks: ramdisk.yaml
+  tags: ramdisk
+  
+- import_tasks: systemd-boot.yml
+  when: bootloader == 'systemd-boot'
+  tags: systemd-boot
+
+- import_tasks: grub.yaml
+  when: bootloader == 'grub'
+  tags: grub
+
+- name: Reboot
+  reboot:
+    connect_timeout: 1
+    reboot_timeout: 1
+  failed_when: false

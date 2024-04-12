@@ -1,0 +1,44 @@
+# Install systemd-boot
+- name: install systemd-boot
+  command: arch-chroot /mnt bootctl install
+
+# Enable encryption in bootloader configuration
+- name: configure systemd-boot
+  lineinfile:
+    dest: /mnt{{ boot_esp }}/loader/loader.conf
+    regexp: "{{ item.regex }}"
+    line: "{{ item.line }}"
+  loop:
+    - { regex: "^default", line: "default arch.conf" }
+    - { regex: "^timeout", line: "timeout 4" }
+    - { regex: "^console-mode", line: "console-mode max" }
+    - { regex: "^editor", line: "editor no" }
+
+# # Configure systemd-boot for encrypted system
+# - name: Create systemd-boot entry for encrypted system
+#   copy:
+#     src: /mnt/usr/lib/systemd/boot/efi/systemd-bootx64.efi
+#     dest: "/mnt{{ boot_esp }}/EFI/systemd/systemd-bootx64.efi"
+#     mode: 0755
+
+# # Generate systemd-boot configuration
+# - name: Generate systemd-boot configuration
+#   command: arch-chroot /mnt bootctl update
+
+- name: Get UUID of root device
+  command: blkid -s UUID -o value {{ root_part }}
+  register: root_device_uuid
+  ignore_errors: yes
+
+- name: Configure systemd-boot entry for arch
+  lineinfile:
+    create: true
+    dest: /mnt{{ boot_esp }}/loader/entries/arch.conf
+    regexp: "{{ item.regex }}"
+    line: "{{ item.line }}"
+  loop:
+    - { regex: "^title", line: "title   Arch Linux" }
+    - { regex: "^linux", line: "linux   /vmlinuz-linux" }
+    - { regex: "^initrd", line: "initrd  /initramfs-linux.img" }
+    # - { regex: "^options", line: "options cryptdevice={{ root_part }}:cryptroot:allow-discards root=/dev/mapper/cryptroot rw" }
+    - { regex: "^options", line: "options rd.luks.name={{ root_device_uuid.stdout }}=root root=/dev/mapper/cryptroot" }

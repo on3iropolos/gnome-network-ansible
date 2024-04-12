@@ -1,0 +1,22 @@
+- name: Run pacstrap
+  # command: pacstrap /mnt base base-devel linux linux-firmware efibootmgr grub openssh sudo networkmanager btrfs-progs grub-btrfs os-prober
+  # command: pacstrap /mnt base linux linux-firmware systemd networkmanager openssh sudo btrfs-progs python reflector
+  command: pacstrap /mnt base base-devel linux linux-firmware efibootmgr grub openssh sudo networkmanager btrfs-progs grub-btrfs os-prober reflector
+  tags:
+    - pacstrap
+
+- name: Restrict reflector to only US mirrors
+  ansible.builtin.lineinfile:
+    insertafter: \# --country
+    line: --country "United States"
+    path: /mnt/etc/xdg/reflector/reflector.conf
+  tags:
+    - mirrors
+
+- name: install Intel microcode
+  command: arch-chroot /mnt pacman -S intel-ucode --noconfirm
+  when: ansible_processor[1].find('Intel') != -1
+
+- name: install AMD microcode
+  command: arch-chroot /mnt pacman -S amd-ucode --noconfirm
+  when: ansible_processor[1].find('AMD') != -1

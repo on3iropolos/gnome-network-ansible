@@ -8,50 +8,32 @@ This is the Gnome Network Ansible project in order to manage and deploy systems 
 
 In order to deploy the Ansible controller container, you need to install [Docker](https://www.docker.com/).
 
-### Linux networking
-
-For your containers to make egress from the docker network, you need `net.ipv4.ip_forward = 1`
-
-You can check the current status by running:
-```
-$ sysctl net.ipv4.ip_forward
-```
-
-If the return is `0`, edit `/etc/sysctl.conf`, and add this line:
-```
-net.ipv4.ip_forward=1
-```
-
-Then, load the changes by running:
-```
-$ sudo sysctl -p
-```
-
-Ensure Docker's bridge IP (`bip`) does not overlap with subnets of the host's other network interfaces. You can define the subnet docker uses by creating or editing `/etc/docker/daemon.json` and adding a `bip` entry like:
-```
-}
-  "bip": "10.240.0.1/24"
-}
-```
-
-
 ## Installation
 
-1. Run the appropriate script based on your operating system.
+1. Ensure your processor architecture `ARG GLIBC_ARCH` is set in `ansible-ctrl.dockerfile`.
+2. Run the appropriate script based on your operating system:
 
     - Mac/Lin: `bash install.sh`
     - Win: `powershell .\install.ps1`
 
-2. Connect to your docker: `docker exec -it $(docker ps -f name=ansible-ctrl -q) fish`
-3. Run the init ansible playbook: `ansible-playbook deploy.yml --ask-vault-pass` and enter the vault password to decrypt certficates.
-4. To add the environment ssh key to your session: `eval (ssh-agent -c)` then `ssh-add /root/.ssh/key_name` (use tab-tab to list all), etc.
-
-Notes:
-- The contents of your `~/.aws` directory will be mounted within the container as `/root/.aws`.
-- Variables contained within the `ansible-ctrl.dockerfile` may need to be updated for your specific Mac M1 architecture.
+3. Connect to your docker: `docker exec -it $(docker ps -f name=ansible-ctrl -q) fish`
 
 ## Host Initialization
 
-For windows hosts, must run command: `choco install --package-parameters=/SSHServerFeature openssh` on the host to setup OpenSSH server.
+1. Boot the host and run the following commands:
 
-The Ansible container needs to have a variable set with `export SSH_PASSWORD="PASSWORD"`.
+    - `passwd` (same as `SSH_PASSWORD`)
+    - `systemctl start sshd`
+    - `ip a`
+
+2. Update the the inventory `hosts.yml` file to include the IP address assigned by DHCP.
+
+## Inventory Deployment
+
+1. Set environment variables:
+
+    - `export SSH_PASSWORD="my value"`
+    - `export ENCRYPTION_PASSWORD="my value"`
+    - `export USER_PASSWORD="my value"`
+
+2. Run the ansible playbook: `ansible-playbook -i /data/inventories/workstations/ deploy.yml`
