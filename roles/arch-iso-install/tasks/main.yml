@@ -69,7 +69,11 @@
 
 - import_tasks: ramdisk.yaml
   tags: ramdisk
-  
+
+- import_tasks: refind.yml
+  when: bootloader == 'refind'
+  tags: refind
+
 - import_tasks: systemd-boot.yml
   when: bootloader == 'systemd-boot'
   tags: systemd-boot

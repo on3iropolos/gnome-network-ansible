@@ -1,9 +1,20 @@
 - name: Run pacstrap
-  # command: pacstrap /mnt base base-devel linux linux-firmware efibootmgr grub openssh sudo networkmanager btrfs-progs grub-btrfs os-prober
-  # command: pacstrap /mnt base linux linux-firmware systemd networkmanager openssh sudo btrfs-progs python reflector
+  command: pacstrap /mnt base linux linux-firmware systemd networkmanager openssh sudo btrfs-progs python reflector
+  tags:
+    - pacstrap
+  when: bootloader == 'systemd-boot'
+
+- name: Run pacstrap
+  command: pacstrap /mnt base base-devel linux linux-firmware efibootmgr openssh sudo networkmanager btrfs-progs os-prober reflector
+  tags:
+    - pacstrap
+  when: bootloader == 'refind'
+
+- name: Run pacstrap
   command: pacstrap /mnt base base-devel linux linux-firmware efibootmgr grub openssh sudo networkmanager btrfs-progs grub-btrfs os-prober reflector
   tags:
     - pacstrap
+  when: bootloader == 'grub'
 
 - name: Restrict reflector to only US mirrors
   ansible.builtin.lineinfile:

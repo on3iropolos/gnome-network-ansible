@@ -1,0 +1,16 @@
+- name: install refind
+  command: arch-chroot /mnt pacman -S refind --noconfirm
+
+- name: configure refind
+  command: arch-chroot /mnt refind-install --root
+
+# - name: configure refind_linux.conf
+#   ansible.builtin.replace:
+#     path: "/path/to/refind_linux.conf"
+#     regexp: "{{ item.regex }}"
+#     replace: "{{ item.line }}"
+#   loop:
+#     - { regex: '^"Boot with standard options"', line: '"Boot with standard options"  "archisodevice=UUID=4b2de300-c483-4484-8bb9-ac30dd1c0c95"' }
+#     - { regex: '^"Boot to single-user mode".*UUID=[a-zA-Z0-9\-]+', line: '"Boot to single-user mode"    "archisobasedir=arch archisodevice=UUID=4b2de300-c483-4484-8bb9-ac30dd1c0c95 single"' }
+
+# Note: I feel like I need to boot with grub, and then attempt to do refind-install to get the proper configurations, but even this I have problems.
