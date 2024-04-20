@@ -6,10 +6,9 @@
 - hosts: virtual_hosts
   become: true
   roles:
-    - arch-iso-install
-    # - network.init
-    # - wm.init
-    # - git.init
+    - role: arch-iso-install
+      ansible_user: root
+    - role: network
 
 # - hosts: windows_hosts
 #   roles:

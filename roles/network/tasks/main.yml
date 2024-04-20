@@ -1,0 +1,31 @@
+# Tasks to be executed by the role
+
+- name: Install network tools
+  ansible.builtin.package:
+    name:
+      - ethtool
+      - wpa_supplicant
+      - netctl
+      - dhcpcd
+      - networkmanager
+      - ntp
+    state: latest
+
+- name: Sync time to ntp server
+  command: ntpdate -u pool.ntp.org
+
+- name: Start & enable services
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop:
+    - systemd-timesyncd
+    - sshd
+    - NetworkManager
+
+- name: Stop & disable networkd
+  systemd:
+    name: systemd-networkd
+    state: stopped
+    enabled: no

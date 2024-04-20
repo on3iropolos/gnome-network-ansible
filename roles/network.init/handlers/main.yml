@@ -1,4 +1,0 @@
-# Handler tasks to be executed conditionally
-
-- name: restart neworkmanager
-  ansible.builtin.service: name=networkmanager.service state=restarted
