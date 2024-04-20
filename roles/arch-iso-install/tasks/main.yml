@@ -69,10 +69,6 @@
 
 - import_tasks: ramdisk.yaml
   tags: ramdisk
-  
-- import_tasks: systemd-boot.yml
-  when: bootloader == 'systemd-boot'
-  tags: systemd-boot
 
 - import_tasks: grub.yaml
   when: bootloader == 'grub'
