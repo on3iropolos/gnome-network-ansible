@@ -1,13 +1,61 @@
-# Role: [Your Role Name Here]
+# Role Name: `[ROLE_NAME_HERE]`
 
-This is a template role that can be used as a starting point for creating your own roles.
+## Description
 
-## How to Use
+[A brief description of what this role does. What is its purpose? What systems or services does it manage or configure?]
 
-1. Copy this directory to your roles directory.
-2. Rename the directory to reflect your desired role name.
-3. Edit the files within the directory to customize the role for your specific needs.
-    - Update `defaults/main.yml` with your default variables.
-    - Modify `tasks/main.yml` to define the tasks you want the role to perform.
-    - Optionally add conditional handler tasks in `handlers/main.yml`.
-4. Run `ansible-playbook` with your playbook file referencing your newly created role.
+## Requirements
+
+[List any prerequisites for this role to function correctly.]
+
+-   Ansible version: `[e.g., 2.9+]`
+-   Operating System: `[e.g., CentOS 7, Debian 10, Arch Linux]`
+-   Other roles: `[e.g., `common`, `security` (if this role depends on them)]`
+-   Collections: `[e.g., `community.general` (if specific collections are needed)]`
+-   Software: `[e.g., `python3-pip` must be installed on the target host]`
+
+## Role Variables
+
+List of variables that can be set to customize the role's behavior. Variables defined in `defaults/main.yml` should be listed here with their default values.
+
+| Variable                 | Default Value | Description                                                                 |
+| ------------------------ | ------------- | --------------------------------------------------------------------------- |
+| `role_name_variable_1` | `true`        | Example boolean variable. Controls [feature/behavior].                      |
+| `role_name_package_name` | `nginx`       | The name of the package to install.                                         |
+| `role_name_config_path`  | `/etc/app/`   | Path to the application configuration directory.                            |
+| `role_name_user_list`    | `[]`          | A list of users to create or manage. Each item could be a username or a dict. |
+
+*(For more complex variable structures like lists of dictionaries, provide an example of the expected structure.)*
+
+## Dependencies
+
+A list of other roles (if any) that this role depends on. These roles will be executed before this one.
+
+-   `[dependency_role_name_1]`
+-   `[dependency_role_name_2]` (with specific parameters if needed, e.g., `role: dependency_role_name_2, some_param: value`)
+
+*(If no dependencies, state "None".)*
+
+## Example Playbook
+
+Including an example of how to use the role in a playbook:
+
+```yaml
+- hosts: your_target_servers
+  become: true
+  roles:
+    - role: [ROLE_NAME_HERE]
+      # Optionally override default variables here
+      # role_name_variable_1: false
+      # role_name_package_name: "apache2"
+```
+
+## License
+
+[Specify the license for this role, or state that it falls under the main project license, e.g., "See LICENSE file in the root of the repository." ]
+
+## Author Information
+
+[Your Name or Organization]
+[Contact Email or Link to Profile (Optional)]
+```
