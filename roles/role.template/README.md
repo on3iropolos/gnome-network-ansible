@@ -4,6 +4,21 @@
 
 [A brief description of what this role does. What is its purpose? What systems or services does it manage or configure?]
 
+Below is a placeholder for a Mermaid diagram. When creating a new role from this template, replace this with a diagram relevant to the role's functionality. This helps visualize the role's process or architecture.
+
+```mermaid
+graph TD
+    A[Start: Role Execution] --> B(Define Parameters/Variables);
+    B --> C{Perform Prerequisite Checks?};
+    C -- Yes --> D[Execute Prerequisite Tasks];
+    C -- No --> E[Execute Main Tasks];
+    D --> E;
+    E --> F{Any Post-Execution Actions?};
+    F -- Yes --> G[Execute Post-Execution Tasks];
+    F -- No --> H[End: Role Completed];
+    G --> H;
+```
+
 ## Requirements
 
 [List any prerequisites for this role to function correctly.]

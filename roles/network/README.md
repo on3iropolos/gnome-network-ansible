@@ -4,7 +4,19 @@
 
 This role is responsible for establishing the network configuration of a target host. Its specific tasks might include configuring network interfaces, setting up DNS, managing hostnames, or configuring network services, depending on its implementation in `tasks/main.yml`.
 
-*(Note: The current implementation in `tasks/main.yml` should be reviewed to accurately detail the specific actions this role performs.)*
+A general representation of its tasks:
+
+```mermaid
+graph TD
+    A[Start: Role Execution] --> B{Identify Network Interfaces};
+    B --> C[Configure IP Settings (Static/DHCP)];
+    C --> D[Set Hostname];
+    D --> E[Configure DNS Servers];
+    E --> F[Apply Network Changes];
+    F --> G[End: Network Configured];
+```
+
+*(Note: The current implementation in `tasks/main.yml` should be reviewed to accurately detail the specific actions this role performs and update the diagram if necessary.)*
 
 ## Requirements
 

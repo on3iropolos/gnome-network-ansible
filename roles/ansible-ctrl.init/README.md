@@ -4,6 +4,16 @@
 
 This role initializes the Ansible controller itself. It ensures that the necessary directory structure (e.g., `/etc/ansible`) exists and copies the base `ansible.cfg` file into place. This role is intended to be run on the Ansible controller node, typically within the Docker container defined by `ansible-ctrl.dockerfile`.
 
+The initialization process is as follows:
+
+```mermaid
+graph TD
+    A[Start: Role Execution] --> B{Target: Ansible Controller};
+    B --> C[Ensure /etc/ansible directory exists];
+    C --> D[Copy ansible.cfg to /etc/ansible/ansible.cfg];
+    D --> E[End: Controller Initialized];
+```
+
 ## Requirements
 
 -   Ansible version: `2.9+` (or as per `ansible-ctrl.dockerfile`)
