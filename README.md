@@ -14,7 +14,20 @@ This is the Gnome Network Ansible project designed to automate the configuration
 
 ## Repository Structure
 
-This repository follows a standard Ansible project structure:
+This repository follows a standard Ansible project structure. The following diagram illustrates the general workflow:
+
+```mermaid
+graph TD
+    A[Start] --> B{Define Inventory};
+    B --> C[Select Roles/Playbooks];
+    C --> D[Run Ansible Playbook];
+    D --> E{Review Changes};
+    E -- Approve --> F[Apply Configuration];
+    E -- Reject --> C;
+    F --> G[End];
+```
+
+The project structure is as follows:
 
 - **`ansible-ctrl.dockerfile`**: Dockerfile to build the Ansible controller container.
 - **`deploy.yml`**: The main Ansible playbook for deploying configurations to hosts.

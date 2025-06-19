@@ -16,6 +16,31 @@ Special thanks to the following repositories for inspiration:
 -   [33Fraise33/desktop-ansible](https://github.com/33Fraise33/desktop-ansible/tree/main)
 -   [jsf9k/ansible-arch-install](https://github.com/jsf9k/ansible-arch-install)
 
+The overall installation flow is as follows:
+
+```mermaid
+graph TD
+    A[Start: Target Booted in Arch ISO] --> B(Define Target Drive);
+    B --> C{Encryption Enabled?};
+    C -- Yes --> D[Setup LUKS Encryption];
+    C -- No --> E[Partition Disk];
+    D --> E;
+    E --> F{BTRFS Enabled?};
+    F -- Yes --> G[Create BTRFS Filesystem & Subvolumes];
+    F -- No --> H[Create ext4 Filesystem];
+    G --> I[Mount Filesystems];
+    H --> I;
+    I --> J[Pacstrap Base System];
+    J --> K[Install GRUB Bootloader];
+    K --> L[Configure System: Timezone, Locale, Hostname];
+    L --> M[Create User & Set Password];
+    M --> N[Install User SSH Key];
+    N --> O[Generate fstab];
+    O --> P[Chroot & Finalize GRUB];
+    P --> Q[Unmount & Reboot];
+    Q --> R[End: Arch Linux Installed];
+```
+
 ## Requirements
 
 -   Ansible version: `2.9+` (or as per `ansible-ctrl.dockerfile`)
