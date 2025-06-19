@@ -5,6 +5,22 @@
 
 - hosts: virtual_hosts
   become: true
+  pre_tasks:
+    - name: Check for internet connectivity
+      ansible.builtin.uri:
+        url: "https://www.google.com"
+        method: HEAD
+        timeout: 5
+      register: internet_check
+      ignore_errors: true
+
+    - name: Fail if no internet connection and internet-dependent roles are to be run
+      ansible.builtin.fail:
+        msg: "Internet connection is required but not available. Checked by trying to reach google.com."
+      when:
+        - internet_check.status == -1 or internet_check.status >= 400
+        # Add conditions here if specific roles/tags requiring internet are targeted
+        # For now, this play (virtual_hosts) implies internet is needed due to its roles.
   roles:
     - role: arch-iso-install
       when: ansible_nodename == 'archiso'
