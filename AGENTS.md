@@ -23,13 +23,17 @@ This document provides specific instructions and reminders for AI agents working
 
 ## Testing and Linting
 
-1.  **`ansible-lint`:**
-    *   The `ansible-ctrl.dockerfile` includes `ansible-lint`.
-    *   Before submitting changes to Ansible playbooks, roles, or related YAML files, you **SHOULD** make a best effort to run `ansible-lint .` from the repository root within the Docker container environment (or a compatible local environment).
-    *   Address any critical errors or warnings reported by `ansible-lint` that are relevant to your changes. If unsure, ask the user.
+1.  **`ansible-lint` (Automated CI Check):**
+    *   This repository uses `ansible-lint` for static code analysis.
+    *   A GitHub Actions workflow (`.github/workflows/ansible-lint.yml`) automatically runs `ansible-lint .` on all pull requests targeting the `main` branch.
+    *   **Your changes MUST pass these automated linting checks.** If the CI check fails, you need to address the reported issues and push the corrections.
+    *   The `ansible-ctrl.dockerfile` includes `ansible-lint`, which you can use for local testing.
+    *   It is **STRONGLY RECOMMENDED** that you run `ansible-lint .` locally from the repository root (ideally within the Docker container environment or a compatible local setup) before submitting changes. This helps catch issues early.
+    *   Address any critical errors or warnings reported by `ansible-lint` that are relevant to your changes. If unsure about a specific linting error in the context of your task, ask the user.
     *   *Note: Specific linting rules and configurations for `ansible-lint` may be added in the future (e.g., via an `.ansible-lint` file).*
 2.  **Manual Testing:**
-    *   While automated testing infrastructure is not yet in place, consider the impact of your changes and how they might be manually tested. If you have suggestions for manual testing steps for your changes, please include them in your commit message or PR description.
+    *   Automated linting is in place. However, full playbook execution or integration testing is not yet automated.
+    *   Always consider the impact of your changes and how they might be manually tested. If you have suggestions for manual testing steps for your changes, please include them in your commit message or PR description.
 
 ## Interaction
 
@@ -63,10 +67,13 @@ graph TD
     E --> F[Update Textual Documentation];
     F --> G[Commit Changes];
     G --> H[Submit Pull Request];
+    H --> CI{Automated CI Checks (e.g., ansible-lint)};
+    CI -- Pass --> J[Review & Merge];
+    CI -- Fail --> G; // Developer addresses feedback & commits fixes
     B -- No --> I[Update Code/Configuration];
     I --> G;
     D -- No --> F;
-    H --> J[End];
+    J --> K[End];
 ```
 
 Thank you for your assistance in maintaining and improving this project!

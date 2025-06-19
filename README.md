@@ -44,6 +44,9 @@ The project structure is as follows:
     - **`roles/role.template/`**: A template directory for creating new roles, ensuring consistency in structure and documentation.
 - **`README.md`**: This file, providing an overview and instructions for the project.
 - **`AGENTS.md`**: (To be created) Provides guidelines for AI agents working with this repository.
+- **`.github/`**: Contains GitHub specific files, such as workflows.
+    - **`workflows/`**: Houses CI/CD workflows.
+        - **`ansible-lint.yml`**: GitHub Actions workflow to automatically lint Ansible code.
 - **`LICENSE`**: Project license information.
 - **`.gitignore`**: Specifies intentionally untracked files that Git should ignore.
 
@@ -201,11 +204,13 @@ Use labels to categorize issues and pull requests. This helps in filtering and m
 
 ## Testing
 
-- **Local Testing:** Before submitting a PR, test your changes thoroughly in a local environment that mirrors the target systems as closely as possible.
+- **Automated Linting:** This project uses `ansible-lint` for static code analysis. An automated GitHub Actions workflow runs `ansible-lint .` on every pull request targeting the `main` branch. Pull requests must pass these linting checks before they can be merged.
+- **Local Linting (Recommended):** It is highly recommended to run `ansible-lint .` locally before pushing changes to catch issues early. You can use the provided Docker environment (`ansible-ctrl.dockerfile`) or a local Python environment with `ansible` and `ansible-lint` installed.
+- **Manual Testing:** Beyond linting, test your changes thoroughly in a local environment that mirrors the target systems as closely as possible.
 - **Idempotency:** Ensure your roles and tasks are idempotent. Running them multiple times should not result in unintended changes to the system.
-- **Linting:** (Future) We plan to integrate `ansible-lint`. Once configured, ensure your changes pass all linting checks.
 
 ## Review Process
+
 
 - **Request Reviews:** Once your PR is ready, request reviews from relevant team members or designated reviewers. If unsure, tag the project maintainers.
 - **Address Feedback:** Respond to review comments and make necessary changes. Push updates to the same branch.
