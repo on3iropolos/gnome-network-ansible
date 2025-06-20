@@ -29,9 +29,7 @@ graph TD
 
 The project structure is as follows:
 
-- **`ansible-ctrl.dockerfile`**: Dockerfile to build the Ansible controller container.
 - **`deploy.yml`**: The main Ansible playbook for deploying configurations to hosts.
-- **`install.ps1` / `install.sh`**: Scripts for installing and setting up the Ansible controller.
 - **`inventories/`**: Contains inventory files that define the hosts and groups managed by Ansible.
     - **`inventories/homelab/`**: Example inventory for a homelab setup.
     - **`inventories/workstations/`**: Example inventory for workstation setups.
@@ -59,8 +57,6 @@ To work with this project, you will need [Docker](https://www.docker.com/) insta
 ## Local Development Environment using Docker
 
 This project includes a Dockerized environment to provide a consistent and isolated space for Ansible development and execution. It simplifies setup and ensures all contributors use the same versions of Ansible and related tools.
-
-The old `ansible-ctrl.dockerfile` and associated `install.sh`/`install.ps1` scripts are still present but are superseded by the `Dockerfile` and `docker-compose.yml` for local development.
 
 ### Setup and Usage
 
@@ -127,17 +123,6 @@ The old `ansible-ctrl.dockerfile` and associated `install.sh`/`install.ps1` scri
 Once the Docker image is built (`docker compose build`), the Ansible tools (Ansible, Ansible Lint, Git, etc.) are installed within the image. This means you can use these tools inside the container to work on your playbooks (e.g., editing, linting, running playbooks against locally accessible hosts or VMs) without an active internet connection.
 
 However, any Ansible tasks that inherently require internet access (e.g., downloading packages with `apt`/`yum`/`pacman`, cloning git repositories from the internet, using `uri` to fetch remote files) will naturally fail if the container cannot access the internet. The pre-flight internet check mentioned above aims to catch this early for known roles.
-
-## Original Installation (Legacy - for reference if needed)
-
-1. Ensure your processor architecture `ARG GLIBC_ARCH` is set in `ansible-ctrl.dockerfile`.
-2. Run the appropriate script based on your operating system:
-
-    - Mac/Lin: `bash install.sh`
-    - Win: `powershell .\install.ps1`
-
-3. Connect to your docker: `docker exec -it $(docker ps -f name=ansible-ctrl -q) fish`
-
 
 ## Host Initialization
 
@@ -278,7 +263,7 @@ Use labels to categorize issues and pull requests. This helps in filtering and m
 ## Testing
 
 - **Automated Linting:** This project uses `ansible-lint` for static code analysis. An automated GitHub Actions workflow runs `ansible-lint .` on every pull request targeting the `main` branch. Pull requests must pass these linting checks before they can be merged.
-- **Local Linting (Recommended):** It is highly recommended to run `ansible-lint .` locally before pushing changes to catch issues early. You can use the provided Docker environment (`ansible-ctrl.dockerfile`) or a local Python environment with `ansible` and `ansible-lint` installed.
+- **Local Linting (Recommended):** It is highly recommended to run `ansible-lint .` locally before pushing changes to catch issues early. You can use the provided Docker environment (via `Dockerfile` and `docker-compose.yml`) or a local Python environment with `ansible` and `ansible-lint` installed.
 - **Manual Testing:** Beyond linting, test your changes thoroughly in a local environment that mirrors the target systems as closely as possible.
 - **Idempotency:** Ensure your roles and tasks are idempotent. Running them multiple times should not result in unintended changes to the system.
 
