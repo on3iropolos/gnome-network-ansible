@@ -54,9 +54,81 @@ The project structure is as follows:
 
 ## Pre-requisites
 
-In order to deploy the Ansible controller container, you need to install [Docker](https://www.docker.com/).
+To work with this project, you will need [Docker](https://www.docker.com/) installed. Modern Docker installations include `docker compose` (note the space, not a hyphen), which is used by this project.
 
-## Installation
+## Local Development Environment using Docker
+
+This project includes a Dockerized environment to provide a consistent and isolated space for Ansible development and execution. It simplifies setup and ensures all contributors use the same versions of Ansible and related tools.
+
+The old `ansible-ctrl.dockerfile` and associated `install.sh`/`install.ps1` scripts are still present but are superseded by the `Dockerfile` and `docker-compose.yml` for local development.
+
+### Setup and Usage
+
+1.  **Build the Docker Image:**
+    Open your terminal in the root of this project and run:
+    ```bash
+    sudo docker compose build
+    ```
+    This command builds the Docker image based on the `Dockerfile`. You only need to run this initially or when the `Dockerfile` changes. Adding `--no-cache` is recommended if you suspect caching issues or want a fresh build.
+
+2.  **Start the Development Container:**
+    To start the container in the background (detached mode):
+    ```bash
+    sudo docker compose up -d
+    ```
+    Your project directory is mounted into `/data` inside the container.
+
+3.  **Accessing the Container Shell:**
+    To get an interactive shell (bash by default) inside the running container:
+    ```bash
+    sudo docker compose exec ansible-dev bash
+    ```
+    You can also use `fish` if you prefer:
+    ```bash
+    sudo docker compose exec ansible-dev fish
+    ```
+
+4.  **Running Ansible Commands:**
+    Once inside the container's shell, you can run Ansible commands as usual. The working directory will be `/data`, which is your project root.
+    ```bash
+    # Example: Lint a playbook
+    ansible-lint deploy.yml
+
+    # Example: Run a playbook (ensure your inventory is set up and SSH_PASSWORD etc. are exported if needed)
+    # export SSH_PASSWORD="your_ssh_password"
+    ansible-playbook -i inventories/workstations/hosts.yml deploy.yml
+    ```
+    Alternatively, you can run commands directly without entering the shell:
+    ```bash
+    sudo docker compose exec ansible-dev ansible-lint deploy.yml
+    sudo docker compose exec ansible-dev ansible-playbook -i inventories/workstations/hosts.yml deploy.yml
+    ```
+
+5.  **Volume Mounts:**
+    The `docker-compose.yml` file configures the following important volume mounts:
+    *   `.:/data`: Your entire project directory is mapped to `/data` in the container. Changes made locally are reflected inside the container, and vice-versa.
+    *   `~/.ssh:/root/.ssh:ro`: Your local SSH keys (from `~/.ssh`) are mounted read-only into the container. This allows Ansible running inside the container to connect to your managed nodes.
+    *   `~/.gitconfig:/root/.gitconfig:ro`: Your local Git configuration is mounted read-only.
+
+6.  **Internet Connectivity Check:**
+    Playbooks that include roles known to require internet access (like `arch-iso-install` or `network` for package installation) have a pre-flight check. This check attempts to connect to `google.com`. If it fails, the playbook will halt before running internet-dependent tasks. This is to ensure a better experience when working offline or with intermittent connectivity.
+
+7.  **Stopping the Container:**
+    When you're done, you can stop the container:
+    ```bash
+    sudo docker compose down
+    ```
+    If you just want to stop it without removing it (so it starts faster next time):
+    ```bash
+    sudo docker compose stop
+    ```
+
+### Offline Usage
+Once the Docker image is built (`docker compose build`), the Ansible tools (Ansible, Ansible Lint, Git, etc.) are installed within the image. This means you can use these tools inside the container to work on your playbooks (e.g., editing, linting, running playbooks against locally accessible hosts or VMs) without an active internet connection.
+
+However, any Ansible tasks that inherently require internet access (e.g., downloading packages with `apt`/`yum`/`pacman`, cloning git repositories from the internet, using `uri` to fetch remote files) will naturally fail if the container cannot access the internet. The pre-flight internet check mentioned above aims to catch this early for known roles.
+
+## Original Installation (Legacy - for reference if needed)
 
 1. Ensure your processor architecture `ARG GLIBC_ARCH` is set in `ansible-ctrl.dockerfile`.
 2. Run the appropriate script based on your operating system:
@@ -65,6 +137,7 @@ In order to deploy the Ansible controller container, you need to install [Docker
     - Win: `powershell .\install.ps1`
 
 3. Connect to your docker: `docker exec -it $(docker ps -f name=ansible-ctrl -q) fish`
+
 
 ## Host Initialization
 

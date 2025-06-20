@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  ansible-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # You can specify GLIBC_ARCH if building on a different architecture, e.g., aarch64
+        # GLIBC_ARCH: aarch64
+        GLIBC_ARCH: x86_64
+    volumes:
+      # Mount the current project directory to /data in the container
+      - .:/data
+      # Mount user's SSH keys for Ansible to connect to managed nodes
+      # Important: This assumes your SSH keys are in the default ~/.ssh location
+      # Adjust the host path if your keys are elsewhere.
+      - ~/.ssh:/root/.ssh:ro
+      # Mount user's Git configuration
+      - ~/.gitconfig:/root/.gitconfig:ro
+      # Persist bash/fish history if desired (optional)
+      # You might need to create these files on the host first
+      # - ~/.ansible_dev_bash_history:/root/.bash_history
+      # - ~/.ansible_dev_fish_history:/root/.local/share/fish/fish_history
+    stdin_open: true # Keeps STDIN open even if not attached (-i)
+    tty: true        # Allocates a pseudo-TTY (-t)
+    environment:
+      # Pass the host user's UID and GID to handle file permissions correctly
+      # This is particularly useful if the container creates files in the mounted /data volume.
+      # The entrypoint script in the container would need to handle this.
+      # For now, we'll keep it simple and rely on default root user inside,
+      # but this is a common pattern for more advanced setups.
+      # HOST_USER_ID: "${UID:-1000}"
+      # HOST_GROUP_ID: "${GID:-1000}"
+      ANSIBLE_CONFIG: /data/ansible.cfg # Example if you have a project-specific ansible.cfg
+    # If you need to expose ports (e.g., if running a service that Ansible manages and want to test it locally)
+    # ports:
+    #   - "8080:80"
+    working_dir: /data
+    # The default CMD is /bin/bash from the Dockerfile.
+    # You can override it here if needed, e.g., to start with fish shell:
+    # command: /usr/bin/fish
