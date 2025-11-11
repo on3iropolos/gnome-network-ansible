@@ -37,7 +37,13 @@
 
 - name: Determine if running in a container
   ansible.builtin.set_fact:
-    is_container: "{{ dockerenv_check.stat.exists or container_env | length > 0 or podman_check.stat.exists or (cgroup_check.stat.exists and 'lxc' in (cgroup_content.content | b64decode)) }}"
+    is_container: >-
+      {{
+        dockerenv_check.stat.exists or
+        container_env | length > 0 or
+        podman_check.stat.exists or
+        (cgroup_check.stat.exists and 'lxc' in (cgroup_content.content | b64decode))
+      }}
 
 - name: Determine container runtime
   ansible.builtin.set_fact:

@@ -1,0 +1,36 @@
+# Default variables used throughout the role
+
+arch_iso_install_install_drive: /dev/sda
+
+arch_iso_install_encryption:
+  enabled: true
+  password: "{{ lookup('env', 'ENCRYPTION_PASSWORD') }}"
+
+arch_iso_install_btrfs:
+  enabled: true
+  subvols:
+    - sub: '@snapshots'
+      path: '.snapshots'
+    - sub: '@home'
+      path: 'home'
+    - sub: '@log'
+      path: 'var/log'
+    - sub: '@cache'
+      path: 'var/cache'
+    - sub: '@tmp'
+      path: 'var/tmp'
+    - sub: '@data'
+      path: 'data'
+      disable_cow: true
+
+arch_iso_install_timezone: America/Chicago
+
+arch_iso_install_user:
+  name: on3ir
+  password: "{{ lookup('env', 'USER_PASSWORD') }}"
+  full: 'on3iropolos'
+  email: on3iropolos@gmail.com
+  pub_key_location: "/root/.ssh/on3iropolos-ssh.pub"
+
+arch_iso_install_bootloader: grub
+arch_iso_install_boot_esp: /boot/efi

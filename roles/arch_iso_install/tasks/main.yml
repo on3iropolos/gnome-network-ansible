@@ -1,0 +1,95 @@
+# Tasks to be executed by the role
+
+- name: Set encryption and btrfs fact
+  ansible.builtin.set_fact:
+    use_encryption: "{{ arch_iso_install_encryption is defined and arch_iso_install_encryption.enabled }}"
+    use_btrfs: "{{ arch_iso_install_btrfs is defined and arch_iso_install_btrfs.enabled }}"
+    root_part: "{{ manual_partitions.root | default(arch_iso_install_install_drive + '2') }}"
+    boot_part: "{{ manual_partitions.boot | default(arch_iso_install_install_drive + '1') }}"
+    hostname: "{{ hostname | default(inventory_hostname | replace('_', '-')) }}"
+  tags: always
+
+- name: Abort if the host is not booted from the Arch install media
+  ansible.builtin.fail:
+    msg: "This host is not booted from the Arch install media!"
+  when: ansible_nodename != 'archiso'
+
+- name: Synchronize clock via NTP
+  ansible.builtin.command: timedatectl set-ntp true
+  changed_when: true
+
+- name: Partition disk
+  ansible.builtin.import_tasks: partitions.yaml
+  tags: partitions
+
+- name: Setup encryption
+  ansible.builtin.import_tasks: encryption.yaml
+  tags: encryption
+  when: use_encryption
+
+- name: Create filesystem
+  ansible.builtin.import_tasks: filesystem.yaml
+  tags: filesystem
+
+- name: Configure btrfs
+  ansible.builtin.import_tasks: btrfs.yaml
+  tags: btrfs
+  when: use_btrfs
+
+- name: Create mountpoint for boot volume
+  ansible.builtin.file:
+    path: "/mnt{{ arch_iso_install_boot_esp }}"
+    state: directory
+
+- name: Mount boot filesystem
+  ansible.posix.mount:
+    path: "/mnt{{ arch_iso_install_boot_esp }}"
+    src: "{{ boot_part }}"
+    fstype: vfat
+    state: mounted
+
+- name: Install base system
+  ansible.builtin.import_tasks: install.yaml
+  tags: install
+
+- name: Generate fstab file
+  ansible.builtin.shell: genfstab -U /mnt > /mnt/etc/fstab
+  changed_when: true
+  tags: fstab
+
+- name: Configure localization
+  ansible.builtin.import_tasks: localization.yaml
+  tags: localization
+
+- name: Enable NetworkManager for connectivity at boot
+  ansible.builtin.command: arch-chroot /mnt systemctl enable NetworkManager
+  changed_when: true
+  tags: network
+
+- name: Enable sshd
+  ansible.builtin.command: arch-chroot /mnt systemctl enable sshd
+  changed_when: true
+  tags: ssh
+
+- name: Configure hostname
+  ansible.builtin.import_tasks: hostname.yaml
+  tags: hostname
+
+- name: Create user
+  ansible.builtin.import_tasks: user.yaml
+  tags: user
+
+- name: Configure ramdisk
+  ansible.builtin.import_tasks: ramdisk.yaml
+  tags: ramdisk
+
+- name: Install and configure GRUB
+  ansible.builtin.import_tasks: grub.yaml
+  when: arch_iso_install_bootloader == 'grub'
+  tags: grub
+
+- name: Reboot
+  ansible.builtin.reboot:
+    connect_timeout: 1
+    reboot_timeout: 1
+  failed_when: false

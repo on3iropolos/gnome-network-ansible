@@ -1,0 +1,16 @@
+- name: Set hostname
+  ansible.builtin.lineinfile:
+    line: "{{ hostname }}"
+    path: /mnt/etc/hostname
+    owner: root
+    group: root
+    mode: "0644"
+    create: true
+
+- name: Set hostname in hosts file
+  ansible.builtin.template:
+    src: hosts.j2
+    dest: /mnt/etc/hosts
+    owner: root
+    group: root
+    mode: "0644"

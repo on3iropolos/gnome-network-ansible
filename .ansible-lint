@@ -1,0 +1,46 @@
+---
+# Ansible-lint configuration file for gnome-network-ansible repository
+# See https://ansible-lint.readthedocs.io/en/latest/configuring.html
+
+# Exclude paths
+exclude_paths:
+  - .git/
+  - .github/
+  - .vscode/
+  - .agent/
+  - inventories/
+  - roles/*/molecule/
+  - roles/*/tests/
+
+# Enforced rules - these will cause failures
+# Use 'skip_list' to skip specific rules if needed
+skip_list: []
+
+# Warn only for these rules (will not fail CI)
+warn_list:
+  - experimental  # Experimental rules
+  - role-name     # Allow flexible role naming
+
+# Enable offline mode for faster linting in CI
+offline: false
+
+# Profile to use (min, basic, moderate, safety, shared, production)
+# 'production' is strictest, 'min' is most lenient
+profile: moderate
+
+# Specify Ansible version for rules compatibility
+# Leave empty to auto-detect from ansible-core version
+# ansible_version: "2.14"
+
+# Display rule names in output
+display_relative_path: true
+
+# Enforce that handlers use 'listen' instead of 'name'
+# when possible for better modularity
+loop_var_prefix: loop_
+
+# Task naming
+task_name_prefix: "{stem} | "
+
+# Configure how to handle errors
+strict: false

@@ -12,7 +12,7 @@
       - dhcpcd
       - networkmanager
       - ntp
-    state: latest
+    state: present
 
 - name: Enable and start systemd-timesyncd (non-container)
   ansible.builtin.systemd:

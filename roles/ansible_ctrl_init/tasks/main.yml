@@ -1,0 +1,11 @@
+- name: Create /etc/ansible directory
+  ansible.builtin.file:
+    path: /etc/ansible
+    state: directory
+    mode: "0755"
+
+- name: Ensure ansible is configured
+  ansible.builtin.copy:
+    src: ansible.cfg
+    dest: /etc/ansible/ansible.cfg
+    mode: "0600"
