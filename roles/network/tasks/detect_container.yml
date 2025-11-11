@@ -1,0 +1,57 @@
+---
+# Common task file to detect if running in a container environment
+# Include this file in your role's tasks/main.yml to set the is_container fact
+#
+# Usage:
+#   - name: Detect container environment
+#     ansible.builtin.include_tasks: ../../common_tasks/detect_container.yml
+#
+# Sets the following facts:
+#   - is_container: true if running in a container, false otherwise
+#   - container_runtime: 'docker', 'podman', 'lxc', or 'unknown' if in a container
+
+- name: Check for Docker environment
+  ansible.builtin.stat:
+    path: /.dockerenv
+  register: dockerenv_check
+
+- name: Check for container environment variable
+  ansible.builtin.set_fact:
+    container_env: "{{ lookup('env', 'container') }}"
+
+- name: Check for Podman environment
+  ansible.builtin.stat:
+    path: /run/.containerenv
+  register: podman_check
+
+- name: Check for LXC environment
+  ansible.builtin.stat:
+    path: /proc/1/cgroup
+  register: cgroup_check
+
+- name: Read cgroup to detect LXC
+  ansible.builtin.slurp:
+    path: /proc/1/cgroup
+  register: cgroup_content
+  when: cgroup_check.stat.exists
+
+- name: Determine if running in a container
+  ansible.builtin.set_fact:
+    is_container: "{{ dockerenv_check.stat.exists or container_env | length > 0 or podman_check.stat.exists or (cgroup_check.stat.exists and 'lxc' in (cgroup_content.content | b64decode)) }}"
+
+- name: Determine container runtime
+  ansible.builtin.set_fact:
+    container_runtime: |-
+      {% if dockerenv_check.stat.exists or container_env == 'docker' %}docker
+      {% elif podman_check.stat.exists or container_env == 'podman' %}podman
+      {% elif cgroup_check.stat.exists and 'lxc' in (cgroup_content.content | b64decode) %}lxc
+      {% elif is_container %}unknown
+      {% else %}none
+      {% endif %}
+
+- name: Display container detection results
+  ansible.builtin.debug:
+    msg:
+      - "Container detected: {{ is_container }}"
+      - "Container runtime: {{ container_runtime }}"
+  when: is_container | bool

@@ -30,6 +30,7 @@ RUN set -e \
         wget \
         git \
         openssh-client \
+        rsync \
         py3-pip \
         py3-dnspython \
         py3-jmespath \
