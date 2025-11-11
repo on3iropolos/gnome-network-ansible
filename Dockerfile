@@ -31,6 +31,7 @@ RUN set -e \
         wget \
         git \
         openssh-client \
+        sshpass \
         rsync \
         py3-pip \
         py3-dnspython \
