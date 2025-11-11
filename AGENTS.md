@@ -9,6 +9,26 @@ This document provides specific instructions and reminders for AI agents working
 3.  **Idempotency is Key:** All Ansible roles and tasks you create or modify must be idempotent.
 4.  **Clarity in Commits:** When submitting changes, use clear and descriptive commit messages. If your work spans multiple steps of a plan, consider if multiple smaller commits are more appropriate than one large one.
 
+## Agent Working Directory
+
+All agents **MUST** use the `./.agent/` directory for storing transient working files, logs, and summaries. This directory is excluded from version control via `.gitignore`.
+
+### Summaries
+
+Upon completion of a task, each agent **MUST** create a `summary.md` file in the `./.agent/` directory. This file should provide a concise summary of the actions taken, including:
+
+-   A brief description of the task.
+-   A list of the files that were created, modified, or deleted.
+-   Any important notes or observations.
+
+### Decision Logs
+
+Each agent **MUST** also create a `decision_log.md` file in the `./.agent/` directory. This file should contain a log of the decisions made by the agent during the task, including:
+
+-   The rationale for choosing a particular approach or solution.
+-   Any alternative approaches that were considered and why they were not chosen.
+-   Any assumptions that were made.
+
 ## Documentation
 
 1.  **Role `README.md`:**
@@ -67,13 +87,15 @@ graph TD
     E --> F[Update Textual Documentation];
     F --> G[Commit Changes];
     G --> H[Submit Pull Request];
-    H --> CI{Automated CI Checks (e.g., ansible-lint)};
-    CI -- Pass --> J[Review & Merge];
-    CI -- Fail --> G; // Developer addresses feedback & commits fixes
-    B -- No --> I[Update Code/Configuration];
-    I --> G;
+    H --> I[Create summary.md and decision_log.md];
+    I --> J[Submit for review];
+    J --> CI{Automated CI Checks (e.g., ansible-lint)};
+    CI -- Pass --> K[Review & Merge];
+    CI -- Fail --> J; // Developer addresses feedback & commits fixes
+    B -- No --> L[Update Code/Configuration];
+    L --> G;
     D -- No --> F;
-    J --> K[End];
+    K --> M[End];
 ```
 
 Thank you for your assistance in maintaining and improving this project!
