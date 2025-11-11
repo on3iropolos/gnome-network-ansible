@@ -1,0 +1,26 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  tasks:
+    - name: "Check for /etc/ansible directory"
+      ansible.builtin.stat:
+        path: "/etc/ansible"
+      register: "ansible_dir"
+
+    - name: "Assert that /etc/ansible directory exists"
+      ansible.builtin.assert:
+        that:
+          - "ansible_dir.stat.exists"
+          - "ansible_dir.stat.isdir"
+
+    - name: "Check for /etc/ansible/ansible.cfg file"
+      ansible.builtin.stat:
+        path: "/etc/ansible/ansible.cfg"
+      register: "ansible_cfg"
+
+    - name: "Assert that /etc/ansible/ansible.cfg file exists"
+      ansible.builtin.assert:
+        that:
+          - "ansible_cfg.stat.exists"
+          - "ansible_cfg.stat.isreg"

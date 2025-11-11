@@ -1,0 +1,20 @@
+---
+- name: Prepare
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Update apt package cache
+      ansible.builtin.raw: apt-get update -y
+      changed_when: false
+
+    - name: Install python for Ansible
+      ansible.builtin.raw: apt-get install -y python3
+      changed_when: false
+
+    - name: Install openssh for sshd service
+      ansible.builtin.raw: apt-get install -y openssh-server
+      changed_when: false
+
+    - name: Gather facts after Python installation
+      ansible.builtin.setup:
