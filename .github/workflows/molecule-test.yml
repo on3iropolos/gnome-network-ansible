@@ -12,7 +12,7 @@ on:
 
 jobs:
   molecule-test:
-    name: Molecule Test - Network Role
+    name: Molecule Test - All Roles
     runs-on: ubuntu-latest
     
     steps:
@@ -33,10 +33,19 @@ jobs:
       - name: Display Molecule version
         run: molecule --version
 
-      - name: Run Molecule tests for network role
+      - name: Run Molecule tests for all roles
         run: |
-          cd roles/network
-          molecule test
+          for role_dir in roles/*; do
+            if [ -d "$role_dir/molecule" ]; then
+              echo "====== TESTING ROLE: $(basename "$role_dir") ======"
+              cd "$role_dir"
+              if ! molecule test; then
+                echo "::error::Molecule tests failed for role $(basename "$role_dir")"
+                exit 1
+              fi
+              cd ../..
+            fi
+          done
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
@@ -47,6 +56,6 @@ jobs:
         with:
           name: molecule-logs
           path: |
-            roles/network/molecule/default/.molecule/
+            roles/*/molecule/default/.molecule/
             ~/.cache/molecule/
           retention-days: 7
