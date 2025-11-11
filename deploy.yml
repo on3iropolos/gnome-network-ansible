@@ -3,7 +3,8 @@
 #   roles:
 #     - ansible-ctrl.init
 
-- hosts: virtual_hosts
+- name: Configure virtual hosts
+  hosts: virtual_hosts
   become: true
   pre_tasks:
     - name: Check for internet connectivity
@@ -22,7 +23,7 @@
         # Add conditions here if specific roles/tags requiring internet are targeted
         # For now, this play (virtual_hosts) implies internet is needed due to its roles.
   roles:
-    - role: arch-iso-install
+    - role: arch_iso_install
       when: ansible_nodename == 'archiso'
       ansible_user: root
     - role: network

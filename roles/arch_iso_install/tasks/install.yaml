@@ -1,0 +1,26 @@
+- name: Run pacstrap
+  ansible.builtin.command: >-
+    pacstrap /mnt base base-devel linux linux-firmware efibootmgr grub openssh sudo networkmanager
+    btrfs-progs grub-btrfs os-prober reflector
+  changed_when: true
+  tags:
+    - pacstrap
+  when: arch_iso_install_bootloader == 'grub'
+
+- name: Restrict reflector to only US mirrors
+  ansible.builtin.lineinfile:
+    insertafter: \# --country
+    line: --country "United States"
+    path: /mnt/etc/xdg/reflector/reflector.conf
+  tags:
+    - mirrors
+
+- name: Install Intel microcode
+  ansible.builtin.command: arch-chroot /mnt pacman -S intel-ucode --noconfirm
+  changed_when: true
+  when: ansible_processor[1].find('Intel') != -1
+
+- name: Install AMD microcode
+  ansible.builtin.command: arch-chroot /mnt pacman -S amd-ucode --noconfirm
+  changed_when: true
+  when: ansible_processor[1].find('AMD') != -1

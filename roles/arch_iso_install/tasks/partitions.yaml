@@ -1,0 +1,35 @@
+- name: Wipe install drive and all its partitions
+  ansible.builtin.command: find /dev -wholename "{{ arch_iso_install_install_drive }}*" -exec wipefs --force --all {} \;
+  changed_when: true
+  when: manual_partitions is not defined
+
+- name: Create partitions
+  community.general.parted:
+    device: '{{ arch_iso_install_install_drive }}'
+    label: gpt
+    number: 1
+    part_end: 512MB
+    name: boot
+    flags: [boot, esp]
+    state: present
+  when: manual_partitions is not defined
+
+- name: Create root partition
+  community.general.parted:
+    device: '{{ arch_iso_install_install_drive }}'
+    label: gpt
+    number: 2
+    part_start: 512MB
+    name: root
+    flags: []
+    state: present
+  when: manual_partitions is not defined
+
+- name: Create FAT32 filesystem in boot partition
+  community.general.filesystem:
+    dev: '{{ boot_part }}'
+    fstype: vfat
+    opts: -F32
+    force: true
+  when: manual_partitions is not defined
+  tags: troubleshoot_boot

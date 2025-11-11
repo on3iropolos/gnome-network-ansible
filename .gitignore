@@ -9,6 +9,7 @@ debug.yml
 *.pub
 *.key
 .agent/log/
+.ansible
 
 # Molecule artifacts
 .molecule/

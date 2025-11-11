@@ -1,4 +1,0 @@
-# Handler tasks to be executed conditionally
-
-- name: create_ramdisk
-  command: arch-chroot /mnt mkinitcpio -p linux

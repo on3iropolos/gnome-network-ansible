@@ -1,0 +1,29 @@
+- name: Set local timezone
+  ansible.builtin.command: arch-chroot /mnt ln -sf /usr/share/zoneinfo/{{ arch_iso_install_timezone }} /etc/localtime
+  changed_when: true
+
+- name: Generate adjtime file
+  ansible.builtin.command: arch-chroot /mnt hwclock --systohc
+  changed_when: true
+
+- name: Configure locale.gen
+  ansible.builtin.lineinfile:
+    dest: /mnt/etc/locale.gen
+    regexp: '{{ item.regex }}'
+    line: '{{ item.line }}'
+  loop:
+    - {regex: en_US\.UTF-8 UTF-8, line: en_US.UTF-8 UTF-8}
+
+- name: Create locale.conf
+  ansible.builtin.copy:
+    content: "LANG=en_US.UTF-8"
+    dest: /mnt/etc/locale.conf
+
+- name: Set console keyboard layout
+  ansible.builtin.copy:
+    content: "KEYMAP=us"
+    dest: /mnt/etc/vconsole.conf
+
+- name: Generate locales
+  ansible.builtin.command: arch-chroot /mnt locale-gen
+  changed_when: true

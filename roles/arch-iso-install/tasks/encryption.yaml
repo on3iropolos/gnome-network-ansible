@@ -1,9 +1,0 @@
-- name: encrypt drive
-  # ref: LUKS1 required for grub: https://wiki.archlinux.org/title/GRUB#Encrypted_/boot
-  community.crypto.luks_device:
-    device: "{{ root_part }}"
-    state: "opened"
-    name: cryptroot
-    type: "{{ 'luks1' if bootloader == 'grub' else 'luks2' }}"
-    passphrase: "{{ encryption.password }}"
-    

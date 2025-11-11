@@ -1,0 +1,36 @@
+- name: Setup ramdisk for btrfs
+  ansible.builtin.lineinfile:
+    dest: /mnt/etc/mkinitcpio.conf
+    regexp: ^BINARIES
+    line: 'BINARIES=(btrfs)'
+  when: use_btrfs
+  notify: Create ramdisk
+
+- name: Run encryption items for ramdisk if needed
+  notify: Create ramdisk
+  when: use_encryption
+  block:
+    - name: Create random file for boot decryption
+      community.general.filesize:
+        path: /mnt/crypto_keyfile.bin
+        size: 2 MiB
+        source: /dev/urandom
+    - name: Encrypt drive
+      community.crypto.luks_device:
+        device: "{{ root_part }}"
+        passphrase: "{{ arch_iso_install_encryption.password }}"
+        new_keyfile: /mnt/crypto_keyfile.bin
+    - name: Setup ramdisk for disk encryption | grub
+      ansible.builtin.lineinfile:
+        dest: /mnt/etc/mkinitcpio.conf
+        regexp: ^HOOKS=
+        line: 'HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)'
+      when: arch_iso_install_bootloader == 'grub'
+    - name: Setup ramdisk for encryption file
+      ansible.builtin.lineinfile:
+        dest: /mnt/etc/mkinitcpio.conf
+        regexp: ^FILES=
+        line: 'FILES=(/crypto_keyfile.bin)'
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
