@@ -4,16 +4,16 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Update apt package cache
-      ansible.builtin.raw: apt-get update -y
+    - name: Update pacman package cache
+      ansible.builtin.raw: pacman -Sy --noconfirm
       changed_when: false
 
     - name: Install python for Ansible
-      ansible.builtin.raw: apt-get install -y python3
+      ansible.builtin.raw: pacman -S --noconfirm python
       changed_when: false
 
     - name: Install openssh for sshd service
-      ansible.builtin.raw: apt-get install -y openssh-server
+      ansible.builtin.raw: pacman -S --noconfirm openssh
       changed_when: false
 
     - name: Gather facts after Python installation
