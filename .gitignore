@@ -7,3 +7,4 @@ tmp/*
 !vault.yml*ansible_vault*
 *.pub
 *.key
+.agent/

@@ -41,7 +41,7 @@ The project structure is as follows:
     - **`roles/network/`**: Role for managing network configurations.
     - **`roles/role.template/`**: A template directory for creating new roles, ensuring consistency in structure and documentation.
 - **`README.md`**: This file, providing an overview and instructions for the project.
-- **`AGENTS.md`**: (To be created) Provides guidelines for AI agents working with this repository.
+- **`AGENTS.md`**: Provides guidelines for AI agents working with this repository.
 - **`.github/`**: Contains GitHub specific files, such as workflows.
     - **`workflows/`**: Houses CI/CD workflows.
         - **`ansible-lint.yml`**: GitHub Actions workflow to automatically lint Ansible code.
