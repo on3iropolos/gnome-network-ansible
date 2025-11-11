@@ -4,6 +4,9 @@
   become: true
   gather_facts: true
   tasks:
+    - name: Detect container environment
+      ansible.builtin.include_tasks: ../../tasks/detect_container.yml
+
     - name: Verify network packages are installed
       ansible.builtin.package:
         name:
@@ -18,7 +21,7 @@
       register: package_check
       failed_when: package_check is changed
 
-    - name: Verify systemd-timesyncd service is enabled and started
+    - name: Verify systemd-timesyncd is enabled and started (non-container)
       ansible.builtin.systemd:
         name: systemd-timesyncd
         state: started
@@ -26,6 +29,16 @@
       check_mode: true
       register: timesyncd_check
       failed_when: timesyncd_check is changed
+      when: not is_container | bool
+
+    - name: Verify systemd-timesyncd is enabled only (container)
+      ansible.builtin.systemd:
+        name: systemd-timesyncd
+        enabled: true
+      check_mode: true
+      register: timesyncd_check_container
+      failed_when: timesyncd_check_container is changed
+      when: is_container | bool
 
     - name: Verify sshd service is enabled and started
       ansible.builtin.systemd:

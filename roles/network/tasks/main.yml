@@ -1,5 +1,8 @@
 # Tasks to be executed by the role
 
+- name: Detect container environment
+  ansible.builtin.include_tasks: detect_container.yml
+
 - name: Install network tools
   ansible.builtin.package:
     name:
@@ -11,21 +14,34 @@
       - ntp
     state: latest
 
-- name: Sync time to ntp server
-  command: ntpdate -u pool.ntp.org
+- name: Enable and start systemd-timesyncd (non-container)
+  ansible.builtin.systemd:
+    name: systemd-timesyncd
+    state: started
+    enabled: true
+    daemon_reload: true
+  when: not is_container | bool
 
-- name: Start & enable services
-  systemd:
+- name: Only enable systemd-timesyncd (container)
+  ansible.builtin.systemd:
+    name: systemd-timesyncd
+    enabled: true
+    daemon_reload: true
+  when: is_container | bool
+
+- name: Start & enable other services
+  ansible.builtin.systemd:
     name: "{{ item }}"
     state: started
-    enabled: yes
+    enabled: true
+    daemon_reload: true
   loop:
-    - systemd-timesyncd
     - sshd
     - NetworkManager
 
 - name: Stop & disable networkd
-  systemd:
+  ansible.builtin.systemd:
     name: systemd-networkd
     state: stopped
-    enabled: no
+    enabled: false
+    daemon_reload: true
