@@ -35,7 +35,12 @@ RUN set -e \
         py3-jmespath \
         ansible \
         ansible-lint \
-    && rm -rf /var/cache/apk/* /tmp/*
+        docker-cli \
+    && rm -rf /var/cache/apk/* /tmp/* \
+    && pip3 install --no-cache-dir --break-system-packages \
+        molecule>=5.0 \
+        molecule-plugins[docker]>=23.0 \
+        docker>=6.0
 
 # Default command to bash shell
 CMD [ "/bin/bash" ]

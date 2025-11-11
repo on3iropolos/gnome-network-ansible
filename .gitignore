@@ -8,4 +8,10 @@ tmp/*
 !vault.yml*ansible_vault*
 *.pub
 *.key
-.vagrant/*
+
+# Molecule artifacts
+.molecule/
+.cache/
+__pycache__/
+*.pyc
+.pytest_cache/
