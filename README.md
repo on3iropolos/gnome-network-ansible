@@ -41,6 +41,10 @@ The project structure is as follows:
     - **`roles/network/`**: Role for managing network configurations.
         - **`molecule/`**: Contains Molecule test scenarios for the network role.
     - **`roles/role.template/`**: A template directory for creating new roles, ensuring consistency in structure and documentation.
+- **`terraform/`**: Infrastructure as Code for creating test VMs using Terraform and libvirt.
+    - Provides VM environments for testing roles that require full system access
+    - Includes helper scripts for VM creation and management
+    - Enables graphical access to VMs via virt-viewer or virt-manager
 - **`README.md`**: This file, providing an overview and instructions for the project.
 - **`AGENTS.md`**: Provides guidelines for AI agents working with this repository.
 - **`.github/`**: Contains GitHub specific files, such as workflows.
@@ -127,25 +131,40 @@ Once the Docker image is built (`docker compose build`), the Ansible tools (Ansi
 
 However, any Ansible tasks that inherently require internet access (e.g., downloading packages with `apt`/`yum`/`pacman`, cloning git repositories from the internet, using `uri` to fetch remote files) will naturally fail if the container cannot access the internet. The pre-flight internet check mentioned above aims to catch this early for known roles.
 
-## Host Initialization
+## Running Playbooks
 
-1. Boot the host and run the following commands:
+### 1. Prepare Target Hosts
 
-    - `passwd` (same as `SSH_PASSWORD`)
-    - `systemctl start sshd`
-    - `ip a`
+For Arch ISO installations or VM testing, see role-specific documentation:
+- **Arch ISO installations:** See [`roles/arch_iso_install/README.md`](roles/arch_iso_install/README.md#testing)
+- **VM-based testing:** See [`terraform/README.md`](terraform/README.md)
 
-2. Update the the inventory `hosts.yml` file to include the IP address assigned by DHCP.
+For existing systems, ensure SSH access is configured.
 
-## Inventory Deployment
+### 2. Configure Inventory
 
-1. Set environment variables:
+Update your inventory file (e.g., [`inventories/workstations/hosts.yml`](inventories/workstations/hosts.yml)) with:
+- Host IP addresses or hostnames
+- Connection parameters (user, SSH settings)
+- Group and host variables as needed
 
-    - `export SSH_PASSWORD="my value"`
-    - `export ENCRYPTION_PASSWORD="my value"`
-    - `export USER_PASSWORD="my value"`
+### 3. Set Required Environment Variables
 
-2. Run the ansible playbook: `ansible-playbook -i /data/inventories/workstations/ deploy.yml`
+```bash
+export SSH_PASSWORD="your_ssh_password"
+export ENCRYPTION_PASSWORD="your_encryption_password"  # If using encryption
+export USER_PASSWORD="your_user_password"              # If creating users
+```
+
+### 4. Execute Playbook
+
+```bash
+# From within the Docker container or local environment
+ansible-playbook -i inventories/workstations/hosts.yml deploy.yml
+
+# Or use tags for specific roles
+ansible-playbook -i inventories/workstations/hosts.yml deploy.yml --tags network
+```
 
 # Contributing Guidelines
 
@@ -271,39 +290,25 @@ This project implements multiple levels of testing to ensure code quality and fu
 - **ansible-lint:** This project uses `ansible-lint` for static code analysis. An automated GitHub Actions workflow runs `ansible-lint .` on every pull request targeting the `main` branch.
 - **Local Linting (Recommended):** Run `ansible-lint .` locally before pushing changes to catch issues early. Use the provided Docker environment or a local Python environment with `ansible` and `ansible-lint` installed.
 
-### Molecule Testing
-- **Automated Role Testing:** This project uses Molecule with Docker for automated testing of Ansible roles. Tests run automatically via GitHub Actions on pull requests.
-- **Local Testing:** Test roles locally using Molecule before pushing changes. See [`DEVELOPMENT.md`](DEVELOPMENT.md) for detailed instructions.
-- **Test Coverage:** The network role includes comprehensive Molecule tests that verify:
-  - Package installation
-  - Service configuration and state
-  - Idempotency (roles can be run multiple times without unintended changes)
+### Molecule Testing (Container-Based)
+- **Automated Role Testing:** Molecule with Docker provides fast, lightweight testing for most roles
+- **CI/CD Integration:** Tests run automatically via GitHub Actions on pull requests
+- **Test Coverage:** Includes package installation, service configuration, and idempotency verification
+- **Getting Started:** See [`DEVELOPMENT.md`](DEVELOPMENT.md#testing-with-molecule--docker) for setup and detailed workflow
 
-### Testing Workflow
-```bash
-# Install dependencies
-pip install -r requirements.txt
+### VM-Based Testing (Terraform + libvirt)
+- **For System-Level Roles:** Roles like `arch_iso_install` requiring disk partitioning, bootloader installation, or encryption
+- **Infrastructure:** Uses KVM/libvirt VMs with graphical access for comprehensive testing
+- **Getting Started:** See [`terraform/README.md`](terraform/README.md) for complete setup, usage, and troubleshooting
 
-# Navigate to a role with Molecule tests
-cd roles/network
+### Testing Best Practices
+- **Choose the Right Method:**
+  - Molecule + Docker: Service configuration, package management, standard system tasks
+  - Terraform VMs: Installation roles, operations requiring full system access
+- **Ensure Idempotency:** All roles must be idempotent (running multiple times produces no unintended changes)
+- **Test Locally First:** Run tests locally before pushing changes to catch issues early
 
-# Run complete test suite
-molecule test
-
-# Or test individual steps
-molecule create    # Create test container
-molecule converge  # Apply role
-molecule verify    # Run verification tests
-molecule destroy   # Clean up
-```
-
-### Manual Testing
-- Beyond automated testing, manually verify changes in environments that mirror target systems as closely as possible.
-- Use Docker containers or physical/virtual systems that mirror your target environment for comprehensive testing.
-
-### Idempotency
-- Ensure all roles and tasks are idempotent. Running them multiple times should not result in unintended changes to the system.
-- Molecule's idempotence test automatically verifies this for roles with Molecule scenarios.
+For complete testing instructions, workflows, and troubleshooting, see [`DEVELOPMENT.md`](DEVELOPMENT.md).
 
 ## Review Process
 

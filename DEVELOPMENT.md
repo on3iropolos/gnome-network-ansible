@@ -84,6 +84,42 @@ The test container is based on `archlinux:latest` with:
 
 - **Tests fail in CI/CD**: Check GitHub Actions logs in the repository's Actions tab
 
+## Testing with Terraform + libvirt
+
+For roles that require full system access (like `arch_iso_install`), Terraform with libvirt provides VM-based testing with graphical access on Ubuntu systems.
+
+### Why Terraform for VM Testing?
+
+Container-based testing (Molecule + Docker) works well for most roles, but some operations require actual hardware or full virtualization:
+- Disk partitioning and filesystem creation
+- Bootloader installation (GRUB)
+- Full system installation workflows
+- Hardware-specific configurations
+
+### Setup and Usage
+
+**One-time setup:**
+1. Follow the automated setup instructions in [`terraform/README.md`](terraform/README.md#quick-start)
+2. The setup script installs libvirt, KVM, virtualization tools, and Terraform
+3. Configures user permissions and groups (requires logout/login after setup)
+
+**Testing workflow:**
+1. **Create VM**: Use Terraform to create test environment
+2. **Visual Access**: Connect with virt-viewer or virt-manager
+3. **Prepare VM**: Set up SSH access in the VM
+4. **Run Ansible**: Execute playbooks against the VM
+5. **Verify**: Visually inspect results in GUI
+6. **Clean Up**: Destroy VM when done
+
+**For complete instructions**, including:
+- Detailed prerequisite installation steps
+- VM creation and management commands
+- Available test scenarios (quick-test, full-test)
+- Troubleshooting common issues
+- Integration with specific roles
+
+See [`terraform/README.md`](terraform/README.md) - the authoritative source for VM-based testing infrastructure.
+
 ## CI/CD Integration
 
 This repository includes automated testing via GitHub Actions:

@@ -97,6 +97,125 @@ This role is typically run against a host that is booted into the Arch Linux ins
 
 **Important:** Ensure environment variables `ENCRYPTION_PASSWORD` and `USER_PASSWORD` are set in the shell where you run `ansible-playbook`, or through other secure means like Ansible Tower/AWX credentials.
 
+## Testing
+
+This role requires VM-based testing using the project's Terraform infrastructure. See [`../../terraform/README.md`](../../terraform/README.md) for VM setup instructions and [`../../README.md#running-playbooks`](../../README.md#running-playbooks) for environment variable configuration.
+
+### Test Scenarios
+
+#### Scenario 1: Basic Installation (No Encryption, ext4)
+
+**Variables:**
+```yaml
+encryption:
+  enabled: false
+btrfs:
+  enabled: false
+```
+
+**Expected Results:**
+- System installs to ext4 filesystem
+- No encryption prompts on boot
+- GRUB boots directly to system
+- User can login
+
+#### Scenario 2: Encrypted Installation with BTRFS (Default)
+
+**Variables:**
+```yaml
+encryption:
+  enabled: true
+btrfs:
+  enabled: true
+```
+
+**Expected Results:**
+- LUKS encryption prompt on boot
+- BTRFS subvolumes mounted correctly
+- System boots after entering password
+- All subvolumes visible with `btrfs subvolume list /`
+
+#### Scenario 3: Custom Configuration
+
+Test with custom values:
+```yaml
+timezone: "Europe/London"
+user:
+  name: "testuser"
+  full: "Test User"
+install_drive: "/dev/vdb"  # Second disk in Terraform VM
+```
+
+### Manual Testing Checklist
+
+#### Pre-Installation
+- [ ] VM boots from Arch ISO
+- [ ] Network connectivity works
+- [ ] SSH access established
+- [ ] Environment variables set correctly
+
+#### During Installation
+- [ ] Disk partitioning succeeds
+- [ ] Encryption setup (if enabled) succeeds
+- [ ] Filesystem creation succeeds
+- [ ] Pacstrap installs base system
+- [ ] GRUB installation succeeds
+- [ ] System configuration applied (timezone, locale, hostname)
+- [ ] User creation succeeds
+- [ ] SSH key installation succeeds
+
+#### Post-Installation
+- [ ] System reboots successfully
+- [ ] GRUB menu appears
+- [ ] Encryption password prompt (if enabled)
+- [ ] System boots to login
+- [ ] User can login with password
+- [ ] User can login with SSH key
+- [ ] System timezone is correct
+- [ ] Hostname is set correctly
+- [ ] Network connectivity works
+
+#### BTRFS Specific (if enabled)
+- [ ] All subvolumes created
+- [ ] Subvolumes mounted at correct paths
+- [ ] CoW disabled for appropriate subvolumes
+- [ ] `btrfs filesystem show` displays correctly
+
+### Troubleshooting
+
+**Role Fails at Partitioning:**
+- Check: Correct disk device in variables (`install_drive`)
+- Verify: Disk is not already partitioned/formatted
+- Solution: Use a fresh VM or wipe disk manually
+
+**Role Fails at Encryption:**
+- Check: `ENCRYPTION_PASSWORD` environment variable is set
+- Verify: Password meets requirements (non-empty)
+- Solution: Set environment variable before running playbook
+
+**Role Fails at GRUB Installation:**
+- Check: EFI partition created correctly
+- Verify: System booted in UEFI mode
+- Solution: Ensure VM uses UEFI (Terraform config handles this)
+
+**System Won't Boot After Installation:**
+- Check: GRUB installed to correct disk
+- Verify: Boot order in VM settings
+- Solution: In virt-manager, check boot device order
+
+**SSH Key Authentication Not Working:**
+- Check: `user.pub_key_location` points to valid public key
+- Verify: Public key file exists on Ansible controller
+- Solution: Create SSH key pair if needed: `ssh-keygen -t ed25519`
+
+### Testing Best Practices
+
+1. **Test Encryption Scenarios**: Always test both encrypted and non-encrypted installations
+2. **Verify BTRFS Subvolumes**: When using BTRFS, check all subvolumes are created and mounted correctly
+3. **Test Custom Variables**: Validate custom timezone, username, and disk device configurations
+4. **Document Variable Combinations**: Note which role variable combinations have been tested
+5. **Preserve Test Logs**: Save Ansible output for failed installations to identify role issues
+
 ## License
 
 See the `LICENSE` file within this role's directory (`roles/arch-iso-install/LICENSE`).
