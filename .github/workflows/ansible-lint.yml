@@ -18,7 +18,7 @@ jobs:
           python-version: '3.x' # Use a recent Python 3 version
 
       - name: Install Ansible and ansible-lint
-        run: pip install ansible ansible-lint
+        run: pip install --upgrade ansible ansible-lint
 
       - name: Run ansible-lint
         run: ansible-lint .
