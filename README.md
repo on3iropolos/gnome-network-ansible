@@ -39,12 +39,15 @@ The project structure is as follows:
     - **`roles/ansible-ctrl.init/`**: Role to initialize the Ansible controller environment.
     - **`roles/arch-iso-install/`**: Role to automate Arch Linux installation from an ISO.
     - **`roles/network/`**: Role for managing network configurations.
+        - **`molecule/`**: Contains Molecule test scenarios for the network role.
     - **`roles/role.template/`**: A template directory for creating new roles, ensuring consistency in structure and documentation.
 - **`README.md`**: This file, providing an overview and instructions for the project.
 - **`AGENTS.md`**: Provides guidelines for AI agents working with this repository.
 - **`.github/`**: Contains GitHub specific files, such as workflows.
     - **`workflows/`**: Houses CI/CD workflows.
         - **`ansible-lint.yml`**: GitHub Actions workflow to automatically lint Ansible code.
+        - **`molecule-test.yml`**: GitHub Actions workflow to run Molecule tests for roles.
+- **`requirements.txt`**: Python dependencies for Ansible, Molecule, and testing tools.
 - **`LICENSE`**: Project license information.
 - **`.gitignore`**: Specifies intentionally untracked files that Git should ignore.
 
@@ -262,10 +265,45 @@ Use labels to categorize issues and pull requests. This helps in filtering and m
 
 ## Testing
 
-- **Automated Linting:** This project uses `ansible-lint` for static code analysis. An automated GitHub Actions workflow runs `ansible-lint .` on every pull request targeting the `main` branch. Pull requests must pass these linting checks before they can be merged.
-- **Local Linting (Recommended):** It is highly recommended to run `ansible-lint .` locally before pushing changes to catch issues early. You can use the provided Docker environment (via `Dockerfile` and `docker-compose.yml`) or a local Python environment with `ansible` and `ansible-lint` installed.
-- **Manual Testing:** Beyond linting, test your changes thoroughly in a local environment that mirrors the target systems as closely as possible.
-- **Idempotency:** Ensure your roles and tasks are idempotent. Running them multiple times should not result in unintended changes to the system.
+This project implements multiple levels of testing to ensure code quality and functionality:
+
+### Automated Linting
+- **ansible-lint:** This project uses `ansible-lint` for static code analysis. An automated GitHub Actions workflow runs `ansible-lint .` on every pull request targeting the `main` branch.
+- **Local Linting (Recommended):** Run `ansible-lint .` locally before pushing changes to catch issues early. Use the provided Docker environment or a local Python environment with `ansible` and `ansible-lint` installed.
+
+### Molecule Testing
+- **Automated Role Testing:** This project uses Molecule with Docker for automated testing of Ansible roles. Tests run automatically via GitHub Actions on pull requests.
+- **Local Testing:** Test roles locally using Molecule before pushing changes. See [`DEVELOPMENT.md`](DEVELOPMENT.md) for detailed instructions.
+- **Test Coverage:** The network role includes comprehensive Molecule tests that verify:
+  - Package installation
+  - Service configuration and state
+  - Idempotency (roles can be run multiple times without unintended changes)
+
+### Testing Workflow
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Navigate to a role with Molecule tests
+cd roles/network
+
+# Run complete test suite
+molecule test
+
+# Or test individual steps
+molecule create    # Create test container
+molecule converge  # Apply role
+molecule verify    # Run verification tests
+molecule destroy   # Clean up
+```
+
+### Manual Testing
+- Beyond automated testing, manually verify changes in environments that mirror target systems as closely as possible.
+- Use Docker containers or physical/virtual systems that mirror your target environment for comprehensive testing.
+
+### Idempotency
+- Ensure all roles and tasks are idempotent. Running them multiple times should not result in unintended changes to the system.
+- Molecule's idempotence test automatically verifies this for roles with Molecule scenarios.
 
 ## Review Process
 

@@ -1,0 +1,59 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Verify network packages are installed
+      ansible.builtin.package:
+        name:
+          - ethtool
+          - wpa_supplicant
+          - netctl
+          - dhcpcd
+          - networkmanager
+          - ntp
+        state: present
+      check_mode: true
+      register: package_check
+      failed_when: package_check is changed
+
+    - name: Verify systemd-timesyncd service is enabled and started
+      ansible.builtin.systemd:
+        name: systemd-timesyncd
+        state: started
+        enabled: true
+      check_mode: true
+      register: timesyncd_check
+      failed_when: timesyncd_check is changed
+
+    - name: Verify sshd service is enabled and started
+      ansible.builtin.systemd:
+        name: sshd
+        state: started
+        enabled: true
+      check_mode: true
+      register: sshd_check
+      failed_when: sshd_check is changed
+
+    - name: Verify NetworkManager service is enabled and started
+      ansible.builtin.systemd:
+        name: NetworkManager
+        state: started
+        enabled: true
+      check_mode: true
+      register: nm_check
+      failed_when: nm_check is changed
+
+    - name: Verify systemd-networkd service is disabled and stopped
+      ansible.builtin.systemd:
+        name: systemd-networkd
+        state: stopped
+        enabled: false
+      check_mode: true
+      register: networkd_check
+      failed_when: networkd_check is changed
+
+    - name: Display verification results
+      ansible.builtin.debug:
+        msg: "All network role verifications passed successfully!"

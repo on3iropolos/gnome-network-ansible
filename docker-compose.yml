@@ -18,6 +18,8 @@ services:
       - ~/.ssh:/root/.ssh:ro
       # Mount user's Git configuration
       - ~/.gitconfig:/root/.gitconfig:ro
+      # Mount Docker socket for Molecule to create test containers
+      - /var/run/docker.sock:/var/run/docker.sock
       # Persist bash/fish history if desired (optional)
       # You might need to create these files on the host first
       # - ~/.ansible_dev_bash_history:/root/.bash_history
