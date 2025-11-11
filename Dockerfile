@@ -1,4 +1,5 @@
 # Use an Alpine image with glibc already installed: https://github.com/Docker-Hub-frolvlad/docker-alpine-glibc/tree/master
+# Using :latest tag to always pull the most recent Alpine version
 FROM frolvlad/alpine-glibc:latest
 
 # Set Architecture Compatibility
@@ -39,9 +40,9 @@ RUN set -e \
         docker-cli \
     && rm -rf /var/cache/apk/* /tmp/* \
     && pip3 install --no-cache-dir --break-system-packages \
-        molecule>=5.0 \
-        molecule-plugins[docker]>=23.0 \
-        docker>=6.0
+        molecule \
+        molecule-plugins[docker] \
+        docker
 
 # Default command to bash shell
 CMD [ "/bin/bash" ]

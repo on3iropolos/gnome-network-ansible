@@ -4,7 +4,7 @@
 scratch
 test-inventory.ini
 debug.yml
-tmp/*
+.tmp
 !vault.yml*ansible_vault*
 *.pub
 *.key

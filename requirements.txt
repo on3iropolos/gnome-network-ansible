@@ -1,7 +1,8 @@
 # Ansible and Molecule testing requirements
-ansible-core>=2.12
-ansible>=6.0
-ansible-lint>=6.0
-molecule>=5.0
-molecule-plugins[docker]>=23.0
-docker>=6.0
+# Using latest versions - update regularly with: pip install --upgrade -r requirements.txt
+ansible-core
+ansible
+ansible-lint
+molecule
+molecule-plugins[docker]
+docker
