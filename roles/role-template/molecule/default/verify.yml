@@ -1,0 +1,8 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  tasks:
+    - name: "Hello, world!"
+      ansible.builtin.debug:
+        msg: "This is a placeholder verification task."

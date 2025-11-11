@@ -1,2 +1,8 @@
 ---
-# This playbook is intentionally left empty.
+- name: Converge
+  hosts: all
+  become: true
+  tasks:
+    - name: "Include arch_iso_install"
+      include_role:
+        name: "arch_iso_install"
