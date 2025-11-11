@@ -5,7 +5,7 @@ driver:
   name: docker
 platforms:
   - name: arch-test-instance
-    image: archlinux:latest
+    image: ghcr.io/archlinux/archlinux:latest
     pre_build_image: false
     dockerfile: Dockerfile.j2
     privileged: true
