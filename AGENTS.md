@@ -27,7 +27,7 @@ This document provides specific instructions and reminders for AI agents working
     *   This repository uses `ansible-lint` for static code analysis.
     *   A GitHub Actions workflow (`.github/workflows/ansible-lint.yml`) automatically runs `ansible-lint .` on all pull requests targeting the `main` branch.
     *   **Your changes MUST pass these automated linting checks.** If the CI check fails, you need to address the reported issues and push the corrections.
-    *   The `ansible-ctrl.dockerfile` includes `ansible-lint`, which you can use for local testing.
+    *   The [`Dockerfile`](Dockerfile) includes `ansible-lint`, which you can use for local testing.
     *   It is **STRONGLY RECOMMENDED** that you run `ansible-lint .` locally from the repository root (ideally within the Docker container environment or a compatible local setup) before submitting changes. This helps catch issues early.
     *   Address any critical errors or warnings reported by `ansible-lint` that are relevant to your changes. If unsure about a specific linting error in the context of your task, ask the user.
     *   *Note: Specific linting rules and configurations for `ansible-lint` may be added in the future (e.g., via an `.ansible-lint` file).*
@@ -38,7 +38,7 @@ This document provides specific instructions and reminders for AI agents working
 ## Interaction
 
 *   If any instruction in this `AGENTS.md` or the main `README.md` conflicts with a direct instruction from the user for a specific task, the user's direct instruction takes precedence.
-*   If you are unsure about any aspect of your task or how these guidelines apply, please ask for clarification using `request_user_input`.
+*   If you are unsure about any aspect of your task or how these guidelines apply, please ask for clarification using `ask_followup_question`.
 
 ## Mermaid Diagram Guidelines
 

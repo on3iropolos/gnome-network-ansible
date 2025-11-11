@@ -2,8 +2,11 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  # Use a generic Arch Linux base box
-  config.vm.box = "archlinux/archlinux"
+  # Use a generic Arch Linux base box that supports libvirt
+  # Note: Using generic/arch instead of archlinux/archlinux due to
+  # libvirt provider compatibility issues with the official box
+  config.vm.box = "generic/arch"
+  config.vm.box_version = "4.3.12"
 
   # Define the first virtual machine
   config.vm.define "arch-test-1" do |arch1|
@@ -22,23 +25,23 @@ Vagrant.configure("2") do |config|
     # arch2.vm.network "forwarded_port", guest: 80, host: 8080
   end
 
-  # Provider-specific configuration (e.g., VirtualBox)
-  config.vm.provider "virtualbox" do |vb|
-    # Customize the amount of memory on the VMs:
-    vb.memory = "1024"
-    # Customize the number of CPUs:
-    vb.cpus = "1"
-  end
+  # # Provider-specific configuration (e.g., VirtualBox)
+  # config.vm.provider "virtualbox" do |vb|
+  #   # Customize the amount of memory on the VMs:
+  #   vb.memory = "1024"
+  #   # Customize the number of CPUs:
+  #   vb.cpus = "1"
+  # end
 
   # Provider-specific configuration (e.g., libvirt)
   # Make sure you have the vagrant-libvirt plugin installed:
   # vagrant plugin install vagrant-libvirt
-  # config.vm.provider "libvirt" do |libvirt|
-  #   # Customize the amount of memory on the VMs:
-  #   libvirt.memory = 1024
-  #   # Customize the number of CPUs:
-  #   libvirt.cpus = 1
-  # end
+  config.vm.provider "libvirt" do |libvirt|
+    # Customize the amount of memory on the VMs:
+    libvirt.memory = 1024
+    # Customize the number of CPUs:
+    libvirt.cpus = 1
+  end
 
   # Provisioning with Ansible (optional, if you want Vagrant to run Ansible)
   # You would typically run Ansible from your host machine against these VMs,
