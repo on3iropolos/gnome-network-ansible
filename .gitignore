@@ -8,7 +8,7 @@ tmp/*
 !vault.yml*ansible_vault*
 *.pub
 *.key
-.agent/
+.agent/log/
 
 # Molecule artifacts
 .molecule/
