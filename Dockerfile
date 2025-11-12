@@ -1,10 +1,20 @@
-# Use an Alpine image with glibc already installed: https://github.com/Docker-Hub-frolvlad/docker-alpine-glibc/tree/master
-# Using :latest tag to always pull the most recent Alpine version
-FROM frolvlad/alpine-glibc:latest
+# Use the official Alpine Linux base image
+FROM alpine:latest
 
-# Set Architecture Compatibility
+# Set Architecture and glibc version
+# Using an ARG for glibc_version allows for easier updates in the future.
+ARG GLIBC_VERSION=2.35-r1
 ARG GLIBC_ARCH=x86_64
-# ARG GLIBC_ARCH=aarch64
+
+# Install glibc on Alpine
+# This is a common pattern to add glibc compatibility to Alpine for software that needs it.
+# It downloads the glibc package from a trusted community repository (sgerrand/alpine-pkg-glibc).
+RUN set -e \
+    && apk --no-cache add ca-certificates wget \
+    && wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
+    && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
+    && apk add --no-cache glibc-${GLIBC_VERSION}.apk \
+    && rm glibc-${GLIBC_VERSION}.apk
 
 # Mount /root vol for potential ssh keys or other user-specific configs
 VOLUME ["/root"]
@@ -15,7 +25,7 @@ WORKDIR /data
 
 # Update and Install Dependencies
 RUN set -e \
-    && apk --no-cache update  \
+    && apk --no-cache update \
     && apk --no-cache add \
         bash \
         fish \
@@ -25,10 +35,8 @@ RUN set -e \
         jq \
         groff \
         less \
-        ca-certificates \
         openssl \
         unzip \
-        wget \
         git \
         openssh-client \
         sshpass \
@@ -46,4 +54,4 @@ RUN set -e \
         docker
 
 # Default command to bash shell
-CMD [ "/bin/bash" ]
+CMD ["/bin/bash"]

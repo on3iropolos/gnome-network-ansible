@@ -12,6 +12,51 @@ This is the Gnome Network Ansible project designed to automate the configuration
 - **Improve Reliability:** Standardize configurations to minimize errors and improve system uptime.
 - **Enable Scalability:** Easily manage a growing number of systems and services.
 
+## Development and Testing Architecture
+
+This project uses a combination of Docker, Terraform, and Molecule to provide a flexible and robust environment for developing and testing the Ansible roles. The following diagram illustrates how these components work together:
+
+```mermaid
+graph TD
+    subgraph "Development Environment"
+        A[Developer Workstation] --> B(Docker);
+        B --> C{ansible-dev Container};
+        C --> D[Ansible Tools: ansible, ansible-lint];
+    end
+
+    subgraph "Testing Environments"
+        direction LR
+        subgraph "Container-Based Testing (Fast)"
+            E[Molecule] --> F(Docker);
+            F --> G[Test Containers];
+        end
+        subgraph "VM-Based Testing (Comprehensive)"
+            H[Terraform] --> I(libvirt/KVM);
+            I --> J[Test Virtual Machines];
+        end
+    end
+
+    subgraph "Ansible Automation"
+        K[Ansible Roles];
+    end
+
+    C --> E;
+    C --> H;
+    D -- Manages --> J;
+    E -- Tests --> K;
+    H -- Provisions --> J;
+
+    style B fill:#2496ED,stroke:#333,stroke-width:2px;
+    style F fill:#2496ED,stroke:#333,stroke-width:2px;
+    style I fill:#623CE4,stroke:#333,stroke-width:2px;
+```
+
+-   **Development Environment:** All development and execution of Ansible is done within a Docker container (`ansible-dev`). This ensures a consistent environment with all necessary tools, regardless of the developer's host OS.
+-   **Testing:**
+    -   **Molecule** is used for rapid, container-based testing of most roles. It's ideal for verifying configuration changes, package installations, and service management.
+    -   **Terraform with libvirt/KVM** is used for testing roles that require full system virtualization, such as the `arch-iso-install` role, which performs disk partitioning and bootloader installation.
+-   **Ansible Roles:** The roles contain the core automation logic and are tested against both container and VM environments to ensure they are robust and reliable.
+
 ## Repository Structure
 
 This repository follows a standard Ansible project structure. The following diagram illustrates the general workflow:
@@ -68,6 +113,8 @@ This project includes a Dockerized environment to provide a consistent and isola
 ### Setup and Usage
 
 1.  **Build the Docker Image:**
+    > **Note on Docker Rate Limits:** If you encounter an error like `429 Too Many Requests`, you may have reached Docker Hub's pull rate limit for unauthenticated users. To resolve this, log in to your Docker account by running `docker login` in your terminal and then try the build command again.
+
     Open your terminal in the root of this project and run:
     ```bash
     sudo docker compose build
@@ -104,6 +151,10 @@ This project includes a Dockerized environment to provide a consistent and isola
     Alternatively, you can run commands directly without entering the shell:
     ```bash
     sudo docker compose exec ansible-dev ansible-lint deploy.yml
+
+    # Note: The following command will fail with an "UNREACHABLE" error unless you have a
+    # running host that matches the `arch-test-1.gnome.network` entry in the example inventory.
+    # This is expected. The command is provided as a valid execution example.
     sudo docker compose exec ansible-dev ansible-playbook -i inventories/workstations/hosts.yml deploy.yml
     ```
 
