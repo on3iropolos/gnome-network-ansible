@@ -2,73 +2,49 @@
 
 ## Description
 
-This role is responsible for establishing the network configuration of a target host. Its specific tasks might include configuring network interfaces, setting up DNS, managing hostnames, or configuring network services, depending on its implementation in `tasks/main.yml`.
+This role configures the basic network stack on a target host, preparing it for general use. It installs essential networking tools, enables NetworkManager to handle connections, and ensures time synchronization is active. The role is designed to be idempotent and is aware of containerized environments, adjusting its behavior accordingly.
 
-A general representation of its tasks:
+The configuration process is as follows:
 
 ```mermaid
 graph TD
-    A[Start: Role Execution] --> B{Identify Network Interfaces};
-    B --> C[Configure IP Settings (Static/DHCP)];
-    C --> D[Set Hostname];
-    D --> E[Configure DNS Servers];
-    E --> F[Apply Network Changes];
+    A[Start: Role Execution] --> B{Detect if in Container};
+    B --> C[Install Networking Tools];
+    C --> D[Enable/Start Time Sync (systemd-timesyncd)];
+    D --> E[Start & Enable NetworkManager and sshd];
+    E --> F[Stop & Disable systemd-networkd];
     F --> G[End: Network Configured];
 ```
 
-*(Note: The current implementation in `tasks/main.yml` should be reviewed to accurately detail the specific actions this role performs and update the diagram if necessary.)*
-
 ## Requirements
 
--   Ansible version: `[e.g., 2.9+]` (Specify if known, otherwise use project default)
--   Operating System: `[e.g., Arch Linux, Debian, CentOS]` (Specify target OS if known)
--   Permissions: Likely requires `become: true` for network configuration tasks.
+-   **Ansible version:** `2.9+`
+-   **Operating System:** **Arch Linux** (due to package names like `netctl`).
+-   **Permissions:** Requires `become: true` to install packages and manage systemd services.
 
 ## Role Variables
 
-As of the last review, this role does not have predefined variables in `defaults/main.yml` or `vars/main.yml`. Configuration is likely passed via:
--   Variables defined at the play level.
--   Inventory variables.
--   Group variables.
--   Task-specific parameters within the role.
-
-If you intend to make this role more configurable via default variables, please define them in `roles/network/defaults/main.yml` and document them here.
-
-Example of how variables *could* be structured if added:
-
-| Variable              | Default Value    | Description                                      |
-| --------------------- | ---------------- | ------------------------------------------------ |
-| `network_interface`   | `eth0`           | The primary network interface to configure.      |
-| `network_ip_address`  | `192.168.1.100`  | Static IP address for the interface.             |
-| `network_dns_servers` | `['8.8.8.8']`    | List of DNS servers.                             |
+This role does not expose any configurable variables. Its behavior is consistent across all runs, with the exception of minor adjustments for container environments which are detected automatically.
 
 ## Dependencies
 
-None explicitly defined. *(If this role depends on others, list them here.)*
+None.
 
 ## Example Playbook
 
+To use this role, include it in your playbook. It is recommended to run it on all hosts that require a standardized network setup.
+
 ```yaml
-- hosts: all # Or a specific group of hosts
+- hosts: all
   become: true
   roles:
     - role: network
-      # Example of passing variables directly (if the role supports them)
-      # vars:
-      #   network_interface: enp1s0
-      #   network_ip_address: 10.0.0.50
-      #   network_gateway: 10.0.0.1
-      #   network_dns_servers:
-      #     - 1.1.1.1
-      #     - 8.8.8.8
 ```
 
 ## License
 
-See LICENSE file in the root of the repository.
+See the LICENSE file in the root of the repository.
 
 ## Author Information
 
 Gnome Network Ansible project
-```
-
