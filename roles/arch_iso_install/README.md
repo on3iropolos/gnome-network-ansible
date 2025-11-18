@@ -99,7 +99,9 @@ This role is typically run against a host that is booted into the Arch Linux ins
 
 ## Testing
 
-This role requires VM-based testing using the project's Terraform infrastructure. See [`../../terraform/README.md`](../../terraform/README.md) for VM setup instructions and [`../../README.md#running-playbooks`](../../README.md#running-playbooks) for environment variable configuration.
+This role requires VM-based testing using the project's Terraform infrastructure.
+For detailed setup and usage instructions, see [terraform/README.md](../../terraform/README.md).
+For environment variable configuration, see [README.md](../../README.md#running-playbooks).
 
 ### Test Scenarios
 
