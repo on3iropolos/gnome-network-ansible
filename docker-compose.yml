@@ -4,50 +4,20 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        # You can specify GLIBC_ARCH if building on a different architecture, e.g., aarch64
-        # GLIBC_ARCH: aarch64
-        GLIBC_ARCH: x86_64
+        GLIBC_ARCH: x86_64 # or aarch64 for ARM64 builds
     volumes:
-      # Mount the current project directory to /data in the container
       - .:/data
-      # Mount only the specific SSH public key needed for arch_iso_install role
-      # This avoids permission issues with mounting the entire .ssh directory
-      # Update this path if you need a different public key
       - ${HOME}/.ssh/git_on3iropolos_ed25519.pub:/root/.ssh/user_public_key.pub:ro
-      # Mount user's Git configuration
       - ~/.gitconfig:/root/.gitconfig:ro
-      # Mount Docker socket for Molecule to create test containers
       - /var/run/docker.sock:/var/run/docker.sock
-      # Mount libvirt socket for ejecting ISO after installation
-      # Using :rw to ensure read-write access for virsh commands
       - /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock:rw
-      # Persist bash/fish history if desired (optional)
-      # You might need to create these files on the host first
-      # - ~/.ansible_dev_bash_history:/root/.bash_history
-      # - ~/.ansible_dev_fish_history:/root/.local/share/fish/fish_history
-    stdin_open: true # Keeps STDIN open even if not attached (-i)
-    tty: true        # Allocates a pseudo-TTY (-t)
-    # Add libvirt group to allow virsh socket communication
-    # This matches the host's libvirt group GID (128)
+    stdin_open: true
+    tty: true
     group_add:
-      - "128"  # Host libvirt group GID
+      - "128" # Host libvirt group GID
     environment:
-      # Pass the host user's UID and GID to handle file permissions correctly
-      # This is particularly useful if the container creates files in the mounted /data volume.
-      # The entrypoint script in the container would need to handle this.
-      # For now, we'll keep it simple and rely on default root user inside,
-      # but this is a common pattern for more advanced setups.
-      # HOST_USER_ID: "${UID:-1000}"
-      # HOST_GROUP_ID: "${GID:-1000}"
-      ANSIBLE_CONFIG: /data/ansible.cfg # Example if you have a project-specific ansible.cfg
-      # Pass sensitive variables from host environment
+      ANSIBLE_CONFIG: /data/ansible.cfg
       SSH_PASSWORD: "${SSH_PASSWORD}"
       ENCRYPTION_PASSWORD: "${ENCRYPTION_PASSWORD}"
       USER_PASSWORD: "${USER_PASSWORD}"
-    # If you need to expose ports (e.g., if running a service that Ansible manages and want to test it locally)
-    # ports:
-    #   - "8080:80"
     working_dir: /data
-    # The default CMD is /bin/bash from the Dockerfile.
-    # You can override it here if needed, e.g., to start with fish shell:
-    # command: /usr/bin/fish
