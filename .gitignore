@@ -1,4 +1,5 @@
 .trunk
+.env
 *.retry
 *.scratch
 scratch
@@ -9,6 +10,7 @@ debug.yml
 *.pub
 *.key
 .agent/log/
+.agent/tmp/
 .ansible
 
 # Molecule artifacts

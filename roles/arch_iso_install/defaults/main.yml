@@ -2,6 +2,9 @@
 
 arch_iso_install_install_drive: /dev/sda
 
+# Libvirt domain name for ISO detachment (overridable per host)
+libvirt_domain_name: "{{ inventory_hostname_short }}"
+
 arch_iso_install_encryption:
   enabled: true
   password: "{{ lookup('env', 'ENCRYPTION_PASSWORD') }}"
@@ -33,4 +36,6 @@ arch_iso_install_user:
   pub_key_location: "/root/.ssh/on3iropolos-ssh.pub"
 
 arch_iso_install_bootloader: grub
+# Boot mode: 'uefi' or 'bios'
+arch_iso_install_boot_mode: uefi
 arch_iso_install_boot_esp: /boot/efi

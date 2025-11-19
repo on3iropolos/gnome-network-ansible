@@ -47,11 +47,18 @@ RUN set -e \
         ansible \
         ansible-lint \
         docker-cli \
+        libvirt-client \
     && rm -rf /var/cache/apk/* /tmp/* \
     && pip3 install --no-cache-dir --break-system-packages \
         molecule \
         molecule-plugins[docker] \
         docker
+
+# Add libvirt group for virsh socket communication
+# Use the same GID as host system's libvirt group (128)
+# This allows proper communication with the host libvirt daemon via mounted socket
+RUN addgroup -g 128 libvirt 2>/dev/null || true \
+    && addgroup root libvirt 2>/dev/null || true
 
 # Default command to bash shell
 CMD ["/bin/bash"]

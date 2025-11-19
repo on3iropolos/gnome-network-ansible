@@ -1,3 +1,15 @@
+- name: Initialize pacman keyring
+  ansible.builtin.command: pacman-key --init
+  changed_when: true
+  tags:
+    - pacstrap
+
+- name: Populate Arch Linux keyring
+  ansible.builtin.command: pacman-key --populate archlinux
+  changed_when: true
+  tags:
+    - pacstrap
+
 - name: Run pacstrap
   ansible.builtin.command: >-
     pacstrap /mnt base base-devel linux linux-firmware efibootmgr grub openssh sudo networkmanager

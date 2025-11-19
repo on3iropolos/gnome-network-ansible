@@ -1,11 +1,5 @@
 # Variable definitions for Terraform VM testing
 
-variable "test_id" {
-  description = "Unique identifier for this test instance"
-  type        = string
-  default     = "default"
-}
-
 variable "pool_name" {
   description = "libvirt storage pool name"
   type        = string
@@ -31,7 +25,7 @@ variable "vcpus" {
 }
 
 variable "disk_size_bytes" {
-  description = "Installation disk size in bytes (default: 20GB)"
+  description = "Installation disk size in bytes (default: 5GB)"
   type        = number
-  default     = 21474836480
+  default     = 5368709120
 }
