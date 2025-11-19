@@ -123,8 +123,6 @@ This project includes a Dockerized environment to provide a consistent and isola
     docker compose build
     docker compose up -d
     ```
-    
-    > **Note:** If you don't add yourself to docker group, use `sudo -E` before docker commands to preserve environment variables needed for SSH key mounting.
 
 3.  **Access the container shell:**
     ```bash
@@ -173,6 +171,9 @@ Docker Compose automatically reads this file.
 ```bash
 # From within the Docker container or local environment
 ansible-playbook -i inventories/workstations/hosts.yml deploy.yml
+
+# From your localhost shell
+docker compose exec ansible-dev ansible-playbook -i inventories/workstations/hosts.yml deploy.yml
 
 # Or use tags for specific roles
 ansible-playbook -i inventories/workstations/hosts.yml deploy.yml --tags network
