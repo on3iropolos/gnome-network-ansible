@@ -12,17 +12,26 @@
     state: directory
     mode: "0700"
 
+- name: Check if SSH public key exists
+  ansible.builtin.stat:
+    path: "{{ arch_iso_install_user.pub_key_location }}"
+  register: ssh_key_stat
+  delegate_to: localhost
+  become: false
+
 - name: Copy over ssh key from current Ansible controller as an authorized key
   ansible.builtin.copy:
     src: "{{ arch_iso_install_user.pub_key_location }}"
     dest: /mnt/home/{{ arch_iso_install_user.name }}/.ssh/authorized_keys
     mode: "0600"
+  when: ssh_key_stat.stat.exists
 
 - name: Set mode, owner, and group on user's authorized_key file
   ansible.builtin.command: >-
     arch-chroot /mnt chown -R {{ arch_iso_install_user.name }}:{{ arch_iso_install_user.name }}
     /home/{{ arch_iso_install_user.name }}/.ssh/
   changed_when: true
+  when: ssh_key_stat.stat.exists
 
 - name: Give passwordless sudo access to wheel group
   ansible.builtin.copy:

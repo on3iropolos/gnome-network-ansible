@@ -1,0 +1,18 @@
+# Host-specific configuration for arch-test.gnome.network
+# This VM uses virtio block devices instead of traditional SCSI devices
+
+# Override the install drive to use the virtio block device
+# vda is the ISO, vdb is the hard disk (after disk order swap in Terraform)
+arch_iso_install_install_drive: /dev/vdb
+
+# This VM uses BIOS boot mode (not UEFI)
+arch_iso_install_boot_mode: bios
+
+# Use the mounted SSH public key for the user account
+# The actual key file is mounted from the host at this location
+arch_iso_install_user:
+  name: on3ir
+  password: "{{ lookup('env', 'USER_PASSWORD') }}"
+  full: 'on3iropolos'
+  email: on3iropolos@gmail.com
+  pub_key_location: "/root/.ssh/on3iropolos-ssh.pub"

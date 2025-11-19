@@ -3,7 +3,8 @@
   changed_when: true
   when: manual_partitions is not defined
 
-- name: Create partitions
+# UEFI boot partitioning scheme
+- name: Create EFI System Partition (UEFI mode)
   community.general.parted:
     device: '{{ arch_iso_install_install_drive }}'
     label: gpt
@@ -12,9 +13,11 @@
     name: boot
     flags: [boot, esp]
     state: present
-  when: manual_partitions is not defined
+  when:
+    - manual_partitions is not defined
+    - arch_iso_install_boot_mode == 'uefi'
 
-- name: Create root partition
+- name: Create root partition (UEFI mode)
   community.general.parted:
     device: '{{ arch_iso_install_install_drive }}'
     label: gpt
@@ -23,13 +26,68 @@
     name: root
     flags: []
     state: present
-  when: manual_partitions is not defined
+  when:
+    - manual_partitions is not defined
+    - arch_iso_install_boot_mode == 'uefi'
 
-- name: Create FAT32 filesystem in boot partition
+- name: Create FAT32 filesystem in EFI partition (UEFI mode)
   community.general.filesystem:
     dev: '{{ boot_part }}'
     fstype: vfat
     opts: -F32
     force: true
-  when: manual_partitions is not defined
+  when:
+    - manual_partitions is not defined
+    - arch_iso_install_boot_mode == 'uefi'
   tags: troubleshoot_boot
+
+# BIOS boot partitioning scheme
+- name: Create BIOS Boot Partition (BIOS mode)
+  community.general.parted:
+    device: '{{ arch_iso_install_install_drive }}'
+    label: gpt
+    number: 1
+    part_end: 2MB
+    name: bios_boot
+    flags: [bios_grub]
+    state: present
+  when:
+    - manual_partitions is not defined
+    - arch_iso_install_boot_mode == 'bios'
+
+- name: Create boot partition (BIOS mode)
+  community.general.parted:
+    device: '{{ arch_iso_install_install_drive }}'
+    label: gpt
+    number: 2
+    part_start: 2MB
+    part_end: 512MB
+    name: boot
+    flags: []
+    state: present
+  when:
+    - manual_partitions is not defined
+    - arch_iso_install_boot_mode == 'bios'
+
+- name: Create ext4 filesystem in boot partition (BIOS mode)
+  community.general.filesystem:
+    dev: '{{ boot_part }}'
+    fstype: ext4
+    opts: -L boot
+    force: true
+  when:
+    - manual_partitions is not defined
+    - arch_iso_install_boot_mode == 'bios'
+
+- name: Create root partition (BIOS mode)
+  community.general.parted:
+    device: '{{ arch_iso_install_install_drive }}'
+    label: gpt
+    number: 3
+    part_start: 512MB
+    name: root
+    flags: []
+    state: present
+  when:
+    - manual_partitions is not defined
+    - arch_iso_install_boot_mode == 'bios'

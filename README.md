@@ -112,75 +112,33 @@ This project includes a Dockerized environment to provide a consistent and isola
 
 ### Setup and Usage
 
-1.  **Build the Docker Image:**
-    > **Note on Docker Rate Limits:** If you encounter an error like `429 Too Many Requests`, you may have reached Docker Hub's pull rate limit for unauthenticated users. To resolve this, log in to your Docker account by running `docker login` in your terminal and then try the build command again.
-
-    Open your terminal in the root of this project and run:
+1.  **Add yourself to docker group (recommended):**
     ```bash
-    sudo docker compose build
-    ```
-    This command builds the Docker image based on the `Dockerfile`. You only need to run this initially or when the `Dockerfile` changes. Adding `--no-cache` is recommended if you suspect caching issues or want a fresh build.
-
-2.  **Start the Development Container:**
-    To start the container in the background (detached mode):
-    ```bash
-    sudo docker compose up -d
-    ```
-    Your project directory is mounted into `/data` inside the container.
-
-3.  **Accessing the Container Shell:**
-    To get an interactive shell (bash by default) inside the running container:
-    ```bash
-    sudo docker compose exec ansible-dev bash
-    ```
-    You can also use `fish` if you prefer:
-    ```bash
-    sudo docker compose exec ansible-dev fish
+    sudo usermod -aG docker $USER
+    # Log out and back in for group changes to take effect
     ```
 
-4.  **Running Ansible Commands:**
-    Once inside the container's shell, you can run Ansible commands as usual. The working directory will be `/data`, which is your project root.
+2.  **Build and start the container:**
     ```bash
-    # Example: Lint a playbook
+    docker compose build
+    docker compose up -d
+    ```
+
+3.  **Access the container shell:**
+    ```bash
+    docker compose exec ansible-dev bash
+    ```
+
+4.  **Run Ansible commands:**
+    ```bash
     ansible-lint deploy.yml
-
-    # Example: Run a playbook (ensure your inventory is set up and SSH_PASSWORD etc. are exported if needed)
-    # export SSH_PASSWORD="your_ssh_password"
     ansible-playbook -i inventories/workstations/hosts.yml deploy.yml
     ```
-    Alternatively, you can run commands directly without entering the shell:
+
+5.  **Stop the container:**
     ```bash
-    sudo docker compose exec ansible-dev ansible-lint deploy.yml
-
-    # Note: The following command will fail with an "UNREACHABLE" error unless you have a
-    # running host that matches the `arch-test-1.gnome.network` entry in the example inventory.
-    # This is expected. The command is provided as a valid execution example.
-    sudo docker compose exec ansible-dev ansible-playbook -i inventories/workstations/hosts.yml deploy.yml
+    docker compose down
     ```
-
-5.  **Volume Mounts:**
-    The `docker-compose.yml` file configures the following important volume mounts:
-    *   `.:/data`: Your entire project directory is mapped to `/data` in the container. Changes made locally are reflected inside the container, and vice-versa.
-    *   `~/.ssh:/root/.ssh:ro`: Your local SSH keys (from `~/.ssh`) are mounted read-only into the container. This allows Ansible running inside the container to connect to your managed nodes.
-    *   `~/.gitconfig:/root/.gitconfig:ro`: Your local Git configuration is mounted read-only.
-
-6.  **Internet Connectivity Check:**
-    Playbooks that include roles known to require internet access (like `arch-iso-install` or `network` for package installation) have a pre-flight check. This check attempts to connect to `google.com`. If it fails, the playbook will halt before running internet-dependent tasks. This is to ensure a better experience when working offline or with intermittent connectivity.
-
-7.  **Stopping the Container:**
-    When you're done, you can stop the container:
-    ```bash
-    sudo docker compose down
-    ```
-    If you just want to stop it without removing it (so it starts faster next time):
-    ```bash
-    sudo docker compose stop
-    ```
-
-### Offline Usage
-Once the Docker image is built (`docker compose build`), the Ansible tools (Ansible, Ansible Lint, Git, etc.) are installed within the image. This means you can use these tools inside the container to work on your playbooks (e.g., editing, linting, running playbooks against locally accessible hosts or VMs) without an active internet connection.
-
-However, any Ansible tasks that inherently require internet access (e.g., downloading packages with `apt`/`yum`/`pacman`, cloning git repositories from the internet, using `uri` to fetch remote files) will naturally fail if the container cannot access the internet. The pre-flight internet check mentioned above aims to catch this early for known roles.
 
 ## Running Playbooks
 
@@ -202,16 +160,20 @@ Update your inventory file (e.g., [`inventories/workstations/hosts.yml`](invento
 ### 3. Set Required Environment Variables
 
 ```bash
-export SSH_PASSWORD="your_ssh_password"
-export ENCRYPTION_PASSWORD="your_encryption_password"  # If using encryption
-export USER_PASSWORD="your_user_password"              # If creating users
+cp .env.example .env
+# Edit .env and set your passwords
 ```
+
+Docker Compose automatically reads this file.
 
 ### 4. Execute Playbook
 
 ```bash
 # From within the Docker container or local environment
 ansible-playbook -i inventories/workstations/hosts.yml deploy.yml
+
+# From your localhost shell
+docker compose exec ansible-dev ansible-playbook -i inventories/workstations/hosts.yml deploy.yml
 
 # Or use tags for specific roles
 ansible-playbook -i inventories/workstations/hosts.yml deploy.yml --tags network

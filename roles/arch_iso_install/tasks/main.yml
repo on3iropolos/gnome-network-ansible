@@ -4,8 +4,8 @@
   ansible.builtin.set_fact:
     use_encryption: "{{ arch_iso_install_encryption is defined and arch_iso_install_encryption.enabled }}"
     use_btrfs: "{{ arch_iso_install_btrfs is defined and arch_iso_install_btrfs.enabled }}"
-    root_part: "{{ manual_partitions.root | default(arch_iso_install_install_drive + '2') }}"
-    boot_part: "{{ manual_partitions.boot | default(arch_iso_install_install_drive + '1') }}"
+    root_part: "{{ manual_partitions.root | default(arch_iso_install_install_drive + ('3' if arch_iso_install_boot_mode == 'bios' else '2')) }}"
+    boot_part: "{{ manual_partitions.boot | default(arch_iso_install_install_drive + ('2' if arch_iso_install_boot_mode == 'bios' else '1')) }}"
     hostname: "{{ hostname | default(inventory_hostname | replace('_', '-')) }}"
   tags: always
 
@@ -36,17 +36,33 @@
   tags: btrfs
   when: use_btrfs
 
-- name: Create mountpoint for boot volume
+- name: Create mountpoint for boot volume (UEFI mode)
   ansible.builtin.file:
     path: "/mnt{{ arch_iso_install_boot_esp }}"
     state: directory
+  when: arch_iso_install_boot_mode == 'uefi'
 
-- name: Mount boot filesystem
+- name: Mount boot filesystem (UEFI mode)
   ansible.posix.mount:
     path: "/mnt{{ arch_iso_install_boot_esp }}"
     src: "{{ boot_part }}"
     fstype: vfat
     state: mounted
+  when: arch_iso_install_boot_mode == 'uefi'
+
+- name: Create mountpoint for boot volume (BIOS mode)
+  ansible.builtin.file:
+    path: "/mnt/boot"
+    state: directory
+  when: arch_iso_install_boot_mode == 'bios'
+
+- name: Mount boot filesystem (BIOS mode)
+  ansible.posix.mount:
+    path: "/mnt/boot"
+    src: "{{ boot_part }}"
+    fstype: ext4
+    state: mounted
+  when: arch_iso_install_boot_mode == 'bios'
 
 - name: Install base system
   ansible.builtin.import_tasks: install.yaml
@@ -87,6 +103,60 @@
   ansible.builtin.import_tasks: grub.yaml
   when: arch_iso_install_bootloader == 'grub'
   tags: grub
+
+- name: Stop VM to detach ISO
+  ansible.builtin.shell: |
+    virsh --connect qemu:///system destroy {{ libvirt_domain_name | default(inventory_hostname_short) }}
+  delegate_to: localhost
+  become: true
+  changed_when: true
+  register: vm_destroy_result
+
+- name: Verify VM is stopped
+  ansible.builtin.shell: |
+    virsh --connect qemu:///system domstate {{ libvirt_domain_name | default(inventory_hostname_short) }}
+  delegate_to: localhost
+  become: true
+  register: vm_state
+  failed_when: vm_state.stdout != "shut off"
+
+- name: Detach ISO from VM (vda is the ISO, vdb is the hard disk)
+  ansible.builtin.shell: |
+    virsh --connect qemu:///system detach-disk {{ libvirt_domain_name | default(inventory_hostname_short) }} vda --config --persistent
+  delegate_to: localhost
+  become: true
+  changed_when: true
+  register: iso_detach_result
+
+- name: Display ISO detach result
+  ansible.builtin.debug:
+    var: iso_detach_result
+
+- name: Verify ISO was successfully detached
+  ansible.builtin.shell: |
+    virsh --connect qemu:///system domblklist {{ libvirt_domain_name | default(inventory_hostname_short) }} --inactive
+  delegate_to: localhost
+  become: true
+  register: disk_list
+  failed_when: "'arch-iso.iso' in disk_list.stdout"
+
+- name: Start VM (will boot from hard drive since ISO is detached)
+  ansible.builtin.shell: |
+    virsh --connect qemu:///system start {{ libvirt_domain_name | default(inventory_hostname_short) }}
+  delegate_to: localhost
+  become: true
+  changed_when: true
+  register: vm_start_result
+
+- name: Wait for VM to be running
+  ansible.builtin.shell: |
+    virsh --connect qemu:///system domstate {{ libvirt_domain_name | default(inventory_hostname_short) }}
+  delegate_to: localhost
+  become: true
+  register: vm_running_state
+  until: vm_running_state.stdout == "running"
+  retries: 5
+  delay: 2
 
 - name: Reboot
   ansible.builtin.reboot:
