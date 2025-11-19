@@ -112,103 +112,35 @@ This project includes a Dockerized environment to provide a consistent and isola
 
 ### Setup and Usage
 
-1.  **Build the Docker Image:**
-    > **Note on Docker Rate Limits:** If you encounter an error like `429 Too Many Requests`, you may have reached Docker Hub's pull rate limit for unauthenticated users. To resolve this, log in to your Docker account by running `docker login` in your terminal and then try the build command again.
-
-    Open your terminal in the root of this project and run:
-    ```bash
-    sudo -E docker compose build
-    sudo -E docker compose up -d
-    ```
-    
-    **Option B: Add your user to the docker group (recommended, no sudo needed)**
+1.  **Add yourself to docker group (recommended):**
     ```bash
     sudo usermod -aG docker $USER
     # Log out and back in for group changes to take effect
+    ```
+
+2.  **Build and start the container:**
+    ```bash
     docker compose build
     docker compose up -d
     ```
     
-    The `-E` flag is important because it preserves your `$HOME` environment variable, which is needed to mount your SSH keys from `~/.ssh`.
+    > **Note:** If you don't add yourself to docker group, use `sudo -E` before docker commands to preserve environment variables needed for SSH key mounting.
 
-2.  **Build the Docker Image:**
+3.  **Access the container shell:**
     ```bash
-    sudo -E docker compose build
-    # OR if you added yourself to docker group:
-    docker compose build
-    ```
-    This command builds the Docker image based on the `Dockerfile`. You only need to run this initially or when the `Dockerfile` changes. Adding `--no-cache` is recommended if you suspect caching issues or want a fresh build.
-
-3.  **Start the Development Container:**
-    ```bash
-    sudo -E docker compose up -d
-    # OR if you added yourself to docker group:
-    docker compose up -d
-    ```
-    Your project directory is mounted into `/data` inside the container.
-
-4.  **Accessing the Container Shell:**
-    ```bash
-    sudo -E docker compose exec ansible-dev bash
-    # OR if you added yourself to docker group:
     docker compose exec ansible-dev bash
     ```
-    You can also use `fish` if you prefer:
-    ```bash
-    sudo -E docker compose exec ansible-dev fish
-    ```
 
-5.  **Running Ansible Commands:**
-    Once inside the container's shell, you can run Ansible commands as usual. The working directory will be `/data`, which is your project root.
+4.  **Run Ansible commands:**
     ```bash
-    # Example: Lint a playbook
     ansible-lint deploy.yml
-
-    # Example: Run a playbook (ensure your inventory is set up and SSH_PASSWORD etc. are exported if needed)
-    # export SSH_PASSWORD="your_ssh_password"
     ansible-playbook -i inventories/workstations/hosts.yml deploy.yml
     ```
-    Alternatively, you can run commands directly without entering the shell:
+
+5.  **Stop the container:**
     ```bash
-    sudo docker compose exec ansible-dev ansible-lint deploy.yml
-
-    # Note: The following command will fail with an "UNREACHABLE" error unless you have a
-    # running host that matches the `arch-test-1.gnome.network` entry in the example inventory.
-    # This is expected. The command is provided as a valid execution example.
-    sudo docker compose exec ansible-dev ansible-playbook -i inventories/workstations/hosts.yml deploy.yml
-    ```
-
-6.  **Volume Mounts:**
-    The `docker-compose.yml` file configures the following important volume mounts:
-    *   `.:/data`: Your entire project directory is mapped to `/data` in the container. Changes made locally are reflected inside the container, and vice-versa.
-    *   `${HOME}/.ssh/git_on3iropolos_ed25519.pub:/root/.ssh/user_public_key.pub:ro`: Only your SSH **public key** is mounted (not the entire `.ssh` directory). This provides the minimum necessary access for the `arch_iso_install` role to copy your public key to new systems, while maintaining security.
-    *   `~/.gitconfig:/root/.gitconfig:ro`: Your local Git configuration is mounted read-only.
-    
-    **Security Note:** We mount only the specific public key file needed, not the entire `.ssh` directory. This prevents:
-    - Permission conflicts with sensitive files like SSH config
-    - Exposure of private keys to the container
-    - Potential security issues from mounting files with different ownership
-    
-    **Customization:** If you need to use a different public key, update the volume mount in `docker-compose.yml` and the `pub_key_location` in your host_vars file.
-
-7.  **Internet Connectivity Check:**
-    Playbooks that include roles known to require internet access (like `arch-iso-install` or `network` for package installation) have a pre-flight check. This check attempts to connect to `google.com`. If it fails, the playbook will halt before running internet-dependent tasks. This is to ensure a better experience when working offline or with intermittent connectivity.
-
-8.  **Stopping the Container:**
-    ```bash
-    sudo -E docker compose down
-    # OR if you added yourself to docker group:
     docker compose down
     ```
-    If you just want to stop it without removing it (so it starts faster next time):
-    ```bash
-    sudo -E docker compose stop
-    ```
-
-### Offline Usage
-Once the Docker image is built (`docker compose build`), the Ansible tools (Ansible, Ansible Lint, Git, etc.) are installed within the image. This means you can use these tools inside the container to work on your playbooks (e.g., editing, linting, running playbooks against locally accessible hosts or VMs) without an active internet connection.
-
-However, any Ansible tasks that inherently require internet access (e.g., downloading packages with `apt`/`yum`/`pacman`, cloning git repositories from the internet, using `uri` to fetch remote files) will naturally fail if the container cannot access the internet. The pre-flight internet check mentioned above aims to catch this early for known roles.
 
 ## Running Playbooks
 
@@ -229,35 +161,12 @@ Update your inventory file (e.g., [`inventories/workstations/hosts.yml`](invento
 
 ### 3. Set Required Environment Variables
 
-Create a `.env` file in the project root directory:
-
 ```bash
 cp .env.example .env
+# Edit .env and set your passwords
 ```
 
-Then edit `.env` and set your actual passwords:
-
-```bash
-# .env file
-SSH_PASSWORD=your_actual_ssh_password
-ENCRYPTION_PASSWORD=your_actual_encryption_password
-USER_PASSWORD=your_actual_user_password
-```
-
-**Important Notes:**
-- The `.env` file is automatically ignored by git (it's in `.gitignore`)
-- Docker Compose automatically reads this file when you run commands
-- Never commit `.env` to version control
-- Use `.env.example` as a template for others
-
-**Alternative (Not Recommended):** You can also export environment variables, but this requires not using `sudo`:
-```bash
-export SSH_PASSWORD="your_ssh_password"
-export ENCRYPTION_PASSWORD="your_encryption_password"
-export USER_PASSWORD="your_user_password"
-# Then run without sudo or use sudo -E
-docker compose exec ansible-dev ansible-playbook ...
-```
+Docker Compose automatically reads this file.
 
 ### 4. Execute Playbook
 

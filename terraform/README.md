@@ -73,23 +73,14 @@ virt-manager
 # Double-click to open the graphical console
 ```
 
-### 4. Prepare VM for Ansible
-
-Open the VM console and set root password:
+### 4. Set Root Password in VM
 
 ```bash
-# Open VM graphically
 virt-viewer --connect qemu:///system arch-test
-
-# In the VM console:
-# 1. Login as root (press Enter at login prompt, type 'root')
-# 2. Set password to match SSH_PASSWORD from your .env file:
-passwd
+# Login as root, then: passwd
 ```
 
-**That's it!** SSH is already running on Arch ISO by default.
-
-### 5. Run Ansible Playbooks
+### 5. Run Ansible
 
 ```bash
 # From project root
@@ -135,71 +126,13 @@ Or override via command line:
 terraform apply -var="memory_mb=4096" -var="vcpus=4" -auto-approve
 ```
 
-## Manual Terraform Usage
-
-If you prefer direct Terraform commands:
+## Manual Terraform Commands
 
 ```bash
-# Initialize
 terraform init
-
-# Plan
-terraform plan
-
-# Apply
 terraform apply -auto-approve
-
-# View outputs
 terraform output
-
-# Destroy
 terraform destroy -auto-approve
-```
-
-## File Structure
-
-```
-terraform/
-├── main.tf              # Main Terraform configuration
-├── variables.tf         # Variable definitions
-├── outputs.tf           # Output definitions
-├── ubuntu-setup.sh      # Automated Ubuntu environment setup
-├── vm-create.sh         # Helper script to create VMs
-├── vm-destroy.sh        # Helper script to destroy VMs
-└── README.md           # This file
-```
-
-## Integration with Roles
-
-### Testing arch_iso_install Role
-
-```bash
-# Create VM
-cd terraform
-./vm-create.sh
-
-# In VM console: set passwd, start sshd, get IP
-
-# Run arch_iso_install role
-cd ..
-ansible-playbook -i inventories/test/hosts.yml deploy.yml \
-    --tags arch_iso_install
-```
-
-### Testing Other Roles
-
-The same VM can be used to test multiple roles sequentially:
-
-```bash
-# After arch_iso_install completes and system reboots:
-
-# Test network role
-ansible-playbook -i inventories/test/hosts.yml deploy.yml \
-    --tags network
-
-# Test additional roles
-ansible-playbook -i inventories/test/hosts.yml deploy.yml \
-    --tags other_role
 ```
 
 ## Troubleshooting
@@ -250,45 +183,16 @@ virsh net-start default
 virsh net-autostart default
 ```
 
-### Permission Issues After Setup
+### Permission Issues
 
-If you encounter permission errors after running the setup script:
-
-1. **Verify AppArmor is disabled for libvirtd:**
-   ```bash
-   sudo aa-status | grep libvirtd
-   # Should show NO output (not confined)
-   ```
-
-2. **If still confined, manually disable:**
-   ```bash
-   sudo ln -sf /etc/apparmor.d/usr.sbin.libvirtd /etc/apparmor.d/disable/
-   sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.libvirtd
-   sudo systemctl restart libvirtd
-   ```
-
-3. **Verify group membership:**
-   ```bash
-   groups | grep -E 'libvirt|kvm'
-   # If not present, log out and back in
-   ```
-
-### Re-enabling AppArmor for libvirtd
-
-If you need to re-enable AppArmor protection later:
+If you encounter permission errors:
 ```bash
-sudo rm /etc/apparmor.d/disable/usr.sbin.libvirtd
-sudo apparmor_parser -a /etc/apparmor.d/usr.sbin.libvirtd
-sudo systemctl restart libvirtd
+# Verify AppArmor disabled
+sudo aa-status | grep libvirtd  # Should show no output
+
+# Verify group membership
+groups | grep -E 'libvirt|kvm'  # Log out and back in if missing
 ```
-
-## Tips
-
-1. **ISO Caching**: The Arch ISO is downloaded once and cached in libvirt storage pool
-2. **Snapshots**: Use virt-manager to create snapshots before major operations
-3. **Performance**: VMs use host CPU passthrough for best performance
-4. **Resource Cleanup**: Always destroy VMs when done to free system resources
-5. **Customization**: Adjust default values in `variables.tf` for different resource requirements
 
 ## See Also
 
