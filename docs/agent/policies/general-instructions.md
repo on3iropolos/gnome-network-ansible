@@ -29,7 +29,7 @@ Before making changes:
 
 - Read the project overview and goals in [`README.md`](../../README.md:1).
 - Read this agent guide in [`AGENTS.md`](../../AGENTS.md:1).
-- Review the ALWAYS LINK policy in [`always-link.md`](always-link.md:1).
+- Review the Always Link policy in [`always-link.md`](always-link.md:1).
 - Review the documentation contributor guide in [`contributing.md`](../../contributing.md:1).
 
 Your edits must align with the repository’s goals and documentation system, not just the immediate user request.
@@ -38,7 +38,7 @@ Your edits must align with the repository’s goals and documentation system, no
 
 When working with docs:
 
-- Treat `docs/` as the **canonical** home for concepts, as required by the ALWAYS LINK policy in [`always-link.md`](always-link.md:1).
+- Treat `docs/` as the **canonical** home for concepts, as required by the Always Link policy in [`always-link.md`](always-link.md:1).
 - Avoid duplicating explanations in `README.md`, role `README.md` files, or code comments; link to the appropriate doc under `docs/` instead.
 - When promoting existing text (for example from `.agent/instructions/` or a role README) into `docs/`, keep a short “Source” note or link stub at the original location.
 
@@ -64,7 +64,7 @@ Agents must not ignore testing requirements:
 When instructions conflict:
 
 1. The user’s direct instructions for the current task take precedence, as long as they do not obviously damage the repository.
-2. Repository policies (including this file and the ALWAYS LINK policy) guide how you implement the user’s request.
+2. Repository policies (including this file and the Always Link policy) guide how you implement the user’s request.
 3. Per-topic instructions in `.agent/instructions/` refine the details (working directory, logging, testing, interaction, diagrams).
 
 If you must deviate from these policies to satisfy a user request, keep the deviation as local as possible and avoid breaking canonical docs or automated tooling.
@@ -73,7 +73,7 @@ If you must deviate from these policies to satisfy a user request, keep the devi
 
 For more detailed guidance:
 
-- ALWAYS LINK policy: [`always-link.md`](always-link.md:1)
+- Always Link policy: [`always-link.md`](always-link.md:1)
 - Documentation system and examples: [`contributing.md`](../../contributing.md:1)
 - Agent working directory and logging: [`agent-working-directory-and-logging.md`](agent-working-directory-and-logging.md:1)
 - Agent working directory and logging (legacy source): [`working_directory.md`](.agent/instructions/working_directory.md:1)

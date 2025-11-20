@@ -19,7 +19,7 @@ Human- and agent-facing documentation is organized under the `docs/` tree using 
 Canonical agent and documentation docs you will frequently need:
 
 - Agent docs index: [`docs/agent/INDEX.md`](docs/agent/INDEX.md:1)
-- ALWAYS LINK policy (canonical): [`docs/agent/policies/always-link.md`](docs/agent/policies/always-link.md:1)
+- Always Link policy (canonical): [`docs/agent/policies/always-link.md`](docs/agent/policies/always-link.md:1)
 - General instructions for AI agents (canonical): [`docs/agent/policies/general-instructions.md`](docs/agent/policies/general-instructions.md:1)
 - Documentation contributing guide: [`docs/contributing.md`](docs/contributing.md:1)
 
@@ -66,7 +66,7 @@ When performing documentation work, follow this sequence:
    - Project overview: [`README.md`](README.md:1)
    - Agent instructions: [`AGENTS.md`](AGENTS.md:1)
    - Agent docs index and policies: [`docs/agent/INDEX.md`](docs/agent/INDEX.md:1)
-   - ALWAYS LINK policy: [`docs/agent/policies/always-link.md`](docs/agent/policies/always-link.md:1)
+   - Always Link policy: [`docs/agent/policies/always-link.md`](docs/agent/policies/always-link.md:1)
    - Docs contributing guide: [`docs/contributing.md`](docs/contributing.md:1)
 
 2. **Inventory and classification**

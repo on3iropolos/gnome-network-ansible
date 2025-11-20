@@ -54,7 +54,7 @@ Logging is not optional; it is part of the required audit trail for automated ch
 
 ## Relationship to other policies
 
-- The ALWAYS LINK documentation rules are defined at [`always-link.md`](always-link.md:1) and govern how canonical docs and link stubs are organized.
+- The Always Link documentation rules are defined at [`always-link.md`](always-link.md:1) and govern how canonical docs and link stubs are organized.
 - General agent behavior (following user instructions, respecting testing policies, and using `.agent` tooling) is defined in [`general-instructions.md`](general-instructions.md:1).
 - This document adds specific requirements for:
   - Where agents create transient files.

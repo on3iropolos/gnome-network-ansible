@@ -1,6 +1,6 @@
 ---
 title: "Documenting roles and repository"
-summary: "Defines documentation expectations for Ansible roles, repository structure updates, and in-code clarity, integrating with the ALWAYS LINK documentation system."
+summary: "Defines documentation expectations for Ansible roles, repository structure updates, and in-code clarity, integrating with the Always Link documentation system."
 type: "how-to"
 scope: "repo"
 tags:
@@ -21,9 +21,9 @@ source: "docs/policies/documentation.md"
 
 > Source: This guide was migrated from the former "Documentation Policy" that previously lived under `docs/policies/documentation.md`.
 
-This guide explains how to document Ansible roles, repository structure, and non-obvious code in this repository. It builds on the ALWAYS LINK system described in [`docs/agent/policies/always-link.md`](../agent/policies/always-link.md:1) and the contributing guide in [`docs/contributing.md`](../contributing.md:1).
+This guide explains how to document Ansible roles, repository structure, and non-obvious code in this repository. It builds on the Always Link system described in [`docs/agent/policies/always-link.md`](../agent/policies/always-link.md:1) and the contributing guide in [`docs/contributing.md`](../contributing.md:1).
 
-## Scope and relationship to ALWAYS LINK
+## Scope and relationship to Always Link
 
 - Use this document for **what must be documented** in roles and top-level files.
 - Use [`docs/agent/policies/always-link.md`](../agent/policies/always-link.md:1) for **how docs are organized** (canonical docs, link stubs, front matter).
@@ -51,7 +51,7 @@ At minimum, fill in:
 Additional notes:
 
 - Keep the README concise and defer deep explanations to canonical docs under `docs/roles/` (for example, a dedicated role how-to).
-- When you promote content from a role README into `docs/`, leave behind a 1–2 sentence link stub that points to the canonical doc, following the ALWAYS LINK policy.
+- When you promote content from a role README into `docs/`, leave behind a 1–2 sentence link stub that points to the canonical doc, following the Always Link policy.
 
 ## Repository structure documentation
 

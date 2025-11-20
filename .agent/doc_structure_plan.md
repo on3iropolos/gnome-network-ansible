@@ -37,7 +37,7 @@ This file is an internal agent planning note and is not part of the canonical do
 
 ## Policy bindings
 
-- The ALWAYS LINK policy is canonically defined at `docs/policies/always-link.md`.
+- The Always Link policy is canonically defined at `docs/policies/always-link.md`.
 - All policy mentions elsewhere (including `README.md` and `AGENTS.md`) will link to that file instead of duplicating policy text.
 
 ## Index files
@@ -56,7 +56,7 @@ This file is an internal agent planning note and is not part of the canonical do
 - `AGENTS.md` will be treated as AGENT_ENTRY and will:
   - Describe how agents should use canonical docs and indexes.
   - Require inventory, classification, and audit reports to be kept in `docs/`.
-  - Emphasize the ALWAYS LINK policy for all agent-authored content.
+  - Emphasize the Always Link policy for all agent-authored content.
 
 ## Ephemeral agent materials
 

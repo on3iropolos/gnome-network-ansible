@@ -1,6 +1,6 @@
 ---
-title: "ALWAYS LINK Documentation Policy"
-summary: "Defines the ALWAYS LINK policy for this repository: every concept has exactly one canonical document, and all other mentions must link to that source instead of duplicating content."
+title: "Always Link Documentation Policy"
+summary: "Defines the Always Link policy for this repository: every concept has exactly one canonical document, and all other mentions must link to that source instead of duplicating content."
 type: "policy"
 scope: "repo"
 tags:
@@ -18,7 +18,7 @@ canonical_url: "docs/agent/policies/always-link.md"
 
 > Source: This policy was migrated from [`docs/policies/always-link.md`](../../policies/always-link.md:1) to make it part of the agent documentation collection under `docs/agent/`.
 
-The ALWAYS LINK policy defines how documentation is organized and maintained in this repository. Every concept has exactly one canonical document; all other mentions must link to that document instead of duplicating its content.
+The Always Link policy defines how documentation is organized and maintained in this repository. Every concept has exactly one canonical document; all other mentions must link to that document instead of duplicating its content.
 
 ## Goals
 

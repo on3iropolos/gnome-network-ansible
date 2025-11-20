@@ -1,6 +1,6 @@
 ---
 title: "Contributing Documentation to Gnome Network Ansible"
-summary: "Explains how to add and maintain documentation using the ALWAYS LINK policy, canonical docs, and the docs/ subject-based structure."
+summary: "Explains how to add and maintain documentation using the Always Link policy, canonical docs, and the docs/ subject-based structure."
 type: "how-to"
 scope: "repo"
 tags:
@@ -15,7 +15,7 @@ last_reviewed: "2025-11-19"
 canonical_url: "docs/contributing.md"
 ---
 
-This document describes how to write and evolve documentation in this repository while following the ALWAYS LINK policy and the subject-based layout under `docs/`.
+This document describes how to write and evolve documentation in this repository while following the Always Link policy and the subject-based layout under `docs/`.
 
 ## When to add or change docs
 
@@ -28,7 +28,7 @@ Add or update docs when you:
 
 Before writing anything new, **search for an existing canonical doc** that covers the concept. If one exists, update it or add a link stub instead of creating a second full explanation.
 
-See the ALWAYS LINK policy for details: [ALWAYS LINK policy](agent/policies/always-link.md).
+See the Always Link policy for details: [Always Link policy](agent/policies/always-link.md).
 
 ## File placement and naming
 
@@ -90,4 +90,4 @@ When you modify docs:
 - Keep canonical URLs stable; do not rename or move canonical files without updating all links and the classification data.
 - Do not write long-form documentation directly into `README.md`, `AGENTS.md`, or code comments when it belongs in `docs/`; add a link stub instead.
 
-If you add a new canonical doc, ensure that any overlapping existing content is converted to link stubs in the same change so the ALWAYS LINK policy remains enforced.
+If you add a new canonical doc, ensure that any overlapping existing content is converted to link stubs in the same change so the Always Link policy remains enforced.

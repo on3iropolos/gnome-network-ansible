@@ -1,6 +1,6 @@
 ---
 title: "Agent Workflow: Updating Documentation"
-summary: "Step-by-step workflow for AI agents to update documentation safely using the ALWAYS LINK policy and .agent tooling."
+summary: "Step-by-step workflow for AI agents to update documentation safely using the Always Link policy and .agent tooling."
 type: "how-to"
 scope: "repo"
 tags:
@@ -20,7 +20,7 @@ canonical_url: "docs/agent/workflows/update-docs.md"
 
 # Agent Workflow: Updating Documentation
 
-This document defines the recommended end-to-end workflow for AI agents that update documentation in this repository. It complements the high-level rules in [`docs/agent/policies/general-instructions.md`](../policies/general-instructions.md:1) and the ALWAYS LINK policy in [`docs/agent/policies/always-link.md`](../policies/always-link.md:1).
+This document defines the recommended end-to-end workflow for AI agents that update documentation in this repository. It complements the high-level rules in [`docs/agent/policies/general-instructions.md`](../policies/general-instructions.md:1) and the Always Link policy in [`docs/agent/policies/always-link.md`](../policies/always-link.md:1).
 
 Use this workflow whenever you add, restructure, or significantly edit files under `docs/`, `README.md`, or `AGENTS.md`.
 
@@ -33,7 +33,7 @@ Before changing any docs:
 - Review agent policies: [`docs/agent/policies/INDEX.md`](../policies/INDEX.md:1).
 - Review the documentation contributing guide: [`docs/contributing.md`](../../contributing.md:1).
 
-Confirm that the requested change fits the repository’s goals and the ALWAYS LINK model (one canonical doc per concept, link stubs elsewhere).
+Confirm that the requested change fits the repository’s goals and the Always Link model (one canonical doc per concept, link stubs elsewhere).
 
 ## 2. Run inventory and classification
 
@@ -53,7 +53,7 @@ Using the inventory and classification outputs:
   - Updates an existing canonical doc, or
   - Creates a new canonical doc under `docs/<subject>/<slug>.md`, or
   - Converts legacy text into a short link stub pointing to an existing canonical doc.
-- Ensure there will be **exactly one** canonical doc per concept, per [`ALWAYS LINK`](../policies/always-link.md:1).
+- Ensure there will be **exactly one** canonical doc per concept, per [`Always Link`](../policies/always-link.md:1).
 
 Record any migration decisions in the doc body as short “Source” notes when you promote text out of legacy locations.
 

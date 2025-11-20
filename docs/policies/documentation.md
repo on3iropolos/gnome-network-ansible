@@ -27,7 +27,7 @@ Use the docs linked here as the canonical references for **what** must be docume
 
 ## Core documentation model
 
-- [`ALWAYS LINK documentation policy`](../agent/policies/always-link.md:1)  
+- [`Always Link documentation policy`](../agent/policies/always-link.md:1)  
   Canonical definition of the documentation model:
   - Exactly one canonical doc per concept.
   - Bite-sized documents with clear front matter.
@@ -59,7 +59,7 @@ Use the docs linked here as the canonical references for **what** must be docume
 
 When you add or update documentation:
 
-1. Start from the ALWAYS LINK policy and contributing guide to understand structure and front matter.
+1. Start from the Always Link policy and contributing guide to understand structure and front matter.
 2. Use the “Documenting roles and repository” how-to for role READMEs and repository-wide docs.
 3. Use the Mermaid guidelines whenever you add or modify diagrams.
 4. Prefer adding or updating canonical docs under `docs/` and leaving short link stubs in READMEs or comments, rather than duplicating explanations.

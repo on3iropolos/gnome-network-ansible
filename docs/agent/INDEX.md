@@ -34,7 +34,7 @@ Agent-focused policies live under `docs/agent/policies/` and are indexed at:
 
 Key policies for agents:
 
-- **ALWAYS LINK documentation policy**  
+- **Always Link documentation policy**  
   Canonical definition of the documentation model: one canonical doc per concept, bite-sized files, and link stubs everywhere else.  
   See [`docs/agent/policies/always-link.md`](policies/always-link.md:1).
 
@@ -54,7 +54,7 @@ For the full set of repository-wide policies (not just agent-focused ones), see 
 Task-oriented workflows for agents live under `docs/agent/workflows/`.
 
 - **Updating documentation**  
-  End-to-end workflow for updating docs safely using the ALWAYS LINK policy and `.agent` tooling (inventory, classify, audit).  
+  End-to-end workflow for updating docs safely using the Always Link policy and `.agent` tooling (inventory, classify, audit).  
   See [`docs/agent/workflows/update-docs.md`](workflows/update-docs.md:1).
 
 Additional workflows can be added to this directory as the automation surface grows.

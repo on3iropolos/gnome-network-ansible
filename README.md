@@ -19,7 +19,7 @@ This is the Gnome Network Ansible project designed to automate the configuration
 - **Run your first playbook:** See the _Running Playbooks_ section below for a concrete end-to-end workflow.
 - **Understand testing:** See `DEVELOPMENT.md` for detailed Molecule and Terraform testing workflows.
 - **Troubleshoot Molecule:** Use the runbook at `docs/troubleshooting/troubleshooting-molecule.md` when Molecule + Docker tests fail.
-- **Change or add docs:** Follow `docs/contributing.md` and the ALWAYS LINK policy in `docs/agent/policies/always-link.md`.
+- **Change or add docs:** Follow `docs/contributing.md` and the Always Link policy in `docs/agent/policies/always-link.md`.
 
 ## Development and Testing Architecture
 
@@ -302,7 +302,7 @@ Use labels to categorize issues and pull requests. This helps in filtering and m
 
 Documentation is organized under the `docs/` directory using subject-based folders and bite-sized canonical documents.
 
-- **Canonical docs:** Each concept has a single canonical Markdown file under `docs/<subject>/<slug>.md`. See the ALWAYS LINK policy in `docs/agent/policies/always-link.md` for details.
+- **Canonical docs:** Each concept has a single canonical Markdown file under `docs/<subject>/<slug>.md`. See the Always Link policy in `docs/agent/policies/always-link.md` for details.
 - **How to contribute docs:** Follow `docs/contributing.md` when adding or updating documentation.
 - **Role documentation:** All new roles must include a `README.md` file within their directory, based on the `roles/role_template/README.md` template, but long-form explanations should live in `docs/` with short links from the role README.
 - **Updating docs:** When you change behavior, update the relevant canonical docs in `docs/` and convert any overlapping text elsewhere into link stubs instead of duplicating content.

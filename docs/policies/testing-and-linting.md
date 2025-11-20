@@ -51,7 +51,7 @@ Use the docs linked here as the canonical references for how testing works in th
 ## Contributing and extending tests
 
 - [`Contributing documentation to Gnome Network Ansible`](../contributing.md:1)  
-  Describes the ALWAYS LINK policy, canonical docs, and how to structure new testing docs.
+  Describes the Always Link policy, canonical docs, and how to structure new testing docs.
 
 When you add new testing workflows or tools:
 

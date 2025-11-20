@@ -26,7 +26,7 @@ Use this page when you need to discover which high-level policies agents must fo
 
 ## Core agent policies
 
-- **ALWAYS LINK documentation policy**
+- **Always Link documentation policy**
   Canonical definition of the documentation model: one canonical doc per concept, bite-sized files, and link stubs everywhere else.
   See `docs/agent/policies/always-link.md`.
 
