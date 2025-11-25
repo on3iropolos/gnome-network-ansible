@@ -101,25 +101,7 @@ Each populated subject directory under `docs/` (including `docs/agent/`) should 
 
 When these index files exist, prefer linking to them from `README.md` and `AGENTS.md` instead of enumerating individual docs inline.
 
-## 6. Legacy instruction files under .agent/instructions
-
-In addition to this entrypoint, agents **must** honor the existing instruction files:
-
-- General instructions: [`general_instructions.md`](.agent/instructions/general_instructions.md:1)
-- Working directory & logging: [`working_directory.md`](.agent/instructions/working_directory.md:1)
-- Documentation specifics: [`documentation.md`](.agent/instructions/documentation.md:1)
-- Testing & linting: [`testing_and_linting.md`](.agent/instructions/testing_and_linting.md:1)
-- Interaction rules: [`interaction.md`](.agent/instructions/interaction.md:1)
-- Mermaid diagrams: [`mermaid_diagram_guidelines.md`](.agent/instructions/mermaid_diagram_guidelines.md:1)
-
-These documents describe how to:
-
-- Use `.agent/` as the working directory.
-- Log activity in `.agent/log/` as required.
-- Run `ansible-lint`, Molecule, and Terraform tests.
-- Handle conflicting instructions between this repo and the user (user instructions take precedence for the current task).
-
-## 7. Safety and precedence rules
+## 6. Safety and precedence rules
 
 When in doubt:
 

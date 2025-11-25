@@ -42,6 +42,7 @@ Examples:
 - `docs/terraform/testing-with-terraform-libvirt.md`
 - `docs/roles/network-role-overview.md`
 - `docs/troubleshooting/molecule-common-failures.md`
+- `docs/agent/policies/agent-workspace.md`
 
 If you are unsure which subject to use, pick the one that best matches the dominant topic (for example, Terraform usage belongs under `terraform` even if it mentions roles).
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Classify documentation units from docs/inventory.yaml into docs/classified.yaml.
+Classify documentation units from .agent/tmp/inventory.yaml into .agent/tmp/classified.yaml.
 
 - Assigns subject (from fixed taxonomy), type, scope, and tags.
 - Detects duplicates by exact concept signature.
@@ -8,6 +8,15 @@ Classify documentation units from docs/inventory.yaml into docs/classified.yaml.
 - Output is fully machine-readable and idempotent.
 
 This script deliberately has no external dependencies (no PyYAML).
+
+Usage:
+  1. From the repository root, run the inventory step:
+       python .agent/doc_inventory.py
+  2. Then classify the inventory into .agent/tmp/classified.yaml:
+       python .agent/doc_classify.py
+
+The resulting classified data can be used by downstream tools to generate or
+validate canonical docs under docs/.
 """
 
 from __future__ import annotations

@@ -4,6 +4,13 @@
 This script is intentionally self-contained (no external dependencies)
 and safe to re-run. It can be extended as the documentation system
 evolves.
+
+Usage:
+  From the repository root:
+    python .agent/doc_inventory.py
+
+This will scan README/AGENTS/docs and selected comment blocks in source
+files, then write a machine-readable inventory to .agent/tmp/inventory.yaml.
 """
 
 import hashlib

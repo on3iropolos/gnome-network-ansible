@@ -28,6 +28,8 @@ This file is an internal agent planning note and is not part of the canonical do
 - reference → `docs/reference/`
 - how-to → `docs/how-to/`
 
+These subjects mirror `ALLOWED_SUBJECTS` in `.agent/doc_classify.py`. Not all subject directories need to exist immediately under `docs/`; new ones are created as canonical docs for those subjects are introduced.
+
 ## Canonicalization rules
 
 - One canonical file per concept signature (as defined in `docs/classified.yaml`).

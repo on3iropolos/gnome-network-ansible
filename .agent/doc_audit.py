@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+"""
+Run a documentation audit and write a machine-readable report.
+
+- Scans README.md, AGENTS.md, and all docs/*.md files for Markdown links.
+- Flags broken links, absolute paths, and links that escape the repository.
+- Detects oversize docs (by word count) and duplicate concept signatures.
+- Writes a JSON report to .agent/tmp/audit.json and docs/audit.json.
+
+Usage:
+  From the repository root:
+    python .agent/doc_audit.py
+"""
 
 import json
 import re

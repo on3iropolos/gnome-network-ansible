@@ -18,51 +18,25 @@ last_reviewed: "2025-11-19"
 canonical_url: "docs/agent/policies/agent-working-directory-and-logging.md"
 ---
 
-> Source: This policy was migrated from [`docs/policies/agent-working-directory-and-logging.md`](../../policies/agent-working-directory-and-logging.md:1) to be part of the agent documentation collection under `docs/agent/`.
+> Source: This policy was originally migrated from [`docs/policies/agent-working-directory-and-logging.md`](../../policies/agent-working-directory-and-logging.md:1). It is now a high-level entrypoint that delegates to the focused workspace and logging policies under `docs/agent/policies/`.
 
 # Agent Working Directory and Logging
 
-This policy describes how AI agents must use the `.agent/` directory for temporary artifacts and how they must log activity in this repository. It consolidates and replaces the older inline instructions in `.agent/instructions/working_directory.md` and should be treated as the canonical reference.
+This document provides a short overview and links to the two focused policies that agents must follow:
 
-## Working directory overview
+- Workspace usage: [`agent-workspace.md`](agent-workspace.md:1)
+- Logging requirements: [`agent-logging.md`](agent-logging.md:1)
 
-Agents must treat the `./.agent/` directory as the dedicated workspace for:
+In day-to-day work:
 
-- Transient working files (intermediate JSON/YAML, scratch notes, audit outputs).
-- Agent-oriented scripts and helper tools under `.agent/`.
-- Logs written during automated documentation or refactor runs.
+- Use **`agent-workspace.md`** to understand how `.agent/` and `.agent/tmp/` are used for transient artifacts and tooling.
+- Use **`agent-logging.md`** to understand when and how to write logs under `.agent/log/`.
 
-Key points:
+For repository-wide policies that underpin these agent-focused docs, continue to use:
 
-- Do not scatter temporary files across the repository; keep them under `.agent/`.
-- Respect the project’s `.gitignore` rules so that ephemeral outputs (for example `.agent/tmp/`) are not committed.
-- Instruction files under `.agent/instructions/` remain version-controlled; everything under `.agent/tmp/` is considered ephemeral.
+- Working directory policy: [`../../policies/working-directory.md`](../../policies/working-directory.md:1)
+- Logging file layout: [`../../policies/log-file-naming-and-location.md`](../../policies/log-file-naming-and-location.md:1)
+- Logging content rules: [`../../policies/log-content-guidelines.md`](../../policies/log-content-guidelines.md:1)
+- Log entry format: [`../../policies/log-entry-format.md`](../../policies/log-entry-format.md:1)
 
-For more detail on the working directory rules, see [`working-directory.md`](../../policies/working-directory.md:1).
-
-## Logging overview
-
-Every non-trivial agent run must produce a concise log entry in `./.agent/log/` so that humans can reconstruct what was done and why.
-
-Logging requirements:
-
-- Use the directory and naming scheme described in [`log-file-naming-and-location.md`](../../policies/log-file-naming-and-location.md:1).
-- Follow the content and brevity rules from [`log-content-guidelines.md`](../../policies/log-content-guidelines.md:1).
-- Use the standard entry format from [`log-entry-format.md`](../../policies/log-entry-format.md:1) so logs remain machine- and human-readable.
-
-Logging is not optional; it is part of the required audit trail for automated changes to documentation and code.
-
-## Relationship to other policies
-
-- The Always Link documentation rules are defined at [`always-link.md`](always-link.md:1) and govern how canonical docs and link stubs are organized.
-- General agent behavior (following user instructions, respecting testing policies, and using `.agent` tooling) is defined in [`general-instructions.md`](general-instructions.md:1).
-- This document adds specific requirements for:
-  - Where agents create transient files.
-  - How they name and structure logs.
-  - How they keep logging concise but useful.
-
-When updating logging or working-directory behavior, prefer to update this policy and the related detailed docs rather than editing individual scripts in isolation.
-
-## Migration note
-
-The original guidance in `.agent/instructions/working_directory.md` has been canonicalized into this document and its related policies. Future references to working-directory or logging behavior should link here or to the more focused docs listed in `related`, not to the legacy `.agent/instructions/` file.
+Agents should treat this file as an index and rely on the linked policies for the authoritative, detailed requirements.
