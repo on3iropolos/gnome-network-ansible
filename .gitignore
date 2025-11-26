@@ -11,6 +11,7 @@ debug.yml
 .agent/log/
 .agent/tmp/
 .ansible
+docs/audit.json
 
 # Molecule artifacts
 .molecule/
