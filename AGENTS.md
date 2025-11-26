@@ -12,16 +12,19 @@ Human- and agent-facing documentation is organized under the `docs/` tree using 
 
 For the authoritative view of this system, start from these canonical docs:
 
-- Agent docs index: [`docs/agent/INDEX.md`](docs/agent/INDEX.md:1)  
+- Agent docs index: [`docs/agent/INDEX.md`](docs/agent/INDEX.md:1)
   - Entry point for **all agent-focused** docs (policies, workflows, commands).
 
-- Contributing docs: [`docs/contributing.md`](docs/contributing.md:1)  
+- Agent policies index: [`docs/agent/policies/INDEX.md`](docs/agent/policies/INDEX.md:1)
+  - Entry point for agent-focused policy documents, including the machine-readable all-agent policy manifest at `docs/agent/policies/agent-policy-manifest.yaml`.
+
+- Contributing docs: [`docs/contributing.md`](docs/contributing.md:1)
   - How to add and maintain docs using the subject-based layout, YAML front matter, canonical docs, and link stubs.
 
-- Documentation policies index: [`docs/policies/INDEX.md`](docs/policies/INDEX.md:1)  
+- Documentation policies index: [`docs/policies/INDEX.md`](docs/policies/INDEX.md:1)
   - Repository-wide documentation policies, including log and content guidelines.
 
-- Always Link policy (canonical): [`docs/agent/policies/always-link.md`](docs/agent/policies/always-link.md:1)  
+- Always Link policy (canonical): [`docs/agent/policies/always-link.md`](docs/agent/policies/always-link.md:1)
   - “One canonical doc per concept, link stubs everywhere else.”
 
 HUMAN entrypoint:
@@ -38,22 +41,24 @@ AGENT entrypoint (this file):
 
 When operating in this repository:
 
-- **Prefer canonical docs under `docs/`**  
-  - Long-form explanations belong in `docs/`, not in `README.md`, `AGENTS.md`, or inline comments.  
+Canonical policies for AI agents live under `docs/agent/policies/` and are summarized in the agent policies index together with the machine-readable manifest at `docs/agent/policies/agent-policy-manifest.yaml`. Treat those files as the source of truth for which policies apply to you; this file only explains how to navigate and use those canonical docs.
+
+- **Prefer canonical docs under `docs/`**
+  - Long-form explanations belong in `docs/`, not in `README.md`, `AGENTS.md`, or inline comments.
   - If you see duplicated explanations, move the shared part into a canonical doc and leave link stubs behind.
 
-- **Respect the Always Link policy**  
-  - Ensure there is **exactly one** canonical doc per concept.  
-  - Other occurrences become short stubs that point to the canonical doc or section.  
+- **Respect the Always Link policy**
+  - Ensure there is **exactly one** canonical doc per concept.
+  - Other occurrences become short stubs that point to the canonical doc or section.
   - See [`docs/agent/policies/always-link.md`](docs/agent/policies/always-link.md:1).
 
-- **Use `.agent/` as your working area**  
-  - Temporary inventories, classifications, audits, and scratch materials live under `.agent/tmp/`.  
-  - Logs for non-trivial runs live under `.agent/log/`.  
+- **Use `.agent/` as your working area**
+  - Temporary inventories, classifications, audits, and scratch materials live under `.agent/tmp/`.
+  - Logs for non-trivial runs live under `.agent/log/`.
   - Follow the operational policies under `docs/agent/policies/` (workspace, logging, working directory, etc.).
 
-- **Prefer scripted, idempotent changes**  
-  - Use `.agent` tools instead of ad-hoc parsing when possible.  
+- **Prefer scripted, idempotent changes**
+  - Use `.agent` tools instead of ad-hoc parsing when possible.
   - Keep changes repeatable: re-running the workflow should not create duplicate docs or inconsistent links.
 
 - **User instructions win for the current task**  

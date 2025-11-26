@@ -12,7 +12,7 @@ related:
   - "../workflows/update-docs.md"
   - "../policies/INDEX.md"
 owner: "Gnome Network Ansible maintainers"
-last_reviewed: "2025-11-20"
+last_reviewed: "2025-11-26"
 canonical_url: "docs/agent/commands/INDEX.md"
 ---
 
@@ -26,8 +26,8 @@ All commands referenced here live under the `.agent/` directory and should be tr
 
 ### Inventory generator
 
-- Script: [`doc_inventory.py`](../../.agent/doc_inventory.py:1)  
-- Purpose: Scans markdown documentation and produces an inventory of “documentation units” with signatures and source pointers.  
+- Script: [`doc_inventory.py`](../../.agent/doc_inventory.py:1)
+- Purpose: Scans markdown documentation and produces an inventory of “documentation units” with signatures and source pointers.
 - Typical usage:
 
   ```bash
@@ -38,8 +38,8 @@ All commands referenced here live under the `.agent/` directory and should be tr
 
 ### Classifier
 
-- Script: [`doc_classify.py`](../../.agent/doc_classify.py:1)  
-- Purpose: Consumes the inventory output and classifies units by subject, type, scope, and tags; also records canonical-doc mappings and duplicates.  
+- Script: [`doc_classify.py`](../../.agent/doc_classify.py:1)
+- Purpose: Consumes the inventory output and classifies units by subject, type, scope, and tags; also records canonical-doc mappings and duplicates.
 - Typical usage:
 
   ```bash
@@ -50,7 +50,7 @@ All commands referenced here live under the `.agent/` directory and should be tr
 
 ### Link auditor
 
-- Script: [`doc_audit.py`](../../.agent/doc_audit.py:1)  
+- Script: [`doc_audit.py`](../../.agent/doc_audit.py:1)
 - Purpose: Audits links across `docs/`, `README.md`, and `AGENTS.md` for:
   - Broken or invalid links.
   - Oversize docs that may need splitting.
@@ -62,6 +62,18 @@ All commands referenced here live under the `.agent/` directory and should be tr
   ```
 
 - Output: Writes an audit report under `.agent/tmp/audit.json` (ephemeral working data).
+
+### Policy manifest audit
+
+- Script: [`policy_audit.py`](../../.agent/policy_audit.py:1)
+- Purpose: Performs a structural audit of `docs/agent/policies/agent-policy-manifest.yaml`, validating YAML structure and `canonical_doc` paths, and warning about unreferenced policy markdown files.
+- Typical usage:
+
+  ```bash
+  python3 .agent/policy_audit.py
+  ```
+
+- Output: Prints results to stdout; may emit warnings about unreferenced policy docs.
 
 ## Working directory and logging
 

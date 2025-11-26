@@ -1,0 +1,48 @@
+terms:
+  - id: always_link
+    name: always_link
+    category: docs
+    level: must
+    applies_to:
+      - all-agents
+    canonical_doc: docs/agent/policies/always-link.md
+
+  - id: agent_general_instructions
+    name: agent_general_instructions
+    category: behavior
+    level: must
+    applies_to:
+      - all-agents
+    canonical_doc: docs/agent/policies/general-instructions.md
+
+  - id: agent_operational_policies
+    name: agent_operational_policies
+    category: workspace
+    level: must
+    applies_to:
+      - all-agents
+    canonical_doc: docs/agent/policies/agent-operational-policies.md
+
+  - id: agent_workspace
+    name: agent_workspace
+    category: workspace
+    level: must
+    applies_to:
+      - all-agents
+    canonical_doc: docs/agent/policies/agent-workspace.md
+
+  - id: agent_logging
+    name: agent_logging
+    category: logging
+    level: must
+    applies_to:
+      - all-agents
+    canonical_doc: docs/agent/policies/agent-logging.md
+
+  - id: working_directory
+    name: working_directory
+    category: workspace
+    level: must
+    applies_to:
+      - all-agents
+    canonical_doc: docs/agent/policies/working-directory.md

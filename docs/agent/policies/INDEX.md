@@ -15,7 +15,7 @@ related:
   - "agent-logging.md"
   - "working-directory.md"
 owner: "Gnome Network Ansible maintainers"
-last_reviewed: "2025-11-20"
+last_reviewed: "2025-11-26"
 canonical_url: "docs/agent/policies/INDEX.md"
 ---
 
@@ -24,6 +24,10 @@ canonical_url: "docs/agent/policies/INDEX.md"
 This index lists agent-focused policy documents. Each document under `docs/agent/policies/` is a canonical agent-facing policy or reference. The overall documentation model is defined in [`docs/agent/policies/always-link.md`](always-link.md:1).
 
 Use this page when you need to discover which high-level policies agents must follow and where their canonical definitions live.
+
+## All-agent policy manifest
+
+For a single, machine-readable index of the policies that apply to all agents, use the YAML manifest at `docs/agent/policies/agent-policy-manifest.yaml`. It lists policy identifiers and their canonical documents; the detailed policy content lives only in those canonical docs.
 
 ## Core agent policies
 
