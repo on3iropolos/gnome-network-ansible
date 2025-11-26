@@ -75,7 +75,8 @@ For more detailed guidance:
 
 - Always Link policy: [`always-link.md`](always-link.md:1)
 - Documentation system and examples: [`contributing.md`](../../contributing.md:1)
-- Agent working directory and logging: [`agent-working-directory-and-logging.md`](agent-working-directory-and-logging.md:1)
+- Agent workspace policy: [`agent-workspace.md`](agent-workspace.md:1)
+- Agent logging policy: [`agent-logging.md`](agent-logging.md:1)
 - Agent working directory and logging (legacy source): [`working_directory.md`](.agent/instructions/working_directory.md:1)
 - Testing and linting specifics: [`testing_and_linting.md`](.agent/instructions/testing_and_linting.md:1)
 - Interaction rules: [`interaction.md`](.agent/instructions/interaction.md:1)

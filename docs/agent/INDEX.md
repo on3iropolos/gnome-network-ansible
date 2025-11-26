@@ -38,13 +38,17 @@ Key policies for agents:
   Canonical definition of the documentation model: one canonical doc per concept, bite-sized files, and link stubs everywhere else.  
   See [`docs/agent/policies/always-link.md`](policies/always-link.md:1).
 
-- **General instructions for AI agents**  
-  High-level expectations for agents: understand the project first, respect canonical docs, prefer scripted/idempotent changes, and honor testing policies.  
+- **General instructions for AI agents**
+  High-level expectations for agents: understand the project first, respect canonical docs, prefer scripted/idempotent changes, and honor testing policies.
   See [`docs/agent/policies/general-instructions.md`](policies/general-instructions.md:1).
 
-- **Agent working directory and logging**  
-  Requirements for using `.agent/` as a working area and for writing audit logs under `.agent/log/`.  
-  See [`docs/agent/policies/agent-working-directory-and-logging.md`](policies/agent-working-directory-and-logging.md:1).
+- **Agent workspace policy**
+  Requirements for using `.agent/` as a working area and for managing transient artifacts under `.agent/`.
+  See [`agent-workspace.md`](policies/agent-workspace.md:1).
+
+- **Agent logging policy**
+  Requirements for writing concise, structured logs under `.agent/log/` so humans can reconstruct automated activity.
+  See [`agent-logging.md`](policies/agent-logging.md:1).
 
 For the full set of repository-wide policies (not just agent-focused ones), see the main policies index at  
 [`docs/policies/INDEX.md`](../policies/INDEX.md:1).

@@ -85,7 +85,7 @@ Use the findings to refine your changes until the audit output is clean or clear
 Before considering the task complete:
 
 - Create or update a log entry under `.agent/log/` following:
-  - Working-directory and logging policy: [`docs/agent/policies/agent-working-directory-and-logging.md`](../policies/agent-working-directory-and-logging.md:1).
+  - Workspace and logging policies: [`agent-workspace.md`](../policies/agent-workspace.md:1) and [`agent-logging.md`](../policies/agent-logging.md:1).
   - Log naming and content rules under [`docs/policies/log-file-naming-and-location.md`](../../policies/log-file-naming-and-location.md:1) and [`docs/policies/log-content-guidelines.md`](../../policies/log-content-guidelines.md:1).
 - Ensure diffs are focused and minimal, and that rerunning this workflow would not create duplicate docs or break links.
 

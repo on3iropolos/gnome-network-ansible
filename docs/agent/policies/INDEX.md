@@ -13,7 +13,6 @@ related:
   - "general-instructions.md"
   - "agent-workspace.md"
   - "agent-logging.md"
-  - "agent-working-directory-and-logging.md"
   - "working-directory.md"
 owner: "Gnome Network Ansible maintainers"
 last_reviewed: "2025-11-20"

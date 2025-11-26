@@ -67,7 +67,8 @@ All commands referenced here live under the `.agent/` directory and should be tr
 
 When running any of these commands as part of an automated agent task:
 
-- Follow the working-directory and logging policy in [`docs/agent/policies/agent-working-directory-and-logging.md`](../policies/agent-working-directory-and-logging.md:1).
+- Follow the agent workspace policy in [`agent-workspace.md`](../policies/agent-workspace.md:1).
+- Follow the agent logging policy in [`agent-logging.md`](../policies/agent-logging.md:1).
 - Keep all temporary outputs under `.agent/tmp/`.
 - Record a concise log entry for non-trivial runs under `.agent/log/` using the naming and content guidelines in:
   - [`docs/policies/log-file-naming-and-location.md`](../../policies/log-file-naming-and-location.md:1)

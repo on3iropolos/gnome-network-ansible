@@ -8,7 +8,8 @@ tags:
   - "working-directory"
   - "tooling"
 related:
-  - "agent-working-directory-and-logging.md"
+  - "agent-workspace.md"
+  - "agent-logging.md"
   - "../../policies/logging.md"
 owner: "Gnome Network Ansible maintainers"
 last_reviewed: "2025-11-19"
@@ -19,7 +20,7 @@ canonical_url: "docs/agent/policies/working-directory.md"
 
 # Agent Working Directory
 
-Agents must treat the `./.agent/` directory as the dedicated workspace for transient files, instructions, and automation tooling. This policy is the canonical reference for where agents are allowed to write working artifacts. Higher-level guidance is summarized in [`agent-working-directory-and-logging.md`](agent-working-directory-and-logging.md:1).
+Agents must treat the `./.agent/` directory as the dedicated workspace for transient files, instructions, and automation tooling. This policy is the canonical reference for where agents are allowed to write working artifacts. Higher-level guidance is summarized in [`agent-workspace.md`](agent-workspace.md:1) and [`agent-logging.md`](agent-logging.md:1).
 
 ## Directory usage
 
