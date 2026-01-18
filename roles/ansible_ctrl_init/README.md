@@ -17,7 +17,7 @@ graph TD
 ## Requirements
 
 -   Ansible version: `2.9+` (or as per `ansible-ctrl.dockerfile`)
--   Operating System: The base image of the `ansible-ctrl.dockerfile` (currently `frolvlad/alpine-glibc`).
+-   Operating System: The base image of the ansible-dev container (currently `alpine:latest` with custom glibc).
 -   Permissions: Requires `become: true` to create directories and copy files to system locations like `/etc/ansible`.
 
 ## Role Variables
