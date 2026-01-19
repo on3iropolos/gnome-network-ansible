@@ -1,7 +1,7 @@
 ---
 # Global Config
 install_root: /mnt
-install_drive: /dev/nvme0n1
+install_drive: /dev/nvme1n1
 boot_mode: uefi
 
 # Encryption
