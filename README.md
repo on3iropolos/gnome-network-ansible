@@ -10,7 +10,7 @@ This repository contains:
 
 ## Current Status
 > [!NOTE]
-> **Encryption (LUKS)** is currently **disabled** in `packer_install.yml` to troubleshoot partitioning reliability and ISO disk space constraints. Re-enabling encryption is a high-priority task.
+> **Encryption (LUKS)** is currently **disabled** in `install.yml` to troubleshoot partitioning reliability and ISO disk space constraints. Re-enabling encryption is a high-priority task.
 
 ## Structure
 *   `roles/`: Contains all granular roles.
@@ -22,8 +22,8 @@ This repository contains:
 *   `packer/`: Packer templates.
     *   `packer.pkr.hcl`: Main build definition.
     *   `http/install.sh`: Bootstrap script for Live ISO.
-*   `packer_install.yml`: Playbook for **Installing** the OS (run against Live ISO).
-*   `packer_provision.yml`: Playbook for **Configuring** the OS (run inside the installed system).
+*   `install.yml`: Playbook for **Installing** the OS (run against Live ISO).
+*   `provision.yml`: Playbook for **Configuring** the OS (run inside the installed system).
 
 ## Workflow
 
@@ -34,10 +34,10 @@ The Packer build process consists of two stages:
     *   Boots the official Arch Linux ISO.
     *   Runs `install.sh` to set a root password and enable SSH.
 2.  **Installation (Ansible Remote)**:
-    *   Packer runs `packer_install.yml` from the host.
+    *   Packer runs `install.yml` from the host.
     *   This playbook wipes `/dev/sda`, creates partitions (BTRFS/LUKS), installs `base`, and configures the bootloader (GRUB).
 3.  **Configuration (Ansible Chroot)**:
-    *   Packer uploads `packer_provision.yml` and roles to the new system mounted at `/mnt`.
+    *   Packer uploads `provision.yml` and roles to the new system mounted at `/mnt`.
     *   Runs `ansible-playbook` inside `arch-chroot /mnt`.
     *   Configures GNOME, NetworkManager, etc.
 

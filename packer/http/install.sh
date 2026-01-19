@@ -4,7 +4,7 @@ set -x
 
 # This script is now a minimal bootstrap to enable Packer to connect via SSH
 # and run the Ansible provisioner. The actual installation logic has moved
-# to the 'packer_install.yml' Ansible playbook.
+# to the 'install.yml' Ansible playbook.
 
 PASSWORD="${2:-vagrant}"
 

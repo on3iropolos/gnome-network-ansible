@@ -1,0 +1,39 @@
+---
+- name: Install Arch Linux
+  hosts: all
+  become: true
+  # Variables are now loaded from inventories/packer/group_vars/all.yml
+  
+  roles:
+    # Storage Stack
+    - role: partition
+    - role: encryption
+    - role: filesystem
+    
+    # OS Installation
+    - role: pacstrap
+    
+    # Configuration
+    - role: time
+    - role: locale
+    - role: hosts
+    - role: network
+    - role: ssh
+    - role: user
+    
+    # Boot
+    - role: initramfs
+    - role: bootloader
+
+  tasks:
+    - name: Ensure target ansible directory exists
+      file:
+        path: "{{ install_root }}/root/ansible"
+        state: directory
+        mode: '0755'
+
+    - name: Prepare Ansible for post-install
+      copy:
+        src: /root/ansible/
+        dest: "{{ install_root }}/root/ansible/"
+        remote_src: yes

@@ -1,0 +1,27 @@
+---
+# Global Config
+install_root: /mnt
+install_drive: /dev/sda
+boot_mode: uefi
+
+# Encryption
+encryption_enabled: false
+encryption_password: "{{ lookup('env', 'ENCRYPTION_PASSWORD') | default('') }}"
+encryption_format: luks1
+
+# Filesystem
+filesystem_type: btrfs
+
+# Initramfs
+initramfs_encryption: "{{ encryption_enabled }}"
+initramfs_btrfs: true
+
+# User
+user_name: on3ir
+user_password: "{{ lookup('env', 'USER_PASSWORD') | default('') }}"
+user_ssh_key: "{{ lookup('env', 'USER_SSH_KEY') | default('') }}"
+
+# System
+timezone: America/Chicago
+locale: en_US.UTF-8
+hostname: archlinux

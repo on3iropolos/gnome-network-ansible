@@ -26,6 +26,24 @@ Full-system VM-based testing (for example, for `arch_iso_install`) is documented
 
 Those docs cover setup, quick-start workflows, scenarios, and troubleshooting for the Terraform + libvirt environment.
 
+## Quality Assurance
+
+To ensure code quality, this project uses `pre-commit` hooks. These hooks run automatically before every commit to catch linting issues, validation errors, and formatting problems.
+
+### Setup
+Run the following command to install the pre-commit hooks:
+```bash
+make setup
+```
+
+This will configure hooks for `ansible-lint`, `packer validate`, `shellcheck`, and general file hygiene.
+
+### Manual Run
+You can run the hooks manually on all files at any time:
+```bash
+pre-commit run --all-files
+```
+
 ## CI and best practices
 
 CI workflows and testing best practices are described in:

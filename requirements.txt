@@ -7,3 +7,4 @@ molecule
 molecule-plugins[docker]
 docker
 passlib
+pre-commit

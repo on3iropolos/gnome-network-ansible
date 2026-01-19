@@ -1,7 +1,7 @@
 ---
 - name: Locale Gen (Chroot)
   ansible.builtin.shell: |
-    arch-chroot {{ install_root }} bash -c 'echo "{{ locale }} UTF-8" > /etc/locale.gen && locale-gen'
+    /usr/bin/arch-chroot {{ install_root }} bash -c 'echo "{{ locale }} UTF-8" > /etc/locale.gen && locale-gen'
   changed_when: true
   when: install_root | length > 0
   
