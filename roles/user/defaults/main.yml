@@ -1,5 +1,5 @@
 ---
-user_name: on3ir
+user_name: username
 user_password: "{{ lookup('env', 'USER_PASSWORD') }}"
 user_groups: [wheel]
 user_shell: /bin/bash
