@@ -11,3 +11,6 @@
     - role: ssh
     - role: user
     - role: gnome
+    - role: bitwarden
+    - role: aur
+    - role: antigravity

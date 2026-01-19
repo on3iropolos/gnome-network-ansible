@@ -6,7 +6,7 @@ A high-performance, purist automation suite for Arch Linux. This repository faci
 - **Stateless Installation**: Uses a modular "Storage Stack" (Partition -> Encryption -> Filesystem).
 - **Environment Parity**: The same Ansible roles drive both Packer VM builds and local workstation installs.
 - **Security First**: Integrated LUKS encryption support and SSH hardening.
-- **Desktop Ready**: Automated GNOME environment provisioning.
+- **Desktop Ready**: Automated GNOME environment provisioning with Bitwarden and Antigravity AI IDE.
 
 ---
 
@@ -23,7 +23,7 @@ The automation is split into two distinct phases to ensure maximum reliability a
 
 2.  **Phase 2: Provisioning (`provision.yml`)**
     - Targets the **Installed OS**.
-    - Configures user accounts, GNOME shell, desktop applications, and system services.
+    - Configures user accounts, GNOME shell, desktop applications (Bitwarden, Antigravity), and system services.
     - Can be run inside `arch-chroot` (during build) or against a live booted system.
 
 ---

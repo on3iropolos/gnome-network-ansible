@@ -1,0 +1,13 @@
+---
+- name: Install Bitwarden and CLI (Native)
+  ansible.builtin.package:
+    name:
+      - bitwarden
+      - bitwarden-cli
+    state: present
+  when: install_root | length == 0
+
+- name: Install Bitwarden and CLI (Chroot)
+  ansible.builtin.command: "/usr/bin/arch-chroot {{ install_root }} pacman -S --noconfirm bitwarden bitwarden-cli"
+  when: install_root | length > 0
+  changed_when: true

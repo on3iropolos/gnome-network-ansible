@@ -1,0 +1,11 @@
+---
+- name: Install Antigravity from AUR (Native)
+  ansible.builtin.command: yay -S --noconfirm antigravity
+  become_user: "{{ user_name }}"
+  when: install_root | length == 0
+  changed_when: true
+
+- name: Skip Antigravity in chroot
+  ansible.builtin.debug:
+    msg: "AUR package Antigravity installation is skipped during chroot (Phase 1). Use Phase 2 on the booted system."
+  when: install_root | length > 0
