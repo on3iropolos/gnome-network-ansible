@@ -116,7 +116,34 @@ Variables are managed via Ansible's `group_vars` and `host_vars`.
 
 - **Global Config**: `inventories/workstations/group_vars/all.yml` (Drives, Usernames, etc).
 - **Machine Specific**: `inventories/workstations/host_vars/whimsyforge.gnome.network.yml`.
-- **Secret Management**: Passwords and keys are pulled from environment variables (`USER_PASSWORD`, `ENCRYPTION_PASSWORD`, `USER_SSH_KEY`) to keep them out of source control.
+- **Secret Management**: Passwords and keys are pulled from environment variables to keep them out of source control.
+
+### Environment Variables
+
+| Variable | Purpose | Required |
+|----------|---------|----------|
+| `USER_PASSWORD` | User account password | Yes |
+| `ENCRYPTION_PASSWORD` | LUKS encryption password | If encryption enabled |
+| `USER_SSH_KEY` | SSH public key for remote access | Recommended |
+| `GIT_USER_NAME` | Git global user.name | Optional (defaults to 'username') |
+| `GIT_USER_EMAIL` | Git global user.email | Optional (defaults to 'user@example.com') |
+| `GITHUB_SSH_PRIVATE_KEY` | GitHub SSH private key | Optional (for git clone via SSH) |
+| `GITHUB_SSH_PUBLIC_KEY` | GitHub SSH public key | Optional (for git clone via SSH) |
+
+### Configuring SSH Identities
+
+To enable seamless Git operations with SSH, configure `user_ssh_identities` in `group_vars/all.yml`:
+
+```yaml
+user_ssh_identities:
+  - name: github
+    filename: github-ssh-key
+    private_key: "{{ lookup('env', 'GITHUB_SSH_PRIVATE_KEY') }}"
+    public_key: "{{ lookup('env', 'GITHUB_SSH_PUBLIC_KEY') }}"
+    host: github.com
+```
+
+This will automatically deploy your SSH keys and configure `~/.ssh/config` during provisioning.
 
 ---
 

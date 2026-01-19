@@ -24,3 +24,16 @@ user_ssh_key: "{{ lookup('env', 'USER_SSH_KEY') | default('') }}"
 # System
 timezone: America/Chicago
 locale: en_US.UTF-8
+
+# Git Config
+git_user_name: "{{ lookup('env', 'GIT_USER_NAME') | default('on3ir') }}"
+git_user_email: "{{ lookup('env', 'GIT_USER_EMAIL') | default('on3iropolos@gmail.com') }}"
+
+# SSH Identities (for cloning repos)
+user_ssh_identities: []
+#  - name: github
+#    filename: on3iropolos-ssh
+#    private_key: "{{ lookup('env', 'GITHUB_SSH_PRIVATE_KEY') | default('') }}"
+#    public_key: "{{ lookup('env', 'GITHUB_SSH_PUBLIC_KEY') | default('') }}"
+#    host: github.com
+

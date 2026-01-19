@@ -5,6 +5,11 @@ pacstrap_packages:
   - linux
   - linux-firmware
   - vim
+  - nano
+  - git
+  - less
+  - man-db
+  - man-pages
   - python
   - ansible
   - sudo

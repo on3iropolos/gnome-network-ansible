@@ -8,8 +8,10 @@
     - role: locale
     - role: hosts
     - role: network
-    - role: ssh
+    - role: sshd
     - role: user
+    - role: ssh_client
+    - role: git
     - role: gnome
     - role: bitwarden
     - role: aur
