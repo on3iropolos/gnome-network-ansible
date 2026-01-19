@@ -1,5 +1,0 @@
-ansible_connection: ssh
-ansible_port: 22
-ansible_user: on3ir
-ansible_password: "{{ lookup('env', 'SSH_PASSWORD') }}"
-ansible_shell_type: cmd
