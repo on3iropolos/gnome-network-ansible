@@ -1,0 +1,110 @@
+---
+- name: Format ESP (UEFI)
+  community.general.filesystem:
+    dev: "{{ filesystem_esp_device }}"
+    fstype: vfat
+    opts: -F32
+    force: true
+  when: boot_mode == 'uefi'
+
+- name: Format Boot (BIOS)
+  community.general.filesystem:
+    dev: "{{ filesystem_boot_device }}"
+    fstype: ext4
+    force: true
+  when: boot_mode == 'bios'
+
+- name: Format Root (BTRFS)
+  block:
+    - name: Mkfs BTRFS
+      community.general.filesystem:
+        dev: "{{ filesystem_root_device }}"
+        fstype: btrfs
+        opts: -L ArchLinux
+        force: true
+        
+    - name: Mount temp
+      ansible.posix.mount:
+        path: /mnt
+        src: "{{ filesystem_root_device }}"
+        fstype: btrfs
+        state: mounted
+        
+    - name: Create Subvols
+      ansible.builtin.command: "btrfs subvolume create /mnt/{{ item.sub }}"
+      loop: "{{ filesystem_btrfs_subvols }}"
+
+    - name: Unmount temp
+      ansible.posix.mount:
+        path: /mnt
+        state: unmounted
+        
+    - name: Mount Root (@)
+      ansible.posix.mount:
+        path: /mnt
+        src: "{{ filesystem_root_device }}"
+        fstype: btrfs
+        opts: "compress=zstd,discard=async,subvol=@"
+        state: mounted
+        
+    - name: Create Mountpoints
+      ansible.builtin.file:
+        path: "/mnt/{{ item.path }}"
+        state: directory
+      loop: "{{ filesystem_btrfs_subvols }}"
+      when: item.path is defined
+      
+    - name: Mount Subvols
+      ansible.posix.mount:
+        path: "/mnt/{{ item.path }}"
+        src: "{{ filesystem_root_device }}"
+        fstype: btrfs
+        opts: "compress=zstd,discard=async,subvol={{ item.sub }}"
+        state: mounted
+      loop: "{{ filesystem_btrfs_subvols }}"
+      when: item.path is defined
+  when: filesystem_type == 'btrfs'
+
+- name: Format Root (Ext4)
+  block:
+    - name: Mkfs Ext4
+      community.general.filesystem:
+        dev: "{{ filesystem_root_device }}"
+        fstype: ext4
+        opts: -L ArchLinux
+        force: true
+    - name: Mount Root
+      ansible.posix.mount:
+        path: /mnt
+        src: "{{ filesystem_root_device }}"
+        fstype: ext4
+        state: mounted
+  when: filesystem_type == 'ext4'
+
+- name: Mount Boot (UEFI)
+  block:
+    - name: Mkdir /mnt/boot/efi
+      ansible.builtin.file:
+        path: /mnt/boot/efi
+        state: directory
+    - name: Mount ESP
+      ansible.posix.mount:
+        path: /mnt/boot/efi
+        src: "{{ filesystem_esp_device }}"
+        fstype: vfat
+        state: mounted
+  when: boot_mode == 'uefi'
+
+- name: Mount Boot (BIOS)
+  block:
+    - name: Mkdir /mnt/boot
+      ansible.builtin.file:
+        path: /mnt/boot
+        state: directory
+    - name: Mount Boot
+      ansible.posix.mount:
+        path: /mnt/boot
+        src: "{{ filesystem_boot_device }}"
+        fstype: ext4
+        state: mounted
+  when: boot_mode == 'bios'

@@ -1,0 +1,51 @@
+---
+- name: Install Arch Linux
+  hosts: all
+  become: true
+  vars:
+    # Global Config
+    install_root: /mnt
+    install_drive: /dev/sda
+    boot_mode: uefi
+    
+    # Encryption
+    encryption_enabled: false
+    encryption_password: "{{ lookup('env', 'ENCRYPTION_PASSWORD') }}"
+    encryption_format: luks1
+    
+    # Filesystem
+    filesystem_type: btrfs
+    
+    # Initramfs
+    initramfs_encryption: "{{ encryption_enabled }}"
+    initramfs_btrfs: true
+    
+    # User
+    user_name: on3ir
+    user_password: "{{ lookup('env', 'USER_PASSWORD') }}"
+    
+    # System
+    timezone: America/Chicago
+    locale: en_US.UTF-8
+    hostname: archlinux
+  
+  roles:
+    # Storage Stack
+    - role: partition
+    - role: encryption
+    - role: filesystem
+    
+    # OS Installation
+    - role: pacstrap
+    
+    # Configuration
+    - role: time
+    - role: locale
+    - role: hosts
+    - role: network
+    - role: ssh
+    - role: user
+    
+    # Boot
+    - role: initramfs
+    - role: bootloader

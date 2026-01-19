@@ -1,0 +1,3 @@
+---
+install_drive: /dev/sda
+boot_mode: uefi # uefi | bios

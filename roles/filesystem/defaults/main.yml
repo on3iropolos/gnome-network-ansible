@@ -1,0 +1,18 @@
+---
+filesystem_type: btrfs # btrfs | ext4
+filesystem_root_device: "{{ target_root_device }}"
+filesystem_esp_device: "{{ partition_esp }}" # only if uefi
+filesystem_boot_device: "{{ partition_boot }}" # only if bios
+
+filesystem_btrfs_subvols:
+  - sub: '@'
+  - sub: '@home'
+    path: 'home'
+  - sub: '@snapshots'
+    path: '.snapshots'
+  - sub: '@var_log'
+    path: 'var/log'
+  - sub: '@var_cache'
+    path: 'var/cache'
+  - sub: '@var_tmp'
+    path: 'var/tmp'

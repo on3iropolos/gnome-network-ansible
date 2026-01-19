@@ -1,0 +1,7 @@
+---
+user_name: on3ir
+user_password: "{{ lookup('env', 'USER_PASSWORD') }}"
+user_groups: [wheel]
+user_shell: /bin/bash
+user_ssh_key: "{{ lookup('env', 'USER_SSH_KEY') }}"
+install_root: ""

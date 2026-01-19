@@ -1,0 +1,13 @@
+---
+- name: Install GNOME desktop environment
+  ansible.builtin.package:
+    name:
+      - gnome
+      - gnome-extra
+    state: present
+
+- name: Enable GDM service
+  ansible.builtin.systemd:
+    name: gdm
+    enabled: true
+    state: started

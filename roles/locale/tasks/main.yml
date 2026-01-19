@@ -1,0 +1,22 @@
+---
+- name: Locale Gen (Chroot)
+  ansible.builtin.shell: |
+    arch-chroot {{ install_root }} bash -c 'echo "{{ locale }} UTF-8" > /etc/locale.gen && locale-gen'
+  changed_when: true
+  when: install_root | length > 0
+  
+- name: Locale Gen (Native)
+  ansible.builtin.shell: |
+    echo "{{ locale }} UTF-8" > /etc/locale.gen && locale-gen
+  changed_when: true
+  when: install_root | length == 0
+  
+- name: Locale Conf
+  ansible.builtin.copy:
+    dest: "{{ install_root }}/etc/locale.conf"
+    content: "LANG={{ locale }}"
+    
+- name: Keymap
+  ansible.builtin.copy:
+    dest: "{{ install_root }}/etc/vconsole.conf"
+    content: "KEYMAP={{ keymap }}"

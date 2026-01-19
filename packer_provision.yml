@@ -1,0 +1,13 @@
+---
+- name: Provision Image
+  hosts: all
+  become: true
+
+  roles:
+    - role: time
+    - role: locale
+    - role: hosts
+    - role: network
+    - role: ssh
+    - role: user
+    - role: gnome

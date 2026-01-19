@@ -1,0 +1,16 @@
+---
+- name: Init Keys
+  ansible.builtin.command: pacman-key --init
+  changed_when: true
+
+- name: Populate Keys
+  ansible.builtin.command: pacman-key --populate archlinux
+  changed_when: true
+
+- name: Pacstrap
+  ansible.builtin.command: "pacstrap /mnt {{ pacstrap_packages | join(' ') }}"
+  changed_when: true
+
+- name: Genfstab
+  ansible.builtin.shell: genfstab -U /mnt >> /mnt/etc/fstab
+  changed_when: true

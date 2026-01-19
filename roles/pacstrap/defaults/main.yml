@@ -1,0 +1,16 @@
+---
+pacstrap_packages:
+  - base
+  - base-devel
+  - linux
+  - linux-firmware
+  - vim
+  - python
+  - ansible
+  - sudo
+  - btrfs-progs
+  - networkmanager
+  - grub
+  - efibootmgr
+  - openssh
+  - python-passlib

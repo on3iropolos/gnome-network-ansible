@@ -1,0 +1,11 @@
+---
+- name: Enable SSHD (Chroot)
+  ansible.builtin.command: arch-chroot {{ install_root }} systemctl enable sshd
+  changed_when: true
+  when: install_root | length > 0
+
+- name: Enable SSHD (Native)
+  ansible.builtin.service:
+    name: sshd
+    enabled: true
+  when: install_root | length == 0

@@ -1,5 +1,0 @@
-# Handler tasks to be executed conditionally
-
-- name: Create ramdisk
-  ansible.builtin.command: arch-chroot /mnt mkinitcpio -p linux
-  changed_when: true
