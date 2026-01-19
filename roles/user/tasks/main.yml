@@ -1,7 +1,7 @@
 ---
 - name: Create User (Chroot)
   ansible.builtin.command: >
-    arch-chroot {{ install_root }} useradd -m -G {{ user_groups | join(',') }} -s {{ user_shell }} {{ user_name }}
+    /usr/bin/arch-chroot {{ install_root }} useradd -m -G {{ user_groups | join(',') }} -s {{ user_shell }} {{ user_name }}
   changed_when: true
   when: install_root | length > 0
   
@@ -16,7 +16,7 @@
 
 - name: Set Password (Chroot)
   ansible.builtin.shell: |
-    arch-chroot {{ install_root }} sh -c 'echo "{{ user_name }}:{{ user_password }}" | chpasswd'
+    /usr/bin/arch-chroot {{ install_root }} sh -c 'echo "{{ user_name }}:{{ user_password }}" | chpasswd'
   changed_when: true
   no_log: true
   when: install_root | length > 0
@@ -49,7 +49,7 @@
   failed_when: false
   
 - name: Chown (Chroot)
-  ansible.builtin.command: "arch-chroot {{ install_root }} chown -R {{ user_name }}:{{ user_name }} /home/{{ user_name }}/.ssh"
+  ansible.builtin.command: "/usr/bin/arch-chroot {{ install_root }} chown -R {{ user_name }}:{{ user_name }} /home/{{ user_name }}/.ssh"
   changed_when: true
   when: install_root | length > 0
 

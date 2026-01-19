@@ -1,11 +1,11 @@
 ---
 - name: Link Timezone (Chroot)
-  ansible.builtin.command: arch-chroot {{ install_root }} ln -sf /usr/share/zoneinfo/{{ timezone }} /etc/localtime
+  ansible.builtin.command: /usr/bin/arch-chroot {{ install_root }} ln -sf /usr/share/zoneinfo/{{ timezone }} /etc/localtime
   changed_when: true
   when: install_root | length > 0
   
 - name: Hwclock (Chroot)
-  ansible.builtin.command: arch-chroot {{ install_root }} hwclock --systohc
+  ansible.builtin.command: /usr/bin/arch-chroot {{ install_root }} hwclock --systohc
   changed_when: true
   when: install_root | length > 0
 

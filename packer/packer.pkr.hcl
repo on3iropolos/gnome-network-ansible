@@ -110,7 +110,7 @@ build {
     inline = [
       "pacman -Syu --noconfirm --ignore linux ansible python-passlib",
       "cd /root/ansible",
-      "ansible-playbook packer_install.yml -i localhost, -c local -vvv > /tmp/ansible_install.log 2>&1 || (cat /tmp/ansible_install.log && exit 1)"
+      "ansible-playbook packer_install.yml -i inventories/packer -c local -vvv > /tmp/ansible_install.log 2>&1 || (cat /tmp/ansible_install.log && exit 1)"
     ]
   }
 
@@ -123,7 +123,7 @@ build {
       "ANSIBLE_FORCE_COLOR=1"
     ]
     inline = [
-      "arch-chroot /mnt ansible-playbook /root/ansible/packer_provision.yml -i localhost, -c local -vvv --extra-vars '@/root/ansible/inventories/workstations/host_vars/whimsyforge.gnome.network.yml'",
+      "arch-chroot /mnt ansible-playbook /root/ansible/packer_provision.yml -i /root/ansible/inventories/packer -c local -vvv -e 'install_root=' --extra-vars '@/root/ansible/inventories/workstations/host_vars/whimsyforge.gnome.network.yml'",
       "rm -rf /mnt/root/ansible"
     ]
   }

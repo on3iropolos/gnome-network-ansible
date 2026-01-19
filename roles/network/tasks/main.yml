@@ -1,6 +1,6 @@
 ---
 - name: Enable NetworkManager (Chroot)
-  ansible.builtin.command: arch-chroot {{ install_root }} systemctl enable NetworkManager
+  ansible.builtin.command: /usr/bin/arch-chroot {{ install_root }} systemctl enable NetworkManager
   changed_when: true
   when: install_root | length > 0
 

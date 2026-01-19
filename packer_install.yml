@@ -2,32 +2,7 @@
 - name: Install Arch Linux
   hosts: all
   become: true
-  vars:
-    # Global Config
-    install_root: /mnt
-    install_drive: /dev/sda
-    boot_mode: uefi
-    
-    # Encryption
-    encryption_enabled: false
-    encryption_password: "{{ lookup('env', 'ENCRYPTION_PASSWORD') }}"
-    encryption_format: luks1
-    
-    # Filesystem
-    filesystem_type: btrfs
-    
-    # Initramfs
-    initramfs_encryption: "{{ encryption_enabled }}"
-    initramfs_btrfs: true
-    
-    # User
-    user_name: on3ir
-    user_password: "{{ lookup('env', 'USER_PASSWORD') }}"
-    
-    # System
-    timezone: America/Chicago
-    locale: en_US.UTF-8
-    hostname: archlinux
+  # Variables are now loaded from inventories/packer/group_vars/all.yml
   
   roles:
     # Storage Stack
@@ -53,12 +28,12 @@
   tasks:
     - name: Ensure target ansible directory exists
       file:
-        path: /mnt/root/ansible
+        path: "{{ install_root }}/root/ansible"
         state: directory
         mode: '0755'
 
     - name: Prepare Ansible for post-install
       copy:
         src: /root/ansible/
-        dest: /mnt/root/ansible/
+        dest: "{{ install_root }}/root/ansible/"
         remote_src: yes
