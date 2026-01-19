@@ -49,3 +49,16 @@
     # Boot
     - role: initramfs
     - role: bootloader
+
+  tasks:
+    - name: Ensure target ansible directory exists
+      file:
+        path: /mnt/root/ansible
+        state: directory
+        mode: '0755'
+
+    - name: Prepare Ansible for post-install
+      copy:
+        src: /root/ansible/
+        dest: /mnt/root/ansible/
+        remote_src: yes

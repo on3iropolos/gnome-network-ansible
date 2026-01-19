@@ -70,12 +70,22 @@ source "hyperv-iso" "archlinux" {
 build {
   sources = ["source.hyperv-iso.archlinux"]
 
-  # 1. Install Arch Linux (Partitioning, Base System, etc.)
-  # Runs from the host against the Live ISO (which was bootstrapped by install.sh)
-  # 1. Install Arch Linux (Partitioning, Base System, etc.)
-  # Runs inside the Live ISO environment
+  # 1. Prepare Environment and Upload Ansible configuration to the Live ISO
   provisioner "shell" {
-    inline = ["mkdir -p /root/ansible"]
+    inline = [
+      "mount -o remount,size=5G /run/archiso/cowspace",
+      "mkdir -p /root/ansible"
+    ]
+  }
+
+  provisioner "file" {
+    source      = "../roles"
+    destination = "/root/ansible/"
+  }
+
+  provisioner "file" {
+    source      = "../inventories"
+    destination = "/root/ansible/"
   }
 
   provisioner "file" {
@@ -84,10 +94,12 @@ build {
   }
 
   provisioner "file" {
-    source      = "../roles"
-    destination = "/root/ansible/roles"
+    source      = "../packer_provision.yml"
+    destination = "/root/ansible/packer_provision.yml"
   }
 
+  # 2. Install Arch Linux (Partitioning, Base System, etc.)
+  # Runs inside the Live ISO environment
   provisioner "shell" {
     environment_vars = [
       "ENCRYPTION_PASSWORD=${var.encryption_password}",
@@ -96,31 +108,10 @@ build {
       "ANSIBLE_FORCE_COLOR=1"
     ]
     inline = [
-      "mount -o remount,size=5G /run/archiso/cowspace",
       "pacman -Syu --noconfirm --ignore linux ansible python-passlib",
       "cd /root/ansible",
       "ansible-playbook packer_install.yml -i localhost, -c local -vvv > /tmp/ansible_install.log 2>&1 || (cat /tmp/ansible_install.log && exit 1)"
     ]
-  }
-
-  # 2. Upload Roles and Inventory for Post-Install Configuration
-  provisioner "shell" {
-    inline = ["mkdir -p /mnt/root/ansible"]
-  }
-
-  provisioner "file" {
-    source      = "../roles"
-    destination = "/mnt/root/ansible/roles"
-  }
-
-  provisioner "file" {
-    source      = "../inventories"
-    destination = "/mnt/root/ansible/inventories"
-  }
-
-  provisioner "file" {
-    source      = "../packer_provision.yml"
-    destination = "/mnt/root/ansible/packer_provision.yml"
   }
 
   # 3. Configure the Installed System (GNOME, Network, etc.)
