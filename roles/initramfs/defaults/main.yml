@@ -1,0 +1,6 @@
+---
+initramfs_encryption: true
+initramfs_btrfs: true
+initramfs_keyfile_path: /mnt/crypto_keyfile.bin
+initramfs_keyfile_size_kb: 4
+encryption_device: "{{ partition_root }}"

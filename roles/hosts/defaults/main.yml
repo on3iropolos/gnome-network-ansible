@@ -1,0 +1,10 @@
+---
+hostname: archlinux
+hosts_entries:
+  - ip: 127.0.0.1
+    names: [localhost]
+  - ip: ::1
+    names: [localhost]
+  - ip: 127.0.1.1
+    names: ["{{ hostname }}.localdomain", "{{ hostname }}"]
+install_root: ""

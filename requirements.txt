@@ -6,3 +6,4 @@ ansible-lint
 molecule
 molecule-plugins[docker]
 docker
+passlib

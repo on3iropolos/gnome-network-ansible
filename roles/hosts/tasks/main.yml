@@ -1,0 +1,14 @@
+---
+- name: Set Hostname
+  ansible.builtin.copy:
+    dest: "{{ install_root }}/etc/hostname"
+    content: "{{ hostname }}"
+    
+- name: Set Hosts
+  ansible.builtin.blockinfile:
+    path: "{{ install_root }}/etc/hosts"
+    create: true
+    block: |
+      {% for entry in hosts_entries %}
+      {{ entry.ip }} {{ entry.names | join(' ') }}
+      {% endfor %}

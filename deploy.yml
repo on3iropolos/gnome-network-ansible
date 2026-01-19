@@ -1,8 +1,3 @@
-# - hosts: localhost
-#   become: true
-#   roles:
-#     - ansible-ctrl.init
-
 - name: Configure virtual hosts
   hosts: virtual_hosts
   become: true
@@ -23,10 +18,5 @@
         # Add conditions here if specific roles/tags requiring internet are targeted
         # For now, this play (virtual_hosts) implies internet is needed due to its roles.
   roles:
-    - role: arch_iso_install
-      when: ansible_nodename == 'archiso'
-      ansible_user: root
     - role: network
 
-# - hosts: windows_hosts
-#   roles:

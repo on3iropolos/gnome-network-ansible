@@ -1,47 +1,11 @@
-# Tasks to be executed by the role
+---
+- name: Enable NetworkManager (Chroot)
+  ansible.builtin.command: arch-chroot {{ install_root }} systemctl enable NetworkManager
+  changed_when: true
+  when: install_root | length > 0
 
-- name: Detect container environment
-  ansible.builtin.include_tasks: detect_container.yml
-
-- name: Install network tools
-  ansible.builtin.package:
-    name:
-      - ethtool
-      - wpa_supplicant
-      - netctl
-      - dhcpcd
-      - networkmanager
-      - ntp
-    state: present
-
-- name: Enable and start systemd-timesyncd (non-container)
-  ansible.builtin.systemd:
-    name: systemd-timesyncd
-    state: started
+- name: Enable NetworkManager (Native)
+  ansible.builtin.service:
+    name: NetworkManager
     enabled: true
-    daemon_reload: true
-  when: not is_container | bool
-
-- name: Only enable systemd-timesyncd (container)
-  ansible.builtin.systemd:
-    name: systemd-timesyncd
-    enabled: true
-    daemon_reload: true
-  when: is_container | bool
-
-- name: Start & enable other services
-  ansible.builtin.systemd:
-    name: "{{ item }}"
-    state: started
-    enabled: true
-    daemon_reload: true
-  loop:
-    - sshd
-    - NetworkManager
-
-- name: Stop & disable networkd
-  ansible.builtin.systemd:
-    name: systemd-networkd
-    state: stopped
-    enabled: false
-    daemon_reload: true
+  when: install_root | length == 0

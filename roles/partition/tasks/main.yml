@@ -1,0 +1,85 @@
+---
+- name: Wipe disk
+  ansible.builtin.shell: |
+    # Unmount anything currently mounted on the drive
+    for part in "{{ install_drive }}"*; do
+      if [ -b "$part" ]; then
+        umount -R "$part" || true
+      fi
+    done
+    swapoff -a || true
+    
+    # Wipe disk and all partitions
+    sgdisk --zap-all "{{ install_drive }}"
+    wipefs --force --all "{{ install_drive }}"
+    for part in "{{ install_drive }}"*; do
+      if [ -b "$part" ]; then
+        wipefs --force --all "$part" || true
+      fi
+    done
+  changed_when: true
+
+- name: Reload partition table
+  ansible.builtin.command: partprobe "{{ install_drive }}"
+  changed_when: false
+
+- name: Settle udev
+  ansible.builtin.command: udevadm settle
+  changed_when: false
+
+- name: Create ESP (UEFI)
+  community.general.parted:
+    device: "{{ install_drive }}"
+    label: gpt
+    number: 1
+    part_end: 512MB
+    name: esp
+    flags: [boot, esp]
+    state: present
+  when: boot_mode == 'uefi'
+
+- name: Create BIOS Boot (BIOS)
+  community.general.parted:
+    device: "{{ install_drive }}"
+    label: gpt
+    number: 1
+    part_end: 2MB
+    name: bios_boot
+    flags: [bios_grub]
+    state: present
+  when: boot_mode == 'bios'
+
+- name: Create Boot (BIOS)
+  community.general.parted:
+    device: "{{ install_drive }}"
+    label: gpt
+    number: 2
+    part_start: 2MB
+    part_end: 512MB
+    name: boot
+    state: present
+  when: boot_mode == 'bios'
+
+- name: Create Root
+  community.general.parted:
+    device: "{{ install_drive }}"
+    label: gpt
+    number: "{{ '2' if boot_mode == 'uefi' else '3' }}"
+    part_start: "{{ '512MB' if boot_mode == 'uefi' else '512MB' }}"
+    name: root
+    state: present
+
+- name: Settle udev
+  ansible.builtin.command: udevadm settle
+  changed_when: false
+
+- name: Set partition facts
+  ansible.builtin.set_fact:
+    part_prefix: "{{ 'p' if install_drive is search('nvme|mmc') else '' }}"
+
+- name: Define partition variables
+  ansible.builtin.set_fact:
+    partition_esp: "{{ install_drive }}{{ part_prefix }}1" # UEFI only
+    partition_bios_boot: "{{ install_drive }}{{ part_prefix }}1" # BIOS only
+    partition_boot: "{{ install_drive }}{{ part_prefix }}2" # BIOS only
+    partition_root: "{{ install_drive }}{{ part_prefix }}{{ '2' if boot_mode == 'uefi' else '3' }}"

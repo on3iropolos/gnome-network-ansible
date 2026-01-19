@@ -1,0 +1,5 @@
+---
+encryption_enabled: true
+encryption_password: "{{ lookup('env', 'ENCRYPTION_PASSWORD') }}"
+encryption_format: luks1 # luks1 required for grub-cryptodisk usually
+encryption_device: "{{ partition_root }}"

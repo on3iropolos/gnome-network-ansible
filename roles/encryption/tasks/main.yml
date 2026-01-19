@@ -1,0 +1,37 @@
+---
+- name: Encrypt Device
+  block:
+    - name: Load dm-crypt
+      ansible.builtin.command: modprobe dm-crypt
+      changed_when: false
+
+    - name: Format LUKS
+      ansible.builtin.shell: |
+        printf "%s" "{{ encryption_password }}" | cryptsetup luksFormat --type "{{ encryption_format }}" -q "{{ encryption_device }}" -
+      register: luks_frm
+      failed_when: luks_frm.rc != 0
+    
+    - name: Settle udev
+      ansible.builtin.command: udevadm settle
+      changed_when: false
+
+    - name: Close LUKS if open
+      ansible.builtin.shell: cryptsetup close cryptroot || true
+      changed_when: false
+
+    - name: Open LUKS
+      ansible.builtin.shell: |
+         printf "%s" "{{ encryption_password }}" | cryptsetup open "{{ encryption_device }}" cryptroot -
+      register: luks_opn
+      failed_when: luks_opn.rc != 0
+      
+    - name: Set mapped device fact
+      ansible.builtin.set_fact:
+        target_root_device: /dev/mapper/cryptroot
+        
+  when: encryption_enabled
+
+- name: Set unencrypted device fact
+  ansible.builtin.set_fact:
+    target_root_device: "{{ encryption_device }}"
+  when: not encryption_enabled

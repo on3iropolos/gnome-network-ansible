@@ -19,3 +19,15 @@ docs/audit.json
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+
+# Packer
+*.pkrvars.hcl
+*.auto.pkrvars.hcl
+!vars.auto.pkrvars.hcl
+secrets.auto.pkrvars.hcl
+output-*/
+packer_cache/
