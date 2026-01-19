@@ -1,0 +1,14 @@
+---
+- name: Deploy Git Config
+  ansible.builtin.template:
+    src: gitconfig.j2
+    dest: "{{ install_root }}/home/{{ user_name }}/.gitconfig"
+    owner: "{{ user_name if install_root | length == 0 else omit }}"
+    group: "{{ user_name if install_root | length == 0 else omit }}"
+    mode: '0644'
+
+- name: Fix Ownership (Chroot)
+  ansible.builtin.command: "/usr/bin/arch-chroot {{ install_root }} chown -R {{ user_name }}:{{ user_name }} /home/{{ user_name }}"
+  changed_when: true
+  when: install_root | length > 0
+

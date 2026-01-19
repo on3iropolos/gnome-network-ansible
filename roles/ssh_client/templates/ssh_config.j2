@@ -1,0 +1,7 @@
+{% for identity in user_ssh_identities %}
+Host {{ identity.host }}
+    HostName {{ identity.host }}
+    User git
+    IdentityFile ~/.ssh/{{ identity.filename }}
+
+{% endfor %}

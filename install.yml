@@ -18,8 +18,9 @@
     - role: locale
     - role: hosts
     - role: network
-    - role: ssh
+    - role: sshd
     - role: user
+    - role: ssh_client
     
     # Boot
     - role: initramfs

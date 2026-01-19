@@ -7,7 +7,7 @@ services:
         GLIBC_ARCH: x86_64 # or aarch64 for ARM64 builds
     volumes:
       - .:/data
-      - ${HOME}/.ssh/git_on3iropolos_ed25519.pub:/root/.ssh/user_public_key.pub:ro
+      - ${HOME}/.ssh/github_ssh_key.pub:/root/.ssh/user_public_key.pub:ro
       - ~/.gitconfig:/root/.gitconfig:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock:rw
