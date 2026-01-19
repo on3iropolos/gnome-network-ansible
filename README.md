@@ -93,11 +93,19 @@ ansible-playbook install.yml \
 ```
 
 ### 3. Run Provisioning (Post-Reboot)
-Once the system reboots, log in as your new user, clone the repo again (or use the copy left in `/root/ansible` if you kept it), and run the provisioning playbook. 
+Once the system reboots, log in as your new user and run the provisioning playbook. Since you are running this locally on the machine, use `-c local` to bypass SSH.
 
-Since the system is now live, we override `install_root` to target the root directory directly:
 ```bash
-ansible-playbook provision.yml -e "install_root="
+cd /root/ansible
+
+# -c local: bypasses SSH to run on the current machine
+# --limit: ensures we only target your host configuration
+# install_root= targets the active system (/)
+sudo ansible-playbook provision.yml \
+  -i inventories/workstations \
+  --limit whimsyforge.gnome.network \
+  -c local \
+  -e "install_root="
 ```
 
 ---
