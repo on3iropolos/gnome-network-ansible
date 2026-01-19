@@ -21,3 +21,4 @@ services:
       ENCRYPTION_PASSWORD: "${ENCRYPTION_PASSWORD}"
       USER_PASSWORD: "${USER_PASSWORD}"
     working_dir: /data
+

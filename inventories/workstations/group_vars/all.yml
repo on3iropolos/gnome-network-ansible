@@ -1,11 +1,11 @@
 ---
 # Global Config
 install_root: /mnt
-install_drive: /dev/nvme1n1
+# install_drive: /dev/nvme0n1 # Passed via CLI -e "install_drive=/dev/..."
 boot_mode: uefi
 
 # Encryption
-encryption_enabled: true
+encryption_enabled: false
 encryption_password: "{{ lookup('env', 'ENCRYPTION_PASSWORD') | default('') }}"
 encryption_format: luks1
 

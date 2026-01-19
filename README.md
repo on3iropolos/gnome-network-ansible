@@ -55,9 +55,13 @@ Deploy Arch Linux directly to your local hardware.
 2.  Connect to the internet (`iwctl` for Wi-Fi or plug in Ethernet).
 3.  **Pre-Flight Verification**: Before proceeding, run these commands on the ISO to ensure your environment matches the configuration:
     - **Internet**: `ping -c 3 google.com`
-    - **Drive Path**: `lsblk` (Ensure your target drive matches `install_drive` in `inventories/workstations/group_vars/all.yml`).
+    - **Drive Path**: `lsblk` (Identify your target drive, e.g., `/dev/nvme0n1`).
     - **Boot Mode**: `ls /sys/firmware/efi/efivars` (If this dir exists, you are in UEFI mode).
-4.  **Bootstrap Environment**: Install Git and Ansible directly onto the Live ISO ramdisk:
+4.  **Bootstrap Environment**: Install Git and Ansible directly onto the Live ISO ramdisk. 
+    > [!TIP]
+    > If you encounter a "Partition / is too full" error, increase the cowspace size:
+    > `mount -o remount,size=4G /run/archiso/cowspace`
+
     ```bash
     pacman -Syu --noconfirm git ansible
     ```
@@ -80,9 +84,11 @@ export USER_SSH_KEY="ssh-rsa AAAAB3Nza..."
 # -i: specifies the workstations inventory
 # --limit: ensures we only target your host
 # -c local: forces a local connection bypasses SSH
+# -e: passes the install_drive variable (REQUIRED)
 ansible-playbook install.yml \
   -i inventories/workstations \
   --limit whimsyforge.gnome.network \
+  -e "install_drive=/dev/nvme0n1" \
   -c local
 ```
 
