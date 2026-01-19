@@ -1,0 +1,46 @@
+---
+- name: Install AUR dependencies
+  ansible.builtin.package:
+    name:
+      - base-devel
+      - git
+    state: present
+
+- name: Check if yay is installed
+  ansible.builtin.command: which yay
+  register: yay_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install yay-bin from AUR
+  block:
+    - name: Create temporary directory for yay
+      ansible.builtin.file:
+        path: "/tmp/yay-bin"
+        state: directory
+        mode: '0755'
+        owner: "{{ user_name }}"
+
+    - name: Clone yay-bin
+      ansible.builtin.git:
+        repo: "https://aur.archlinux.org/yay-bin.git"
+        dest: "/tmp/yay-bin"
+      become_user: "{{ user_name }}"
+
+    - name: Build and install yay
+      ansible.builtin.command:
+        chdir: "/tmp/yay-bin"
+        cmd: "makepkg -si --noconfirm"
+      become_user: "{{ user_name }}"
+      changed_when: true
+
+    - name: Cleanup yay build directory
+      ansible.builtin.file:
+        path: "/tmp/yay-bin"
+        state: absent
+  when: (yay_check.rc != 0) and (install_root | length == 0)
+
+- name: Skip yay installation in chroot
+  ansible.builtin.debug:
+    msg: "AUR package installation is skipped during chroot (Phase 1). Install manually or during Phase 2."
+  when: install_root | length > 0
