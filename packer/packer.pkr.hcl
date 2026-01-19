@@ -89,13 +89,13 @@ build {
   }
 
   provisioner "file" {
-    source      = "../packer_install.yml"
-    destination = "/root/ansible/packer_install.yml"
+    source      = "../install.yml"
+    destination = "/root/ansible/install.yml"
   }
 
   provisioner "file" {
-    source      = "../packer_provision.yml"
-    destination = "/root/ansible/packer_provision.yml"
+    source      = "../provision.yml"
+    destination = "/root/ansible/provision.yml"
   }
 
   # 2. Install Arch Linux (Partitioning, Base System, etc.)
@@ -110,7 +110,7 @@ build {
     inline = [
       "pacman -Syu --noconfirm --ignore linux ansible python-passlib",
       "cd /root/ansible",
-      "ansible-playbook packer_install.yml -i inventories/packer -c local -vvv > /tmp/ansible_install.log 2>&1 || (cat /tmp/ansible_install.log && exit 1)"
+      "ansible-playbook install.yml -i inventories/packer -c local -vvv > /tmp/ansible_install.log 2>&1 || (cat /tmp/ansible_install.log && exit 1)"
     ]
   }
 
@@ -123,7 +123,7 @@ build {
       "ANSIBLE_FORCE_COLOR=1"
     ]
     inline = [
-      "arch-chroot /mnt ansible-playbook /root/ansible/packer_provision.yml -i /root/ansible/inventories/packer -c local -vvv -e 'install_root=' --extra-vars '@/root/ansible/inventories/workstations/host_vars/whimsyforge.gnome.network.yml'",
+      "arch-chroot /mnt ansible-playbook /root/ansible/provision.yml -i /root/ansible/inventories/packer -c local -vvv -e 'install_root=' --extra-vars '@/root/ansible/inventories/workstations/host_vars/whimsyforge.gnome.network.yml'",
       "rm -rf /mnt/root/ansible"
     ]
   }
