@@ -2,3 +2,4 @@
 locale: en_US.UTF-8
 keymap: us
 install_root: ""
+verify_enabled: true

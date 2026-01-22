@@ -1,0 +1,19 @@
+---
+- name: Verify SSHD service enabled
+  ansible.builtin.stat:
+    path: "{{ install_root }}/etc/systemd/system/multi-user.target.wants/sshd.service"
+  register: sshd_service_file
+
+- name: Assert SSHD service is enabled
+  ansible.builtin.assert:
+    that:
+      - sshd_service_file.stat.exists
+    fail_msg: "SSHD service is not enabled in the target system."
+
+- name: Verify SSHD is listening (Native)
+  ansible.builtin.wait_for:
+    port: 22
+    host: "{{ ansible_host | default('localhost') }}"
+    timeout: 5
+    state: started
+  when: install_root | length == 0

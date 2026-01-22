@@ -1,5 +1,5 @@
----
 install_root: ""
+verify_enabled: true
 
 # SSH Identities for Git and other services
 user_ssh_identities: []

@@ -1,0 +1,27 @@
+---
+- name: Verify GNOME Shell binary exists
+  ansible.builtin.stat:
+    path: "{{ install_root if install_root | length > 0 else '' }}/usr/bin/gnome-shell"
+  register: gnome_shell_stat
+
+- name: Assert GNOME Shell binary exists
+  ansible.builtin.assert:
+    that:
+      - gnome_shell_stat.stat.exists
+    fail_msg: "GNOME Shell binary not found at {{ install_root if install_root | length > 0 else '' }}/usr/bin/gnome-shell"
+
+- name: Verify GDM service enabled
+  ansible.builtin.stat:
+    path: "{{ install_root }}/etc/systemd/system/display-manager.service"
+  register: gdm_service_file
+
+- name: Verify GDM service enabled
+  ansible.builtin.stat:
+    path: "{{ install_root }}/etc/systemd/system/display-manager.service"
+  register: gdm_service_file
+
+- name: Assert GDM service is enabled
+  ansible.builtin.assert:
+    that:
+      - gdm_service_file.stat.exists
+    fail_msg: "GDM service is not enabled."

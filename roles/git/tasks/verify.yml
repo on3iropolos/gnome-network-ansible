@@ -1,0 +1,19 @@
+---
+- name: Verify Git binary exists
+  ansible.builtin.stat:
+    path: "{{ install_root if install_root | length > 0 else '' }}/usr/bin/git"
+  register: git_stat
+
+- name: Assert Git binary exists
+  ansible.builtin.assert:
+    that:
+      - git_stat.stat.exists
+    fail_msg: "Git binary not found at {{ install_root if install_root | length > 0 else '' }}/usr/bin/git"
+
+- name: Verify Github connectivity (Functional)
+  ansible.builtin.wait_for:
+    host: github.com
+    port: 443
+    timeout: 5
+    state: started
+  when: install_root | length == 0

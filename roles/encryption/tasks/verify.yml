@@ -1,0 +1,20 @@
+---
+- name: Verify LUKS encryption
+  ansible.builtin.command: "cryptsetup isLuks {{ encryption_device }}"
+  register: isluks_check
+  changed_when: false
+  failed_when: isluks_check.rc != 0
+  when: encryption_enabled
+
+- name: Verify cryptroot is open
+  ansible.builtin.stat:
+    path: /dev/mapper/cryptroot
+  register: cryptroot_stat
+  when: encryption_enabled
+
+- name: Assert cryptroot is open
+  ansible.builtin.assert:
+    that:
+      - cryptroot_stat.stat.exists
+    fail_msg: "The encrypted device cryptroot is not mapped at /dev/mapper/cryptroot"
+  when: encryption_enabled

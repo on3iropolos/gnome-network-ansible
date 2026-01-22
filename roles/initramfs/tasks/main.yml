@@ -43,3 +43,8 @@
 - name: Build Initramfs
   ansible.builtin.command: arch-chroot /mnt mkinitcpio -P
   changed_when: true
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify]
+  when: verify_enabled

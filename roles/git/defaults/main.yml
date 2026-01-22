@@ -1,4 +1,5 @@
 ---
-git_user_name: "{{ lookup('env', 'GIT_USER_NAME') | default('username') }}"
-git_user_email: "{{ lookup('env', 'GIT_USER_EMAIL') | default('user@example.com') }}"
+git_user_name: "username"
+git_user_email: "user@example.com"
+verify_enabled: true
 

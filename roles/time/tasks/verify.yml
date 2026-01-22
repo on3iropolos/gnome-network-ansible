@@ -1,0 +1,17 @@
+---
+- name: Verify Timezone symlink
+  ansible.builtin.stat:
+    path: "{{ install_root }}/etc/localtime"
+  register: localtime_stat
+
+- name: Assert Timezone symlink exists
+  ansible.builtin.assert:
+    that:
+      - localtime_stat.stat.islnk
+    fail_msg: "/etc/localtime is not a symlink"
+
+- name: Assert Timezone link points to correct zone
+  ansible.builtin.assert:
+    that:
+      - timezone in localtime_stat.stat.lnk_source
+    fail_msg: "/etc/localtime points to {{ localtime_stat.stat.lnk_source }}, expected {{ timezone }}"

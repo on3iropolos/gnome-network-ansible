@@ -1,7 +1,8 @@
 ---
 user_name: username
-user_password: "{{ lookup('env', 'USER_PASSWORD') }}"
+user_password: ""
 user_groups: [wheel]
 user_shell: /bin/bash
-user_ssh_key: "{{ lookup('env', 'USER_SSH_KEY') }}"
+user_ssh_key: ""
 install_root: ""
+verify_enabled: true

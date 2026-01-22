@@ -24,25 +24,22 @@ variable "iso_checksum" {
 variable "ssh_password" {
   type      = string
   sensitive = true
-  # Value provided in secrets.auto.pkrvars.hcl
-}
-
-variable "encryption_password" {
-  type      = string
-  sensitive = true
-  # Value provided in secrets.auto.pkrvars.hcl
 }
 
 variable "user_password" {
   type      = string
   sensitive = true
-  # Value provided in secrets.auto.pkrvars.hcl
 }
 
 variable "user_ssh_key" {
+  type    = string
+  default = ""
+}
+
+variable "encryption_password" {
   type      = string
+  default   = ""
   sensitive = true
-  # Value provided in secrets.auto.pkrvars.hcl
 }
 
 source "hyperv-iso" "archlinux" {
@@ -55,7 +52,7 @@ source "hyperv-iso" "archlinux" {
   cpus              = 2
   generation        = 2
   switch_name       = "Default Switch"
-  boot_wait         = "30s"
+  boot_wait         = "20s"
   boot_command      = [
     "<enter><wait5s>",
     "curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/install.sh<enter><wait>",
@@ -98,17 +95,19 @@ build {
     destination = "/root/ansible/provision.yml"
   }
 
+
   # 2. Install Arch Linux (Partitioning, Base System, etc.)
   # Runs inside the Live ISO environment
   provisioner "shell" {
     environment_vars = [
-      "ENCRYPTION_PASSWORD=${var.encryption_password}",
+      "ANSIBLE_FORCE_COLOR=1",
       "USER_PASSWORD=${var.user_password}",
       "USER_SSH_KEY=${var.user_ssh_key}",
-      "ANSIBLE_FORCE_COLOR=1"
+      "ENCRYPTION_PASSWORD=${var.encryption_password}"
     ]
     inline = [
-      "pacman -Syu --noconfirm --ignore linux ansible python-passlib",
+      "pacman -Syu --noconfirm --ignore linux",
+      "pacman -S --noconfirm ansible python-passlib",
       "cd /root/ansible",
       "ansible-playbook install.yml -i inventories/packer -c local -vvv > /tmp/ansible_install.log 2>&1 || (cat /tmp/ansible_install.log && exit 1)"
     ]
@@ -118,13 +117,14 @@ build {
   # Runs inside the new system via arch-chroot
   provisioner "shell" {
     environment_vars = [
+      "ANSIBLE_FORCE_COLOR=1",
       "USER_PASSWORD=${var.user_password}",
       "USER_SSH_KEY=${var.user_ssh_key}",
-      "ANSIBLE_FORCE_COLOR=1"
+      "ENCRYPTION_PASSWORD=${var.encryption_password}"
     ]
     inline = [
-      "arch-chroot /mnt ansible-playbook /root/ansible/provision.yml -i /root/ansible/inventories/packer -c local -vvv -e 'install_root=' --extra-vars '@/root/ansible/inventories/workstations/host_vars/whimsyforge.gnome.network.yml'",
-      "rm -rf /mnt/root/ansible"
+      "arch-chroot /mnt pacman -S --noconfirm ansible python-passlib",
+      "arch-chroot /mnt ansible-playbook /root/ansible/provision.yml -i /root/ansible/inventories/packer -c local -vvv -e 'install_root=' --extra-vars '@/root/ansible/inventories/workstations/host_vars/whimsyforge.gnome.network.yml'"
     ]
   }
 
@@ -132,7 +132,9 @@ build {
   provisioner "shell" {
     inline = [
       "# Disable root login on the installed system",
-      "sed -i 's/^PermitRootLogin.*/PermitRootLogin no/' /mnt/etc/ssh/sshd_config"
+      "sed -i 's/^PermitRootLogin.*/PermitRootLogin no/' /mnt/etc/ssh/sshd_config",
+      "# Cleanup Ansible files",
+      "rm -rf /mnt/root/ansible"
     ]
   }
 }

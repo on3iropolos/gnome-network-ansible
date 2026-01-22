@@ -1,0 +1,22 @@
+---
+- name: Verify mkinitcpio.conf
+  ansible.builtin.stat:
+    path: /mnt/etc/mkinitcpio.conf
+  register: mkinitcpio_conf
+
+- name: Assert mkinitcpio.conf exists
+  ansible.builtin.assert:
+    that:
+      - mkinitcpio_conf.stat.exists
+    fail_msg: "mkinitcpio configuration file not found."
+
+- name: Verify initramfs image
+  ansible.builtin.stat:
+    path: /mnt/boot/initramfs-linux.img
+  register: initramfs_img
+
+- name: Assert initramfs image exists
+  ansible.builtin.assert:
+    that:
+      - initramfs_img.stat.exists
+    fail_msg: "Initramfs image was not generated at /boot/initramfs-linux.img"

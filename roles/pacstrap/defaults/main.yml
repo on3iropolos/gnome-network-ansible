@@ -19,3 +19,4 @@ pacstrap_packages:
   - efibootmgr
   - openssh
   - python-passlib
+verify_enabled: true

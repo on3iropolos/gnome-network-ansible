@@ -2,3 +2,4 @@
 bootloader_esp_path: /boot/efi
 bootloader_device: /dev/sda
 encryption_device: "{{ partition_root }}"
+verify_enabled: true

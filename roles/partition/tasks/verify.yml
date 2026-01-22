@@ -1,0 +1,25 @@
+---
+- name: Verify Partitioning
+  ansible.builtin.command: "lsblk {{ install_drive }} -nlo NAME"
+  register: lsblk_output
+  changed_when: false
+
+- name: Assert root partition exists
+  ansible.builtin.assert:
+    that:
+      - partition_root.split('/')[-1] in lsblk_output.stdout_lines
+    fail_msg: "Root partition {{ partition_root }} was not found on {{ install_drive }}"
+
+- name: Assert boot partition exists (BIOS)
+  ansible.builtin.assert:
+    that:
+      - partition_boot.split('/')[-1] in lsblk_output.stdout_lines
+    fail_msg: "Boot partition {{ partition_boot }} was not found on {{ install_drive }}"
+  when: boot_mode == 'bios'
+
+- name: Assert ESP partition exists (UEFI)
+  ansible.builtin.assert:
+    that:
+      - partition_esp.split('/')[-1] in lsblk_output.stdout_lines
+    fail_msg: "ESP partition {{ partition_esp }} was not found on {{ install_drive }}"
+  when: boot_mode == 'uefi'

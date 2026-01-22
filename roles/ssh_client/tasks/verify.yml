@@ -1,0 +1,26 @@
+---
+- name: Verify SSH keys existence
+  ansible.builtin.stat:
+    path: "{{ install_root }}/home/{{ user_name }}/.ssh/{{ item.filename }}"
+  loop: "{{ user_ssh_identities | default([]) }}"
+  register: ssh_key_files
+  when: item.private_key | default('') | length > 0
+
+- name: Assert SSH keys exist
+  ansible.builtin.assert:
+    that: 
+      - item.stat.exists
+  loop: "{{ ssh_key_files.results }}"
+  when: not item.skipped | default(false)
+
+- name: Verify SSH Config existence
+  ansible.builtin.stat:
+    path: "{{ install_root }}/home/{{ user_name }}/.ssh/config"
+  register: ssh_config_file
+  when: user_ssh_identities | length > 0
+
+- name: Assert SSH Config exists
+  ansible.builtin.assert:
+    that:
+      - ssh_config_file.stat.exists
+  when: user_ssh_identities | length > 0

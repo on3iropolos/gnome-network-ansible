@@ -3,7 +3,7 @@
   hosts: all
   become: true
   # Variables are now loaded from inventories/packer/group_vars/all.yml
-  
+
   roles:
     # Storage Stack
     - role: partition

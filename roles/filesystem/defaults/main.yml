@@ -16,3 +16,4 @@ filesystem_btrfs_subvols:
     path: 'var/cache'
   - sub: '@var_tmp'
     path: 'var/tmp'
+verify_enabled: true

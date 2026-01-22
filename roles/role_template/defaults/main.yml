@@ -1,1 +1,2 @@
 # Default variables used throughout the role
+verify_enabled: true
