@@ -1,0 +1,24 @@
+---
+- name: Verify User existence (Native)
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ user_name }}"
+  when: install_root | length == 0
+
+- name: Verify User existence (Chroot)
+  ansible.builtin.command: "/usr/bin/arch-chroot {{ install_root }} id {{ user_name }}"
+  register: user_exists_chroot
+  changed_when: false
+  failed_when: user_exists_chroot.rc != 0
+  when: install_root | length > 0
+
+- name: Verify Sudoers config
+  ansible.builtin.slurp:
+    src: "{{ install_root }}/etc/sudoers.d/wheel"
+  register: sudo_conf
+
+- name: Assert Sudoers config is correct
+  ansible.builtin.assert:
+    that:
+      - "'%wheel ALL=(ALL) NOPASSWD: ALL' in sudo_conf.content | b64decode"
+    fail_msg: "Sudoers configuration for %wheel is missing or incorrect."

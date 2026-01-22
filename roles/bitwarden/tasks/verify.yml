@@ -1,0 +1,11 @@
+---
+- name: Verify Bitwarden CLI binary exists
+  ansible.builtin.stat:
+    path: "{{ install_root if install_root | length > 0 else '' }}/usr/bin/bw"
+  register: bw_stat
+
+- name: Assert Bitwarden CLI binary exists
+  ansible.builtin.assert:
+    that:
+      - bw_stat.stat.exists
+    fail_msg: "Bitwarden CLI binary (bw) not found at {{ install_root if install_root | length > 0 else '' }}/usr/bin/bw"

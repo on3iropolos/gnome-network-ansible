@@ -20,3 +20,8 @@
   ansible.builtin.copy:
     dest: "{{ install_root }}/etc/vconsole.conf"
     content: "KEYMAP={{ keymap }}"
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify]
+  when: verify_enabled

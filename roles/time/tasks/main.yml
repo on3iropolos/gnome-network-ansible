@@ -13,6 +13,11 @@
   ansible.builtin.timezone:
     name: "{{ timezone }}"
   when: install_root | length == 0
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify]
+  when: verify_enabled
   
 # Native hwclock not usually needed in containers/VMs managed by Ansible post-provision, but if baremetal:
 # Ansible `timezone` module handles /etc/localtime.

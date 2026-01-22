@@ -1,0 +1,22 @@
+---
+- name: Slurp locale configuration
+  ansible.builtin.slurp:
+    src: "{{ install_root }}/etc/locale.conf"
+  register: locale_conf
+
+- name: Assert LANG is correct
+  ansible.builtin.assert:
+    that:
+      - "('LANG=' + locale) in locale_conf.content | b64decode"
+    fail_msg: "Locale configuration is incorrect. Expected LANG={{ locale }}"
+
+- name: Slurp vconsole configuration
+  ansible.builtin.slurp:
+    src: "{{ install_root }}/etc/vconsole.conf"
+  register: vconsole_conf
+
+- name: Assert Keymap is correct
+  ansible.builtin.assert:
+    that:
+      - "('KEYMAP=' + keymap) in vconsole_conf.content | b64decode"
+    fail_msg: "Keymap configuration is incorrect. Expected KEYMAP={{ keymap }}"

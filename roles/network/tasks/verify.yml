@@ -1,0 +1,19 @@
+---
+- name: Verify NetworkManager service enabled
+  ansible.builtin.stat:
+    path: "{{ install_root }}/etc/systemd/system/multi-user.target.wants/NetworkManager.service"
+  register: nm_service_file
+
+- name: Assert NetworkManager service is enabled
+  ansible.builtin.assert:
+    that:
+      - nm_service_file.stat.exists
+    fail_msg: "NetworkManager service is not enabled."
+
+- name: Verify Internet Connectivity (Functional)
+  ansible.builtin.wait_for:
+    host: 1.1.1.1
+    port: 53
+    timeout: 5
+    state: started
+  when: install_root | length == 0

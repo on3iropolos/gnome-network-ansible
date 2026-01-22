@@ -1,0 +1,5 @@
+---
+# Verification tasks for the role
+# - name: Verify something
+#   ansible.builtin.assert:
+#     that: true

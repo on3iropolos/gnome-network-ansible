@@ -8,3 +8,4 @@ hosts_entries:
   - ip: 127.0.1.1
     names: ["{{ hostname }}.localdomain", "{{ hostname }}"]
 install_root: ""
+verify_enabled: true

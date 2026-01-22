@@ -1,3 +1,4 @@
 ---
 install_drive: /dev/sda
 boot_mode: uefi # uefi | bios
+verify_enabled: true

@@ -1,13 +1,31 @@
 ---
-- name: Install GNOME desktop environment
+- name: Install GNOME desktop environment (Chroot)
+  ansible.builtin.command: >
+    /usr/bin/arch-chroot {{ install_root }} pacman -S --noconfirm gnome gnome-extra
+  changed_when: true
+  when: install_root | length > 0
+
+- name: Install GNOME desktop environment (Native)
   ansible.builtin.package:
     name:
       - gnome
       - gnome-extra
     state: present
+  when: install_root | length == 0
 
-- name: Enable GDM service
+- name: Enable GDM service (Chroot)
+  ansible.builtin.command: /usr/bin/arch-chroot {{ install_root }} systemctl enable gdm
+  changed_when: true
+  when: install_root | length > 0
+
+- name: Enable GDM service (Native)
   ansible.builtin.systemd:
     name: gdm
     enabled: true
     state: started
+  when: install_root | length == 0
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify]
+  when: verify_enabled

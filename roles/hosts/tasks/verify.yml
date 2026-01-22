@@ -1,0 +1,25 @@
+---
+- name: Slurp hosts configuration
+  ansible.builtin.slurp:
+    src: "{{ install_root }}/etc/hosts"
+  register: hosts_conf
+
+- name: Verify Hostname
+  ansible.builtin.slurp:
+    src: "{{ install_root }}/etc/hostname"
+  register: hostname_conf
+
+- name: Assert Hostname is correct
+  ansible.builtin.assert:
+    that:
+      - hostname in hostname_conf.content | b64decode
+    fail_msg: "Hostname is incorrect. Expected {{ hostname }}"
+
+- name: Assert Hosts entries exist
+  ansible.builtin.assert:
+    that:
+      - "(item.ip + ' ' + item.names | join(' ')) in hosts_conf.content | b64decode"
+    fail_msg: "Host entry for {{ item.ip }} missing or incorrect."
+  loop: "{{ hosts_entries | default([]) }}"
+  loop_control:
+    label: "{{ item.ip }}"

@@ -1,0 +1,29 @@
+---
+- name: Verify Root Mountpoint
+  ansible.builtin.command: findmnt -n /mnt
+  register: findmnt_root
+  changed_when: false
+  failed_when: findmnt_root.rc != 0
+
+- name: Assert Root is mounted
+  ansible.builtin.assert:
+    that:
+      - findmnt_root.stdout | length > 0
+    fail_msg: "The root filesystem is not mounted at /mnt"
+
+- name: Verify Subvolume Mounts
+  ansible.builtin.command: "findmnt -n /mnt/{{ item.path }}"
+  loop: "{{ filesystem_btrfs_subvols | default([]) }}"
+  register: findmnt_subvols
+  when: (filesystem_type | default('ext4')) == 'btrfs' and item.path is defined
+  changed_when: false
+  failed_when: findmnt_subvols.rc != 0
+  loop_control:
+    label: "{{ item.path | default('root') }}"
+
+- name: Verify ESP Mount (UEFI)
+  ansible.builtin.command: findmnt -n /mnt/boot/efi
+  register: findmnt_esp
+  when: boot_mode == 'uefi'
+  changed_when: false
+  failed_when: findmnt_esp.rc != 0

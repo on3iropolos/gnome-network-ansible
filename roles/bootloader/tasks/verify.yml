@@ -1,0 +1,37 @@
+---
+- name: Verify GRUB config
+  ansible.builtin.stat:
+    path: /mnt/boot/grub/grub.cfg
+  register: grub_cfg
+
+- name: Assert GRUB config exists
+  ansible.builtin.assert:
+    that:
+      - grub_cfg.stat.exists
+    fail_msg: "GRUB configuration file was not found at /boot/grub/grub.cfg"
+
+- name: Verify GRUB binary (UEFI)
+  ansible.builtin.stat:
+    path: "/mnt{{ bootloader_esp_path }}/EFI/GRUB-ARCH/grubx64.efi"
+  register: grub_efi
+  when: boot_mode == 'uefi'
+
+- name: Assert GRUB EFI binary exists
+  ansible.builtin.assert:
+    that:
+      - grub_efi.stat.exists
+    fail_msg: "GRUB EFI binary was not found."
+  when: boot_mode == 'uefi'
+
+- name: Verify GRUB directory (BIOS)
+  ansible.builtin.stat:
+    path: /mnt/boot/grub/i386-pc
+  register: grub_bios_dir
+  when: boot_mode == 'bios'
+
+- name: Assert GRUB BIOS directory exists
+  ansible.builtin.assert:
+    that:
+      - grub_bios_dir.stat.exists
+    fail_msg: "GRUB BIOS modules were not found."
+  when: boot_mode == 'bios'

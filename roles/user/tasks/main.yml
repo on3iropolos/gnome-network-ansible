@@ -60,3 +60,8 @@
     group: "{{ user_name }}"
     recurse: true
   when: install_root | length == 0
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify]
+  when: verify_enabled
