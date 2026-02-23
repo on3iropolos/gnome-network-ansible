@@ -27,7 +27,7 @@ canonical_url: "docs/agent/policies/agent-operational-policies.md"
 
 # Agent Operational Policies
 
-This document defines how AI agents must use the repository-local `.agent/` directory as their workspace and how they must log non-trivial activity. It is the single canonical reference for workspace, working-directory, and logging behavior at the agent level. Repository-wide logging details still live under [`docs/policies/INDEX.md`](docs/policies/INDEX.md:1).
+This document defines how AI agents must use the repository-local `.agent/` directory as their workspace and how they must log non-trivial activity. It is the single canonical reference for workspace, working-directory, and logging behavior at the agent level. Repository-wide logging details still live under [`../../policies/INDEX.md`](../policies/INDEX.md:1).
 
 ## 1. Workspace and working directory
 
@@ -73,9 +73,9 @@ Very small, obviously local edits (for example, fixing a single typo) may be gro
 
 See the canonical logging policies for exact rules:
 
-- [`docs/policies/log-file-naming-and-location.md`](docs/policies/log-file-naming-and-location.md:1)
-- [`docs/policies/log-content-guidelines.md`](docs/policies/log-content-guidelines.md:1)
-- [`docs/policies/log-entry-format.md`](docs/policies/log-entry-format.md:1)
+- [`../../policies/log-file-naming-and-location.md`](../../policies/log-file-naming-and-location.md:1)
+- [`../../policies/log-content-guidelines.md`](../../policies/log-content-guidelines.md:1)
+- [`../../policies/log-entry-format.md`](../../policies/log-entry-format.md:1)
 
 ### 3.2 Log content
 

@@ -10,7 +10,6 @@ tags:
   - "troubleshooting"
   - "ansible"
 related:
-  - "../reference/molecule-testing-container-based.md"
   - "../reference/testing-best-practices.md"
 owner: "Gnome Network Ansible maintainers"
 last_reviewed: "2025-11-19"
@@ -19,7 +18,7 @@ canonical_url: "docs/troubleshooting/troubleshooting-molecule.md"
 
 # Troubleshooting Molecule with Docker
 
-This runbook covers common failures when running Molecule tests with Docker in this repository and how to fix them quickly. It assumes you are using the standard development workflow described in `DEVELOPMENT.md` and the project [README](../README.md).
+This runbook covers common failures when running Molecule tests with Docker in this repository and how to fix them quickly. It assumes you are using the standard development workflow described in the project [README](../../README.md).
 
 ## Prerequisites
 

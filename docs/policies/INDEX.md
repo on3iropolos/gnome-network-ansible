@@ -34,7 +34,7 @@ Use this page as the starting point when you need to understand or update reposi
 
 - **Documentation contributing guide**  
   How to write new docs that comply with the Always Link system, including required front matter, subjects, and slug rules.  
-  See [`docs/contributing.md`](docs/contributing.md:1).
+  See [`../contributing.md`](../contributing.md:1).
 
 ## How to use these policies
 

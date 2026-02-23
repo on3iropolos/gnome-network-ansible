@@ -20,14 +20,14 @@ canonical_url: "docs/agent/workflows/update-docs.md"
 
 # Agent Workflow: Updating Documentation
 
-This workflow is the **minimal checklist** for updating docs as an agent. It assumes you follow the general rules in [`docs/agent/policies/general-instructions.md`](docs/agent/policies/general-instructions.md:1) and the Always Link policy in [`docs/agent/policies/always-link.md`](docs/agent/policies/always-link.md:1).
+This workflow is the **minimal checklist** for updating docs as an agent. It assumes you follow the general rules in [`../policies/general-instructions.md`](../policies/general-instructions.md:1) and the Always Link policy in [`../policies/always-link.md`](../policies/always-link.md:1).
 
 Use it whenever you add, restructure, or significantly edit files under `docs/`, `README.md`, or `AGENTS.md`.
 
 ## 1. Read constraints and goals
 
-- Project overview: [`README.md`](../../README.md:1)
-- Agent guide: [`AGENTS.md`](../../AGENTS.md:1)
+- Project overview: [`README.md`](../../../README.md:1)
+- Agent guide: [`AGENTS.md`](../../../AGENTS.md:1)
 - Agent docs index: [`docs/agent/INDEX.md`](../INDEX.md:1)
 - Contributing and policies:
   - [`docs/contributing.md`](../../contributing.md:1)
@@ -82,7 +82,7 @@ Refine your changes until the audit output is clean or you clearly understand an
 Before considering the task complete:
 
 - Write or update a log entry under `.agent/log/` following:
-  - [`docs/agent/policies/agent-operational-policies.md`](docs/agent/policies/agent-operational-policies.md:1)
+  - [`../policies/agent-operational-policies.md`](../policies/agent-operational-policies.md:1)
   - The logging policies under [`docs/policies/INDEX.md`](../../policies/INDEX.md:1)
 
 Keep diffs as small as practical and ensure that re-running this workflow would not create duplicate docs or inconsistent links.

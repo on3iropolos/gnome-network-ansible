@@ -16,7 +16,7 @@ last_reviewed: "2025-11-19"
 canonical_url: "docs/agent/policies/always-link.md"
 ---
 
-> Source: This policy was migrated from [`docs/policies/always-link.md`](../../policies/always-link.md:1) to make it part of the agent documentation collection under `docs/agent/`.
+> Source: This policy was migrated from a former location to make it part of the agent documentation collection under `docs/agent/`.
 
 The Always Link policy defines how documentation is organized and maintained in this repository. Every concept has exactly one canonical document; all other mentions must link to that document instead of duplicating its content.
 
@@ -39,7 +39,7 @@ The Always Link policy defines how documentation is organized and maintained in 
 3. **Use link stubs for secondary mentions**  
    - A link stub is a short 1–2 sentence pointer that links to a canonical doc or section anchor.  
    - Example:  
-     `For the full Molecule testing workflow, see [Molecule testing](../../testing/molecule-testing.md).`
+      `For the full Molecule testing workflow, see [Molecule testing](../../reference/testing-best-practices.md).`
 
 4. **Preserve sources non-destructively**  
    - When promoting content into a canonical doc, record the original location in the doc body or in a "Source" note.  
@@ -81,7 +81,7 @@ Any other file that previously described the full workflow should be replaced wi
 
 ```markdown
 This document has been canonicalized. See  
-[Molecule testing](../../testing/molecule-testing.md) for the up-to-date workflow.
+[Molecule testing](../../reference/testing-best-practices.md) for the up-to-date workflow.
 ```
 
 ### Link stub example
@@ -90,7 +90,7 @@ A role README section that used to describe Molecule testing can become:
 
 ```markdown
 For testing of this role, follow  
-[Molecule testing](../../../docs/testing/molecule-testing.md).
+[Molecule testing](../../reference/testing-best-practices.md).
 ```
 
 The README keeps local context (for example, which role the instructions apply to) but delegates the procedure to the canonical doc.
