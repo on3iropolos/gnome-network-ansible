@@ -44,7 +44,15 @@ The vault password is configured in `.vault_password` (gitignored).
 ## Development
 
 ```bash
+# Install deps and setup pre-commit hooks
 pip install -r requirements.txt
 make setup
+
+# Lint (ansible-lint)
 make lint
+
+# Test roles with Molecule
+cd roles/<role-name> && molecule test
 ```
+
+Full documentation: see `docs/` directory.
