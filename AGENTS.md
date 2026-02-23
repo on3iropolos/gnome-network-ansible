@@ -49,11 +49,16 @@ This repository supports the GitHub MCP Server for GitHub operations.
     "github": {
       "type": "remote",
       "url": "https://api.githubcopilot.com/mcp/",
-      "enabled": true
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer YOUR_GITHUB_TOKEN_HERE"
+      }
     }
   }
 }
 ```
+
+**Note**: Hardcode the token directly in the config - the `${GITHUB_PERSONAL_ACCESS_TOKEN}` variable expansion won't work because OpenCode doesn't automatically load env files.
 
 ### Required Scopes
 
