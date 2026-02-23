@@ -1,0 +1,26 @@
+---
+- name: Check if k3d is installed
+  ansible.builtin.command: k3d version
+  register: k3d_check
+  changed_when: false
+  failed_when: false
+
+- name: Get latest k3d version
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/k3d-io/k3d/releases/latest
+    return_content: true
+  register: k3d_latest_release
+  when: k3d_version == "latest"
+  failed_when: false
+
+- name: Set k3d version fact
+  ansible.builtin.set_fact:
+    k3d_version_to_install: "{{ k3d_version if k3d_version != 'latest' else (k3d_latest_release.json.tag_name | default('v5.7.0', true)) }}"
+
+- name: Download k3d
+  ansible.builtin.get_url:
+    url: "https://github.com/k3d-io/k3d/releases/download/{{ k3d_version_to_install }}/k3d-linux-amd64"
+    dest: /usr/local/bin/k3d
+    mode: "0755"
+    force: "{{ k3d_version != 'latest' }}"
+  when: k3d_check.rc != 0 or k3d_version != 'latest'

@@ -1,0 +1,8 @@
+---
+- name: Install Kubernetes tools
+  ansible.builtin.package:
+    name:
+      - kubectl
+      - helm
+      - kubectx
+    state: present

@@ -1,0 +1,10 @@
+verify_enabled: true
+
+k3d_version: "latest"
+k3d_cluster_name: "dev-cluster"
+k3d_server_nodes: 1
+k3d_worker_nodes: 0
+k3d_k3s_version: ""
+k3d_port_mapping:
+  - "80:80"
+  - "443:443"
