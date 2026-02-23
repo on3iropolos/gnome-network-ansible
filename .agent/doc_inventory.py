@@ -80,8 +80,6 @@ def classify_subject(path: Path, text_sample: str) -> str:
     p = str(path)
     if "roles/" in p:
         return "roles"
-    if "terraform/" in p:
-        return "terraform"
     if "inventories/" in p:
         return "inventories"
     if "network" in p:
@@ -259,7 +257,7 @@ def walk_repo() -> List[DocUnit]:
         # Prune directories in-place
         pruned = []
         for d in dirs:
-            if d in {".git", ".terraform", "__pycache__"}:
+            if d in {".git", "__pycache__"}:
                 continue
             if root_path.name == ".agent" and d == "log":
                 continue

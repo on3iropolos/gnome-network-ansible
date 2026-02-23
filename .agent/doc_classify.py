@@ -40,7 +40,6 @@ ALLOWED_SUBJECTS = {
     "roles",
     "inventories",
     "networking",
-    "terraform",
     "ansible",
     "testing",
     "operations",
@@ -226,8 +225,6 @@ def normalize_subject(unit: InventoryUnit, path: str, text: str) -> str:
     # Path-based hints
     if path.startswith("roles/"):
         return "roles"
-    if path.startswith("terraform/"):
-        return "terraform"
     if path.startswith("inventories/"):
         return "inventories"
     if path in {"README.md", "AGENTS.md", "DEVELOPMENT.md"}:
@@ -303,7 +300,7 @@ def classify_type(unit: InventoryUnit, path: str, text: str) -> str:
         return "faq"
 
     # Testing / CI descriptions
-    if "testing" in lower_title or "molecule" in lower or "terraform" in lower_title:
+    if "testing" in lower_title or "molecule" in lower:
         return "concept"
 
     # Default: concept/background
@@ -315,8 +312,6 @@ def classify_scope(unit: InventoryUnit, path: str, text: str) -> str:
 
     if path.startswith("roles/"):
         return "role"
-    if path.startswith("terraform/"):
-        return "infra"
     if path.startswith("inventories/"):
         return "environment"
     if path.startswith(".agent/") or path in {"README.md", "AGENTS.md", "DEVELOPMENT.md"}:
@@ -347,14 +342,8 @@ def derive_tags(unit: InventoryUnit, path: str, text: str) -> List[str]:
         add("ansible")
     if "molecule" in lower:
         add("molecule")
-    if "terraform" in lower:
-        add("terraform")
-    if "libvirt" in lower:
-        add("libvirt")
     if "docker" in lower:
         add("docker")
-    if "pxe" in lower:
-        add("pxe")
     if "mermaid" in lower:
         add("mermaid")
 
