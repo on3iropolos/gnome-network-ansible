@@ -1,0 +1,30 @@
+---
+# System Configuration (defaults for anyone)
+boot_mode: uefi
+timezone: America/Chicago
+locale: en_US.UTF-8
+filesystem_type: btrfs
+
+# Encryption
+encryption_enabled: false
+encryption_password: "{{ vault_encryption_password | default('') }}"
+encryption_format: luks1
+
+# Initramfs
+initramfs_encryption: "{{ encryption_enabled }}"
+initramfs_btrfs: true
+
+# User (from vault)
+user_name: "{{ vault_user_name | default('user') }}"
+user_password: "{{ vault_user_password | default('') }}"
+user_ssh_key: "{{ vault_user_ssh_key | default('') }}"
+
+# Git Config (from vault)
+git_user_name: "{{ vault_git_user_name | default('') }}"
+git_user_email: "{{ vault_git_user_email | default('') }}"
+
+# SSH Identities (from vault - personalized)
+user_ssh_identities: "{{ vault_user_ssh_identities | default([]) }}"
+
+# Hostname (from vault)
+hostname: "{{ vault_hostname | default('archlinux') }}"

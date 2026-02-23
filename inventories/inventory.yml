@@ -1,0 +1,6 @@
+all:
+  children:
+    workstations:
+      hosts:
+        whimsyforge.gnome.network:
+          ansible_connection: local
