@@ -16,7 +16,6 @@ This file is an internal agent planning note and is not part of the canonical do
 - roles → `docs/roles/`
 - inventories → `docs/inventories/`
 - networking → `docs/networking/`
-- terraform → `docs/terraform/`
 - ansible → `docs/ansible/`
 - testing → `docs/testing/`
 - operations → `docs/operations/`

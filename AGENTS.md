@@ -8,7 +8,7 @@ This guide explains **how to navigate the docs**, **what rules you must follow**
 
 ## 1. Where to start
 
-Human- and agent-facing documentation is organized under the `docs/` tree using subject-based folders (policies, architecture, terraform, troubleshooting, reference, how-to, and others).
+Human- and agent-facing documentation is organized under the `docs/` tree using subject-based folders (policies, architecture, troubleshooting, reference, how-to, and others).
 
 For the authoritative view of this system, start from these canonical docs:
 

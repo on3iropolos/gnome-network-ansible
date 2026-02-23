@@ -2,9 +2,9 @@
 - name: Deploy SSH Private Keys
   ansible.builtin.copy:
     content: "{{ item.private_key }}"
-    dest: "{{ install_root }}/home/{{ user_name }}/.ssh/{{ item.filename }}"
-    owner: "{{ user_name if install_root | length == 0 else omit }}"
-    group: "{{ user_name if install_root | length == 0 else omit }}"
+    dest: "/home/{{ user_name }}/.ssh/{{ item.filename }}"
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
     mode: '0600'
   loop: "{{ user_ssh_identities }}"
   when: item.private_key | default('') | length > 0
@@ -13,9 +13,9 @@
 - name: Deploy SSH Public Keys
   ansible.builtin.copy:
     content: "{{ item.public_key }}"
-    dest: "{{ install_root }}/home/{{ user_name }}/.ssh/{{ item.filename }}.pub"
-    owner: "{{ user_name if install_root | length == 0 else omit }}"
-    group: "{{ user_name if install_root | length == 0 else omit }}"
+    dest: "/home/{{ user_name }}/.ssh/{{ item.filename }}.pub"
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
     mode: '0644'
   loop: "{{ user_ssh_identities }}"
   when: item.public_key | default('') | length > 0
@@ -23,9 +23,9 @@
 - name: Configure SSH Config
   ansible.builtin.template:
     src: ssh_config.j2
-    dest: "{{ install_root }}/home/{{ user_name }}/.ssh/config"
-    owner: "{{ user_name if install_root | length == 0 else omit }}"
-    group: "{{ user_name if install_root | length == 0 else omit }}"
+    dest: "/home/{{ user_name }}/.ssh/config"
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
     mode: '0600'
   when: user_ssh_identities | length > 0
 

@@ -2,6 +2,8 @@
 - name: Provision Image
   hosts: all
   become: true
+  vars:
+    verify_enabled: false
 
   roles:
     - role: time
@@ -15,4 +17,4 @@
     - role: gnome
     - role: bitwarden
     - role: aur
-    - role: antigravity
+    # - role: antigravity  # Disabled - to be added later

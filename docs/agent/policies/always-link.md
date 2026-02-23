@@ -29,7 +29,7 @@ The Always Link policy defines how documentation is organized and maintained in 
 ## Core Rules
 
 1. **Exactly one canonical doc per concept**  
-   - A "concept" is a coherent topic (for example "Terraform VM testing" or "network role Molecule tests").  
+   - A "concept" is a coherent topic (for example "Molecule testing" or "network role tests").  
    - The canonical doc lives under `docs/<subject>/<slug>.md` and includes the `canonical_url` field in its front matter.
 
 2. **Never duplicate content**  
@@ -39,7 +39,7 @@ The Always Link policy defines how documentation is organized and maintained in 
 3. **Use link stubs for secondary mentions**  
    - A link stub is a short 1–2 sentence pointer that links to a canonical doc or section anchor.  
    - Example:  
-     `For the full Terraform VM testing workflow, see [Terraform VM testing](../../terraform/testing-with-terraform-libvirt.md).`
+     `For the full Molecule testing workflow, see [Molecule testing](../../testing/molecule-testing.md).`
 
 4. **Preserve sources non-destructively**  
    - When promoting content into a canonical doc, record the original location in the doc body or in a "Source" note.  
@@ -53,7 +53,7 @@ All canonical docs must include the following front matter fields:
 - `summary`: 1–3 sentence summary of the doc. Should match the first paragraph in the body.
 - `type`: One of `concept`, `tutorial`, `how-to`, `reference`, `policy`, `runbook`, `decision`, `changelog`, `faq`, `api`.
 - `scope`: One of `repo`, `role`, `environment`, `infra`, `ops`, `dev`, `sec`, `qa`.
-- `tags`: A short list of topic tags, such as `ansible`, `terraform`, `network`, `testing`, `agent`.
+- `tags`: A short list of topic tags, such as `ansible`, `network`, `testing`, `agent`.
 - `related`: Relative links to closely related docs.
 - `owner`: Team or person accountable for the content.
 - `last_reviewed`: Date of the last human review in `YYYY-MM-DD` format.
@@ -65,32 +65,32 @@ Non-canonical link-stub files may have minimal front matter, but they must **not
 
 ### Canonical example
 
-A canonical Terraform VM testing doc could live at:
+A canonical Molecule testing doc could live at:
 
-- `docs/terraform/testing-with-terraform-libvirt.md`
+- `docs/testing/molecule-testing.md`
 
 Its front matter would include:
 
 ```yaml
-canonical_url: "docs/terraform/testing-with-terraform-libvirt.md"
+canonical_url: "docs/testing/molecule-testing.md"
 type: "how-to"
-scope: "infra"
+scope: "qa"
 ```
 
 Any other file that previously described the full workflow should be replaced with a short pointer:
 
 ```markdown
 This document has been canonicalized. See  
-[Terraform VM testing](../../terraform/testing-with-terraform-libvirt.md) for the up-to-date workflow.
+[Molecule testing](../../testing/molecule-testing.md) for the up-to-date workflow.
 ```
 
 ### Link stub example
 
-A role README section that used to describe Terraform VM testing can become:
+A role README section that used to describe Molecule testing can become:
 
 ```markdown
-For VM-based testing of this role, follow  
-[Terraform VM testing](../../../docs/terraform/testing-with-terraform-libvirt.md).
+For testing of this role, follow  
+[Molecule testing](../../../docs/testing/molecule-testing.md).
 ```
 
 The README keeps local context (for example, which role the instructions apply to) but delegates the procedure to the canonical doc.
@@ -98,7 +98,7 @@ The README keeps local context (for example, which role the instructions apply t
 ## Bite-Sized Documents
 
 - Aim for **200–600 words** per canonical doc when possible.  
-- Split large topics into multiple docs connected with `related` links (for example, `testing-overview`, `molecule-testing`, `terraform-vm-testing`).  
+- Split large topics into multiple docs connected with `related` links (for example, `testing-overview`, `molecule-testing`).  
 - Very small reference entries (for example, a single config option) may be shorter if they are part of a structured reference set.
 
 ## Idempotent Agent Behavior

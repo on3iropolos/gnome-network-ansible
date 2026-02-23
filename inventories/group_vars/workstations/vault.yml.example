@@ -1,0 +1,24 @@
+---
+# Copy this file to group_vars/workstations/vault.yml and fill in your secrets:
+# cp group_vars/workstations/vault.yml.example group_vars/workstations/vault.yml
+# ansible-vault edit group_vars/workstations/vault.yml
+
+vault_hostname: ""
+vault_user_name: ""
+vault_user_password: ""
+vault_user_ssh_key: ""
+vault_git_user_name: ""
+vault_git_user_email: ""
+vault_encryption_password: ""
+vault_github_private_key:_public_key: ""
+
+# SSH Identities ""
+vault_github (personalized)
+vault_user_ssh_identities: []
+# Example:
+# vault_user_ssh_identities:
+#   - name: github
+#     filename: github-ssh
+#     private_key: ""
+#     public_key: ""
+#     host: github.com

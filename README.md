@@ -1,163 +1,50 @@
 # Gnome Network Ansible
 
-A high-performance, purist automation suite for Arch Linux. This repository facilitates both reproducible **VM Image Building** (via Packer) and **Bare Metal Deployment** (via Ansible) for workstations.
+Automated configuration for Arch Linux workstations.
 
-## 🚀 Key Features
-- **Stateless Installation**: Uses a modular "Storage Stack" (Partition -> Encryption -> Filesystem).
-- **Environment Parity**: The same Ansible roles drive both Packer VM builds and local workstation installs.
-- **Security First**: Integrated LUKS encryption support and SSH hardening.
-- **Desktop Ready**: Automated GNOME environment provisioning with Bitwarden and Antigravity AI IDE.
-
----
-
-## 🏗️ Architecture
-
-The automation is split into two distinct phases to ensure maximum reliability and separation of concerns:
-
-1.  **Phase 1: Installation (`install.yml`)**
-    - Targets the **Arch Live ISO** environment.
-    - Handles disk partitioning, LUKS encryption, and BTRFS subvolumes.
-    - Installs the base system via `pacstrap`.
-    - Configures the bootloader and core networking.
-    - Operates on the target disk mounted at `/mnt`.
-
-2.  **Phase 2: Provisioning (`provision.yml`)**
-    - Targets the **Installed OS**.
-    - Configures user accounts, GNOME shell, desktop applications (Bitwarden, Antigravity), and system services.
-    - Can be run inside `arch-chroot` (during build) or against a live booted system.
-
----
-
-## 📦 Usage: Packer (VM Images)
-
-Packer is used to generate a pre-configured VHDX for Hyper-V.
-
-### 1. Initialize & Build
-```bash
-cd packer
-packer init .
-packer build .
-```
-
-### 2. How it works
-- **Bootstrap**: Boots the Arch ISO and runs a minimal `install.sh` to enable SSH.
-- **Local Execution**: Packer uploads this entire repository to the Live ISO and runs Ansible **locally** inside the ISO to minimize network latency and host dependencies.
-- **Chrooted Provisioning**: After installation, Packer runs the provisioning playbook inside an `arch-chroot` to finalize the image before shutdown.
-
----
-
-## 💻 Usage: Local System (Bare Metal)
-
-Deploy Arch Linux directly to your local hardware.
-
-### 1. Prepare the Target
-1.  Boot the [Arch Linux Live ISO](https://archlinux.org/download/) on your target machine.
-2.  Connect to the internet (`iwctl` for Wi-Fi or plug in Ethernet).
-3.  **Pre-Flight Verification**: Before proceeding, run these commands on the ISO to ensure your environment matches the configuration:
-    - **Internet**: `ping -c 3 google.com`
-    - **Drive Path**: `lsblk` (Identify your target drive, e.g., `/dev/nvme0n1`).
-    - **Boot Mode**: `ls /sys/firmware/efi/efivars` (If this dir exists, you are in UEFI mode).
-4.  **Bootstrap Environment**: Install Git and Ansible directly onto the Live ISO ramdisk. 
-    > [!TIP]
-    > If you encounter a "Partition / is too full" error, increase the cowspace size:
-    > `mount -o remount,size=4G /run/archiso/cowspace`
-
-    ```bash
-    pacman -Syu --noconfirm git ansible
-    ```
-5.  **Clone the Repository**:
-    ```bash
-    git clone https://github.com/on3iropolos/gnome-network-ansible.git
-    cd gnome-network-ansible
-    ```
-
-### 2. Run Installation
-Execute the installation locally within the ISO. Use environment variables to pass your secrets and CLI flags to target the local machine.
+## Quick Start
 
 ```bash
-# Set secrets
-export USER_PASSWORD="YourUserPassword"
-export ENCRYPTION_PASSWORD="YourLUKSPassword"
-export USER_SSH_KEY="ssh-rsa AAAAB3Nza..."
+# Copy vault template and edit
+cp inventories/workstations/group_vars/workstations/vault.yml.example \
+   inventories/workstations/group_vars/workstations/vault.yml
+ansible-vault edit inventories/workstations/group_vars/workstations/vault.yml
 
-# Run the installer locally
-# -i: specifies the workstations inventory
-# --limit: ensures we only target your host
-# -c local: forces a local connection bypasses SSH
-# -e: passes the install_drive variable (REQUIRED)
-ansible-playbook install.yml \
-  -i inventories/workstations \
-  --limit whimsyforge.gnome.network \
-  -e "install_drive=/dev/nvme0n1" \
-  -c local
+# Dry-run (audit what would change)
+ansible-playbook provision.yml --check --diff
+
+# Apply changes
+ansible-playbook provision.yml
 ```
 
-### 3. Run Provisioning (Post-Reboot)
-Once the system reboots, log in as your new user and run the provisioning playbook. Since you are running this locally on the machine, use `-c local` to bypass SSH.
+## Requirements
+
+- Ansible
+- Access to target machine (local or SSH)
+
+## Secrets Management
+
+Secrets are stored in an Ansible Vault encrypted file. Copy the example template and fill in your values:
 
 ```bash
-cd /root/ansible
-
-# -c local: bypasses SSH to run on the current machine
-# --limit: ensures we only target your host configuration
-# install_root= targets the active system (/)
-sudo ansible-playbook provision.yml \
-  -i inventories/workstations \
-  --limit whimsyforge.gnome.network \
-  -c local \
-  -e "install_root="
+cp inventories/workstations/group_vars/workstations/vault.yml.example \
+   inventories/workstations/group_vars/workstations/vault.yml
+ansible-vault edit inventories/workstations/group_vars/workstations/vault.yml
 ```
 
----
+The vault password is configured in `.vault_password` (gitignored).
 
-## 🔐 Configuration & Secrets
+## Available Playbooks
 
-Variables are managed via Ansible's `group_vars` and `host_vars`. 
+| Playbook | Purpose |
+|----------|---------|
+| `provision.yml` | Configure existing Arch Linux system |
+| `install.yml` | Fresh installation from Arch Live ISO |
 
-- **Global Config**: `inventories/workstations/group_vars/all.yml` (Drives, Usernames, etc).
-- **Machine Specific**: `inventories/workstations/host_vars/whimsyforge.gnome.network.yml`.
-- **Secret Management**: Passwords and keys are pulled from environment variables to keep them out of source control.
+## Development
 
-### Environment Variables
-
-| Variable | Purpose | Required |
-|----------|---------|----------|
-| `USER_PASSWORD` | User account password | Yes |
-| `ENCRYPTION_PASSWORD` | LUKS encryption password | If encryption enabled |
-| `USER_SSH_KEY` | SSH public key for remote access | Recommended |
-| `GIT_USER_NAME` | Git global user.name | Optional (defaults to 'username') |
-| `GIT_USER_EMAIL` | Git global user.email | Optional (defaults to 'user@example.com') |
-| `GITHUB_SSH_PRIVATE_KEY` | GitHub SSH private key | Optional (for git clone via SSH) |
-| `GITHUB_SSH_PUBLIC_KEY` | GitHub SSH public key | Optional (for git clone via SSH) |
-
-### Configuring SSH Identities
-
-To enable seamless Git operations with SSH, configure `user_ssh_identities` in `group_vars/all.yml`:
-
-```yaml
-user_ssh_identities:
-  - name: github
-    filename: github-ssh-key
-    private_key: "{{ lookup('env', 'GITHUB_SSH_PRIVATE_KEY') }}"
-    public_key: "{{ lookup('env', 'GITHUB_SSH_PUBLIC_KEY') }}"
-    host: github.com
-```
-
-This will automatically deploy your SSH keys and configure `~/.ssh/config` during provisioning.
-
----
-
-## 🛠️ Development
-
-### Setup
-Ensure you have the requirements installed:
 ```bash
 pip install -r requirements.txt
 make setup
-```
-
-### Formatting & Linting
-We use `ansible-lint` and `pre-commit` to maintain code quality:
-```bash
 make lint
 ```
