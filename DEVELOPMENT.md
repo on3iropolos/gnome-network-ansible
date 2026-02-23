@@ -17,15 +17,6 @@ Refer to those docs for:
 - Common failure modes and fixes
 - Expectations for CI integration and ansible-lint
 
-## VM-based testing with Terraform + libvirt
-
-Full-system VM-based testing (for example, for `arch_iso_install`) is documented in:
-
-- [`docs/terraform/testing-with-terraform-libvirt.md`](docs/terraform/testing-with-terraform-libvirt.md:1)
-- [`docs/troubleshooting/terraform-vm-testing.md`](docs/troubleshooting/terraform-vm-testing.md:1)
-
-Those docs cover setup, quick-start workflows, scenarios, and troubleshooting for the Terraform + libvirt environment.
-
 ## Quality Assurance
 
 To ensure code quality, this project uses `pre-commit` hooks. These hooks run automatically before every commit to catch linting issues, validation errors, and formatting problems.
@@ -36,7 +27,7 @@ Run the following command to install the pre-commit hooks:
 make setup
 ```
 
-This will configure hooks for `ansible-lint`, `packer validate`, `shellcheck`, and general file hygiene.
+This will configure hooks for `ansible-lint`, `shellcheck`, and general file hygiene.
 
 ### Manual Run
 You can run the hooks manually on all files at any time:

@@ -11,7 +11,6 @@ tags:
   - "ci"
 related:
   - "../troubleshooting/troubleshooting-molecule.md"
-  - "../terraform/testing-with-terraform-libvirt.md"
   - "../contributing.md"
 owner: "docs-maintainers"
 last_reviewed: "2025-11-19"
@@ -87,7 +86,7 @@ Molecule tests SHOULD verify at least:
 - Configuration correctness
 - Idempotency – running the role repeatedly should not produce changes after the first successful run
 
-For deeper troubleshooting of Molecule issues and libvirt-based VM testing, see [`troubleshooting-molecule`](../troubleshooting/troubleshooting-molecule.md:1) and [`testing-with-terraform-libvirt`](../terraform/testing-with-terraform-libvirt.md:1).
+For deeper troubleshooting of Molecule issues, see [`troubleshooting-molecule`](../troubleshooting/troubleshooting-molecule.md:1).
 
 ## Manual testing expectations
 

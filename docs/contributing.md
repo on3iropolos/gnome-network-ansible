@@ -34,17 +34,16 @@ See the Always Link policy for details: [Always Link policy](agent/policies/alwa
 
 All canonical docs live under `docs/<subject>/<slug>.md`:
 
-- **Subject**: One of `policies, architecture, roles, inventories, networking, terraform, ansible, testing, operations, security, decisions, troubleshooting, workflows, conventions, reference, how-to`.
+- **Subject**: One of `policies, architecture, roles, inventories, networking, ansible, testing, operations, security, decisions, troubleshooting, workflows, conventions, reference, how-to`.
 - **Slug**: Short, lowercase, kebab-case; no dates in the filename (dates belong in front matter).
 
 Examples:
 
-- `docs/terraform/testing-with-terraform-libvirt.md`
 - `docs/roles/network-role-overview.md`
 - `docs/troubleshooting/molecule-common-failures.md`
 - `docs/agent/policies/agent-workspace.md`
 
-If you are unsure which subject to use, pick the one that best matches the dominant topic (for example, Terraform usage belongs under `terraform` even if it mentions roles).
+If you are unsure which subject to use, pick the one that best matches the dominant topic.
 
 ## Required front matter
 
@@ -54,7 +53,7 @@ Every authored doc must start with YAML front matter using this schema:
 - `summary`: 1–3 sentences summarizing the doc; should match the first paragraph.
 - `type`: One of `concept, tutorial, how-to, reference, policy, runbook, decision, changelog, faq, api`.
 - `scope`: One of `repo, role, environment, infra, ops, dev, sec, qa`.
-- `tags`: Short list of topic tags (for example, `ansible`, `terraform`, `network`, `testing`).
+- `tags`: Short list of topic tags (for example, `ansible`, `network`, `testing`).
 - `related`: Relative paths to closely related docs under `docs/`.
 - `owner`: Team or person responsible for the content.
 - `last_reviewed`: Date as `YYYY-MM-DD`.
@@ -69,7 +68,7 @@ Follow these rules when editing existing files:
 - If the file already holds the richest explanation for a concept, keep it as canonical and ensure its front matter is complete.
 - If the same concept appears in multiple places, choose a single canonical file and convert all others into short link stubs.
 - A link stub is typically 1–2 sentences plus a link, for example:
-  `For the full Terraform VM testing workflow, see [Terraform VM testing](../terraform/testing-with-terraform-libvirt.md).`
+  `For the full Molecule testing workflow, see [Molecule testing](../testing/molecule-testing.md).`
 
 README files and in-file comments may still contain local context (for example, how a role uses a canonical workflow) but must delegate the detailed explanation to canonical docs under `docs/`.
 
