@@ -1,23 +1,9 @@
 ---
-- name: Link Timezone (Chroot)
-  ansible.builtin.command: /usr/bin/arch-chroot {{ install_root }} ln -sf /usr/share/zoneinfo/{{ timezone }} /etc/localtime
-  changed_when: true
-  when: install_root | length > 0
-  
-- name: Hwclock (Chroot)
-  ansible.builtin.command: /usr/bin/arch-chroot {{ install_root }} hwclock --systohc
-  changed_when: true
-  when: install_root | length > 0
-
-- name: Set Timezone (Native)
+- name: Set Timezone
   ansible.builtin.timezone:
     name: "{{ timezone }}"
-  when: install_root | length == 0
 
 - name: Verification
   ansible.builtin.include_tasks: verify.yml
   tags: [verify]
   when: verify_enabled
-  
-# Native hwclock not usually needed in containers/VMs managed by Ansible post-provision, but if baremetal:
-# Ansible `timezone` module handles /etc/localtime.

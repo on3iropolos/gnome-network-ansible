@@ -1,65 +1,39 @@
 ---
-- name: Create User (Chroot)
-  ansible.builtin.command: >
-    /usr/bin/arch-chroot {{ install_root }} useradd -m -G {{ user_groups | join(',') }} -s {{ user_shell }} {{ user_name }}
-  changed_when: true
-  when: install_root | length > 0
-  
-- name: Create User (Native)
+- name: Create User
   ansible.builtin.user:
     name: "{{ user_name }}"
     groups: "{{ user_groups }}"
     shell: "{{ user_shell }}"
     append: true
     state: present
-  when: install_root | length == 0
 
-- name: Set Password (Chroot)
-  ansible.builtin.shell: |
-    /usr/bin/arch-chroot {{ install_root }} sh -c 'echo "{{ user_name }}:{{ user_password }}" | chpasswd'
-  changed_when: true
-  no_log: true
-  when: install_root | length > 0
-
-- name: Set Password (Native)
+- name: Set Password
   ansible.builtin.user:
     name: "{{ user_name }}"
     password: "{{ user_password | password_hash('sha512') }}"
-  when: install_root | length == 0
+  when: user_password | length > 0
+  no_log: true
 
 - name: Sudoers
   ansible.builtin.copy:
-    dest: "{{ install_root }}/etc/sudoers.d/wheel"
+    dest: "/etc/sudoers.d/wheel"
     content: "%wheel ALL=(ALL) NOPASSWD: ALL"
-    
+
 - name: SSH Directory
   ansible.builtin.file:
-    path: "{{ install_root }}/home/{{ user_name }}/.ssh"
+    path: "/home/{{ user_name }}/.ssh"
     state: directory
     mode: '0700'
-    owner: "{{ user_name if install_root | length == 0 else omit }}" 
-    # Can't set owner by name if user doesn't exist on host.
-    
+    owner: "{{ user_name }}"
+
 - name: Authorized Keys
   ansible.builtin.copy:
     content: "{{ user_ssh_key }}"
-    dest: "{{ install_root }}/home/{{ user_name }}/.ssh/authorized_keys"
+    dest: "/home/{{ user_name }}/.ssh/authorized_keys"
     mode: '0600'
+    owner: "{{ user_name }}"
   when: user_ssh_key | length > 0
   failed_when: false
-  
-- name: Chown (Chroot)
-  ansible.builtin.command: "/usr/bin/arch-chroot {{ install_root }} chown -R {{ user_name }}:{{ user_name }} /home/{{ user_name }}/.ssh"
-  changed_when: true
-  when: install_root | length > 0
-
-- name: Chown (Native)
-  ansible.builtin.file:
-    path: "/home/{{ user_name }}/.ssh"
-    owner: "{{ user_name }}"
-    group: "{{ user_name }}"
-    recurse: true
-  when: install_root | length == 0
 
 - name: Verification
   ansible.builtin.include_tasks: verify.yml

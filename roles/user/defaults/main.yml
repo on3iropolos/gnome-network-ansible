@@ -1,8 +1,5 @@
 ---
-user_name: username
-user_password: ""
 user_groups: [wheel]
 user_shell: /bin/bash
-user_ssh_key: ""
 install_root: ""
-verify_enabled: true
+verify_enabled: false
