@@ -6,6 +6,7 @@
     verify_enabled: false
 
   roles:
+    - role: docker
     - role: time
     - role: locale
     - role: hosts

@@ -1,0 +1,14 @@
+---
+- name: Install k3d
+  ansible.builtin.include_tasks: install_k3d.yml
+
+- name: Install Kubernetes tools
+  ansible.builtin.include_tasks: install_tools.yml
+
+- name: Create k3d cluster
+  ansible.builtin.include_tasks: create_cluster.yml
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify]
+  when: verify_enabled
