@@ -20,7 +20,8 @@ from pathlib import Path
 from typing import List, Tuple
 
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+SCRIPT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = SCRIPT_DIR.parent
 DOCS_ROOT = REPO_ROOT / "docs"
 TMP_ROOT = REPO_ROOT / ".agent" / "tmp"
 INVENTORY_PATH = TMP_ROOT / "inventory.yaml"

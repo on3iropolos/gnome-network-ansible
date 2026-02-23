@@ -141,7 +141,8 @@ def collect_duplicates(repo_root: Path):
 
 
 def main():
-    repo_root = Path(__file__).resolve().parent.parent
+    script_dir = Path(__file__).resolve().parent
+    repo_root = script_dir.parent.parent
     # Ephemeral path for agent workflows
     audit_tmp_path = repo_root / ".agent" / "tmp" / "audit.json"
     # Canonical machine-readable audit report under docs/
