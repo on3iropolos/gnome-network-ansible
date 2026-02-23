@@ -68,7 +68,7 @@ Follow these rules when editing existing files:
 - If the file already holds the richest explanation for a concept, keep it as canonical and ensure its front matter is complete.
 - If the same concept appears in multiple places, choose a single canonical file and convert all others into short link stubs.
 - A link stub is typically 1–2 sentences plus a link, for example:
-  `For the full Molecule testing workflow, see [Molecule testing](../testing/molecule-testing.md).`
+  `For the full Molecule testing workflow, see [Molecule testing](reference/testing-best-practices.md).`
 
 README files and in-file comments may still contain local context (for example, how a role uses a canonical workflow) but must delegate the detailed explanation to canonical docs under `docs/`.
 

@@ -17,6 +17,6 @@ last_reviewed: "2025-11-25"
 
 # Agent Workspace Policy (stub)
 
-This file is a **stub**. The canonical workspace, working-directory, and logging rules for agents are defined in [`agent-operational-policies.md`](docs/agent/policies/agent-operational-policies.md:1).
+This file is a **stub**. The canonical workspace, working-directory, and logging rules for agents are defined in [`agent-operational-policies.md`](agent-operational-policies.md:1).
 
-For current expectations, including how to use `.agent/`, where to write temporary files, and how to log non-trivial runs, see [`Agent Operational Policies`](docs/agent/policies/agent-operational-policies.md:1).
+For current expectations, including how to use `.agent/`, where to write temporary files, and how to log non-trivial runs, see [`Agent Operational Policies`](agent-operational-policies.md:1).

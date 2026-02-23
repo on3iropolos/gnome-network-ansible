@@ -26,7 +26,7 @@ All commands referenced here live under the `.agent/` directory and should be tr
 
 ### Inventory generator
 
-- Script: [`doc_inventory.py`](../../.agent/doc_inventory.py:1)  
+- Script: [`doc_inventory.py`](../../../.agent/doc_inventory.py:1)  
 - Purpose: Scans markdown documentation and produces an inventory of “documentation units” with signatures and source pointers.  
 - Typical usage:
 
@@ -38,7 +38,7 @@ All commands referenced here live under the `.agent/` directory and should be tr
 
 ### Classifier
 
-- Script: [`doc_classify.py`](../../.agent/doc_classify.py:1)  
+- Script: [`doc_classify.py`](../../../.agent/doc_classify.py:1)  
 - Purpose: Consumes the inventory output and classifies units by subject, type, scope, and tags; also records canonical-doc mappings and duplicates.  
 - Typical usage:
 
@@ -50,7 +50,7 @@ All commands referenced here live under the `.agent/` directory and should be tr
 
 ### Link auditor
 
-- Script: [`doc_audit.py`](../../.agent/doc_audit.py:1)  
+- Script: [`doc_audit.py`](../../../.agent/doc_audit.py:1)  
 - Purpose: Audits links across `docs/`, `README.md`, and `AGENTS.md` for:
   - Broken or invalid links.
   - Oversize docs that may need splitting.
@@ -71,6 +71,6 @@ When running any of these commands as part of an automated agent task:
 - Follow the agent logging policy in [`agent-logging.md`](../policies/agent-logging.md:1).
 - Keep all temporary outputs under `.agent/tmp/`.
 - Record a concise log entry for non-trivial runs under `.agent/log/` using the naming and content guidelines in:
-  - [`docs/policies/log-file-naming-and-location.md`](../../policies/log-file-naming-and-location.md:1)
-  - [`docs/policies/log-content-guidelines.md`](../../policies/log-content-guidelines.md:1)
-  - [`docs/policies/log-entry-format.md`](../../policies/log-entry-format.md:1)
+  - [`../../policies/log-file-naming-and-location.md`](../../policies/log-file-naming-and-location.md:1)
+  - [`../../policies/log-content-guidelines.md`](../../policies/log-content-guidelines.md:1)
+  - [`../../policies/log-entry-format.md`](../../policies/log-entry-format.md:1)
