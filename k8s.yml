@@ -1,0 +1,10 @@
+---
+- name: Local Kubernetes Development Cluster
+  hosts: localhost
+  become: true
+  vars:
+    verify_enabled: false
+
+  roles:
+    - role: docker
+    - role: kubernetes
