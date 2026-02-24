@@ -12,10 +12,11 @@ metadata:
 
 This skill summarizes the core expectations for AI agents working in this repository.
 
-## 1. Understand the project first
+## 1. Understand the project and load memory
 
 Before making changes:
 
+- Load the agent-memory skill: `skill({ name: "agent-memory" })`
 - Read the project overview in `README.md`
 - Read the agent guide in `AGENTS.md`
 - Review the Always Link policy in [canonical-docs](canonical-docs)
@@ -59,6 +60,7 @@ When instructions conflict:
 
 ## Related skills
 
+- [agent-memory](agent-memory): Three-layer memory system (required at session start)
 - [canonical-docs](canonical-docs): Always Link policy
 - [update-docs](update-docs): Complete documentation update workflow
 - [doc-inventory](doc-inventory): Scan and inventory docs
