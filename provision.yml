@@ -18,4 +18,5 @@
     - role: gnome
     - role: bitwarden
     - role: aur
+    - role: qemu
     # - role: antigravity  # Disabled - to be added later
