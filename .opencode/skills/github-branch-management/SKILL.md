@@ -179,10 +179,11 @@ Use `mcp-github-mcp-merge_pull_request`:
 
 ### Feature Development Workflow
 
-1. **Create feature branch** from `main`:
-   ```
-   feature/descriptive-name
-   ```
+1. **Create and checkout feature branch** from `main`:
+    ```
+    git checkout -b feature/descriptive-name
+    ```
+   This creates the branch AND switches to it in one step.
 
 2. **Make commits** following conventional format:
    ```
@@ -203,9 +204,9 @@ Use `mcp-github-mcp-merge_pull_request`:
 
 ### Hotfix Workflow
 
-1. **Create fix branch** from `main`:
+1. **Create and checkout fix branch** from `main`:
    ```
-   fix/critical-bug-description
+   git checkout -b fix/critical-bug-description
    ```
 
 2. **Make fix commit**:
@@ -223,9 +224,9 @@ Use `mcp-github-mcp-merge_pull_request`:
 
 ### Release Workflow
 
-1. **Create release branch**:
+1. **Create and checkout release branch**:
    ```
-   release/v1.2.0
+   git checkout -b release/v1.2.0
    ```
 
 2. **Make version bump commit**:
