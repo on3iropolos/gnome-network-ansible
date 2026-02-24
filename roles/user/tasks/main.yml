@@ -2,7 +2,8 @@
 - name: Create User
   ansible.builtin.user:
     name: "{{ user_name }}"
-    groups: "{{ user_groups }}"
+    groups:
+      - wheel
     shell: "{{ user_shell }}"
     append: true
     state: present
