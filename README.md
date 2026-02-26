@@ -22,6 +22,10 @@ ansible-playbook provision.yml
 - Ansible
 - Access to target machine (local or SSH)
 
+```bash
+ansible-galaxy collection install -r requirements.yml
+```
+
 ## Secrets Management
 
 Secrets are stored in an Ansible Vault encrypted file. Copy the example template and fill in your values:
