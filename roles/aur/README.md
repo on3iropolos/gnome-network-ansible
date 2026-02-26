@@ -2,7 +2,7 @@
 
 ## Description
 
-Installs the `yay-bin` AUR helper. This enables subsequent roles to install packages from the Arch User Repository.
+Installs the `paru` AUR helper. This enables subsequent roles to install packages from the Arch User Repository.
 
 ## Requirements
 
