@@ -19,4 +19,5 @@
     - role: bitwarden
     - role: aur
     - role: qemu
+    - role: spotify
     # - role: antigravity  # Disabled - to be added later
