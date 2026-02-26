@@ -10,7 +10,7 @@ debug.yml
 .tmp
 *.pub
 *.key
-.agent/log/
+.agent/memory/
 .agent/tmp/
 .ansible
 docs/audit.json
