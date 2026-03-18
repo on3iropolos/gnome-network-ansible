@@ -1,0 +1,32 @@
+---
+- name: Install VSCodium from AUR
+  kewlfft.aur.aur:
+    name: vscodium-bin
+    state: present
+  become: true
+  become_user: aur_builder
+
+- name: VSCodium config directory
+  ansible.builtin.file:
+    path: "/home/{{ user_name }}/.config/VSCodium"
+    state: directory
+    mode: '0755'
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
+  when: user_name != "root"
+
+- name: Install VSCodium extensions
+  ansible.builtin.command:
+    cmd: "/usr/bin/codium --install-extension {{ item }}"
+    creates: "/home/{{ user_name }}/.config/VSCodium/User/extensions.json"
+  loop: "{{ vscodium_extensions }}"
+  when:
+    - vscodium_extensions | length > 0
+    - user_name != "root"
+  become: true
+  become_user: "{{ user_name }}"
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify]
+  when: verify_enabled
