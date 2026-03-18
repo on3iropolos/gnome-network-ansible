@@ -2,13 +2,23 @@
 
 Automated configuration for Arch Linux workstations.
 
+## Requirements
+
+- Ansible (install via `pip install ansible` or `pacman -S ansible`)
+- Access to target machine (local or SSH)
+
+```bash
+pip install -r requirements.txt
+ansible-galaxy collection install -r requirements.yml
+```
+
 ## Quick Start
 
 ```bash
 # Copy vault template and edit
-cp inventories/workstations/group_vars/workstations/vault.yml.example \
-   inventories/workstations/group_vars/workstations/vault.yml
-ansible-vault edit inventories/workstations/group_vars/workstations/vault.yml
+cp inventories/group_vars/workstations/vault.yml.example \
+   inventories/group_vars/workstations/vault.yml
+ansible-vault edit inventories/group_vars/workstations/vault.yml
 
 # Dry-run (audit what would change)
 ansible-playbook provision.yml --check --diff
@@ -17,23 +27,14 @@ ansible-playbook provision.yml --check --diff
 ansible-playbook provision.yml
 ```
 
-## Requirements
-
-- Ansible
-- Access to target machine (local or SSH)
-
-```bash
-ansible-galaxy collection install -r requirements.yml
-```
-
 ## Secrets Management
 
 Secrets are stored in an Ansible Vault encrypted file. Copy the example template and fill in your values:
 
 ```bash
-cp inventories/workstations/group_vars/workstations/vault.yml.example \
-   inventories/workstations/group_vars/workstations/vault.yml
-ansible-vault edit inventories/workstations/group_vars/workstations/vault.yml
+cp inventories/group_vars/workstations/vault.yml.example \
+   inventories/group_vars/workstations/vault.yml
+ansible-vault edit inventories/group_vars/workstations/vault.yml
 ```
 
 The vault password is configured in `.vault_password` (gitignored).
