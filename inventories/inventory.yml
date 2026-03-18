@@ -4,5 +4,5 @@ all:
       hosts:
         whimsyforge.gnome.network:
           ansible_connection: local
-        stump.gnome.network:
+        localhost:
           ansible_connection: local
