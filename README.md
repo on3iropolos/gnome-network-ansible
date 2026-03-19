@@ -2,88 +2,47 @@
 
 Automated configuration for Arch Linux workstations.
 
+## Requirements
+
+- Ansible: `pacman -S ansible` or `pip install ansible`
+- Access to target machine (local or SSH)
+
+## Setup
+
+```bash
+pip install -r requirements.txt
+ansible-galaxy collection install -r requirements.yml
+cp inventories/group_vars/workstations/vault.yml.example \
+   inventories/group_vars/workstations/vault.yml
+ansible-vault edit inventories/group_vars/workstations/vault.yml
+```
+
+The vault password is in `.vault_password` (gitignored).
+
 ## Quick Start
 
 ```bash
-# Copy vault template and edit
-cp inventories/workstations/group_vars/workstations/vault.yml.example \
-   inventories/workstations/group_vars/workstations/vault.yml
-ansible-vault edit inventories/workstations/group_vars/workstations/vault.yml
-
-# Dry-run (audit what would change)
+# Dry-run
 ansible-playbook provision.yml --check --diff
 
-# Apply changes
+# Apply
 ansible-playbook provision.yml
 ```
 
-## Requirements
-
-- Ansible
-- Access to target machine (local or SSH)
-
-```bash
-ansible-galaxy collection install -r requirements.yml
-```
-
-## Secrets Management
-
-Secrets are stored in an Ansible Vault encrypted file. Copy the example template and fill in your values:
-
-```bash
-cp inventories/workstations/group_vars/workstations/vault.yml.example \
-   inventories/workstations/group_vars/workstations/vault.yml
-ansible-vault edit inventories/workstations/group_vars/workstations/vault.yml
-```
-
-The vault password is configured in `.vault_password` (gitignored).
-
-## Available Playbooks
+## Playbooks
 
 | Playbook | Purpose |
 |----------|---------|
 | `provision.yml` | Configure existing Arch Linux system |
 | `install.yml` | Fresh installation from Arch Live ISO |
-| `k8s.yml` | Local Kubernetes development cluster (k3d) |
-
-## Kubernetes Development Cluster
-
-This repository includes Ansible roles to set up a local Kubernetes development cluster using [k3d](https://k3d.io/).
-
-```bash
-# Setup k3d cluster with demo app
-ansible-playbook k8s.yml
-
-# Verify cluster
-kubectl get nodes
-kubectl get pods -A
-```
-
-### What It Does
-
-1. Installs Docker (if not present)
-2. Installs k3d, kubectl, helm, kubectx
-3. Creates a k3d cluster
-
-### Customization
-
-Edit `roles/kubernetes/defaults/main.yml` to customize:
-- Cluster name
-- Number of server/worker nodes
-- Port mappings
+| `k8s.yml` | Local Kubernetes cluster (k3d) |
 
 ## Development
 
 ```bash
-# Install deps and setup pre-commit hooks
-pip install -r requirements.txt
-make setup
-
-# Lint (ansible-lint)
-make lint
-
-# Test roles with Molecule
-cd roles/<role-name> && molecule test
+make setup      # Install deps and pre-commit hooks
+make lint      # Run ansible-lint
+cd roles/<role> && molecule test  # Test a role
 ```
 
 Full documentation: see `docs/` directory.
