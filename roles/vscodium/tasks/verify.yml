@@ -1,0 +1,11 @@
+---
+- name: Verify VSCodium binary exists
+  ansible.builtin.stat:
+    path: /usr/bin/codium
+  register: vscodium_stat
+
+- name: Assert VSCodium binary exists
+  ansible.builtin.assert:
+    that:
+      - vscodium_stat.stat.exists
+    fail_msg: "VSCodium binary (codium) not found at /usr/bin/codium"
