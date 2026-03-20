@@ -1,0 +1,13 @@
+---
+- name: Deploy VSCodium
+  hosts: stump.gnome.network
+  become: true
+  vars:
+    verify_enabled: true
+    vscodium_extensions:
+      - ms-python.python
+      - redhat.ansible
+      - hashicorp.terraform
+
+  roles:
+    - role: vscodium

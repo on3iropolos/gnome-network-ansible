@@ -3,17 +3,15 @@
 # cp group_vars/workstations/vault.yml.example group_vars/workstations/vault.yml
 # ansible-vault edit group_vars/workstations/vault.yml
 
-vault_hostname: ""
-vault_user_name: ""
-vault_user_password: ""
-vault_user_ssh_key: ""
-vault_git_user_name: ""
-vault_git_user_email: ""
+vault_hostname: "workstation"
+vault_user_name: "johndoe"
+vault_user_password: "supersecretpassword"
+vault_user_ssh_key: "ssh-rsa AAAA... user@example.com"
+vault_git_user_name: "John Doe"
+vault_git_user_email: "john.doe@example.com"
 vault_encryption_password: ""
-vault_github_private_key:_public_key: ""
 
-# SSH Identities ""
-vault_github (personalized)
+# SSH Identities
 vault_user_ssh_identities: []
 # Example:
 # vault_user_ssh_identities:
