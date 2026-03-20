@@ -17,11 +17,10 @@
     - role: git
     - role: bitwarden
     - role: aur
-      when: inventory_hostname == 'whimsyforge.gnome.network'
     - role: spotify
-      when: inventory_hostname == 'whimsyforge.gnome.network'
     - role: qemu
       when: inventory_hostname == 'whimsyforge.gnome.network'
     - role: gnome
       when: inventory_hostname == 'whimsyforge.gnome.network'
+    - role: vscodium
     # - role: antigravity  # Disabled - to be added later
