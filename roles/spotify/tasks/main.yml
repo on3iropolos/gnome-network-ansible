@@ -1,9 +1,11 @@
+---
 - name: Install Spotify from AUR
   kewlfft.aur.aur:
     name: spotify
     state: present
   become: true
   become_user: aur_builder
+  tags: [spotify]
 
 - name: Spotify config directory
   ansible.builtin.file:
@@ -13,3 +15,9 @@
     owner: "{{ user_name }}"
     group: "{{ user_name }}"
   when: user_name != "root"
+  tags: [spotify]
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify, spotify]
+  when: verify_enabled

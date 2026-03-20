@@ -4,18 +4,21 @@
     name:
       - docker
     state: present
+  tags: [docker]
 
 - name: Enable and start Docker service
   ansible.builtin.systemd:
     name: docker
     enabled: true
     state: started
+  tags: [docker]
 
 - name: Get user groups
   ansible.builtin.command: id -nG "{{ ansible_user }}"
   register: user_groups
   changed_when: false
   when: ansible_user is defined
+  tags: [docker]
 
 - name: Add user to docker group
   ansible.builtin.user:
@@ -23,3 +26,9 @@
     groups: docker
     append: true
   when: ansible_user is defined and "'docker' not in user_groups.stdout"
+  tags: [docker]
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify, docker]
+  when: verify_enabled

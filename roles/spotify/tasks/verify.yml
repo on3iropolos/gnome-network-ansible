@@ -1,0 +1,11 @@
+---
+- name: Verify Spotify binary exists
+  ansible.builtin.stat:
+    path: /usr/bin/spotify
+  register: spotify_stat
+
+- name: Assert Spotify binary exists
+  ansible.builtin.assert:
+    that:
+      - spotify_stat.stat.exists
+    fail_msg: "Spotify binary not found at /usr/bin/spotify"

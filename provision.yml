@@ -16,11 +16,16 @@
     - role: ssh_client
     - role: git
     - role: bitwarden
+
+    # AUR-based roles
     - role: aur
     - role: spotify
+    - role: vscodium
+
+    # whimsyforge only
     - role: qemu
       when: inventory_hostname == 'whimsyforge.gnome.network'
     - role: gnome
       when: inventory_hostname == 'whimsyforge.gnome.network'
-    - role: vscodium
+
     # - role: antigravity  # Disabled - to be added later

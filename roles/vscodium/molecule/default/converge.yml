@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  vars:
+    verify_enabled: false
+  tasks:
+    - name: "Include aur role"
+      ansible.builtin.include_role:
+        name: aur
+    - name: "Include vscodium role"
+      ansible.builtin.include_role:
+        name: vscodium

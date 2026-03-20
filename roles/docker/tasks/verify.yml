@@ -1,0 +1,11 @@
+---
+- name: Verify Docker binary exists
+  ansible.builtin.stat:
+    path: /usr/bin/docker
+  register: docker_stat
+
+- name: Assert Docker binary exists
+  ansible.builtin.assert:
+    that:
+      - docker_stat.stat.exists
+    fail_msg: "Docker binary not found at /usr/bin/docker"

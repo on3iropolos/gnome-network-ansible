@@ -31,8 +31,18 @@ Note: Uses `user_name` from `inventories/group_vars/all.yml` for config and exte
   roles:
     - role: vscodium
       vars:
-        vscodium_user: youruser
         vscodium_extensions:
           - ms-python.python
-          - golang.go
+          - redhat.ansible
+          - hashicorp.terraform
 ```
+
+## Common Extensions
+
+| Extension | ID |
+|-----------|-----|
+| Python | `ms-python.python` |
+| Ansible | `redhat.ansible` |
+| Terraform | `hashicorp.terraform` |
+| Go | `golang.go` |
+| Rust | `rust-lang.rust-analyzer` |

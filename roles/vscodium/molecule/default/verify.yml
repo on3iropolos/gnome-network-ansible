@@ -1,0 +1,16 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Verify VSCodium is installed
+      ansible.builtin.stat:
+        path: /usr/bin/codium
+      register: codium_check
+
+    - name: Assert VSCodium is installed
+      ansible.builtin.assert:
+        that:
+          - codium_check.stat.exists
+        fail_msg: "VSCodium binary not found"
