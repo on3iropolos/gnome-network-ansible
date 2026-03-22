@@ -1,3 +1,6 @@
 ---
-vscodium_extensions: []
+vscodium_extensions:
+  - ms-python.python
+  - redhat.ansible
+  - hashicorp.terraform
 verify_enabled: false

@@ -12,9 +12,15 @@ on:
 
 jobs:
   molecule-test:
-    name: Molecule Test - All Roles
+    name: Molecule Test
     runs-on: ubuntu-latest
-    
+    strategy:
+      fail-fast: false
+      matrix:
+        role:
+          - ansible_ctrl_init
+          - network
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,6 +31,9 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -33,19 +42,10 @@ jobs:
       - name: Display Molecule version
         run: molecule --version
 
-      - name: Run Molecule tests for all roles
+      - name: Run Molecule tests
         run: |
-          for role_dir in roles/*; do
-            if [ -d "$role_dir/molecule" ]; then
-              echo "====== TESTING ROLE: $(basename "$role_dir") ======"
-              cd "$role_dir"
-              if ! molecule test; then
-                echo "::error::Molecule tests failed for role $(basename "$role_dir")"
-                exit 1
-              fi
-              cd ../..
-            fi
-          done
+          cd roles/${{ matrix.role }}
+          molecule test
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
@@ -54,8 +54,8 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: molecule-logs
+          name: molecule-logs-${{ matrix.role }}
           path: |
-            roles/*/molecule/default/.molecule/
+            roles/${{ matrix.role }}/molecule/default/.molecule/
             ~/.cache/molecule/
           retention-days: 7
