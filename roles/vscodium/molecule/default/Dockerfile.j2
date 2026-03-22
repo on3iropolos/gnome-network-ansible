@@ -24,6 +24,8 @@ RUN pacman -Sy --noconfirm \
     iproute2 \
     iptables \
     which \
+    base-devel \
+    git \
     && pacman -Scc --noconfirm
 
 # Remove unnecessary systemd services

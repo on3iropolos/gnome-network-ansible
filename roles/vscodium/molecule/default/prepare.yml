@@ -16,8 +16,13 @@
       ansible.builtin.raw: pacman -S --noconfirm openssh
       changed_when: false
 
-    - name: Install NetworkManager
-      ansible.builtin.raw: pacman -S --noconfirm networkmanager
+    - name: Install base-devel for AUR builds
+      ansible.builtin.raw: pacman -S --noconfirm base-devel git
+      changed_when: false
+
+    - name: Install paru AUR helper
+      ansible.builtin.raw: |
+        cd /tmp && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si --noconfirm
       changed_when: false
 
     - name: Gather facts after Python installation
