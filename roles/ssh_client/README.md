@@ -105,17 +105,12 @@ The role installs and configures GCR (GNOME Crypto Runtime) SSH agent for automa
 
 ### Requirements
 
-- Desktop environment with systemd user session support
-- `gcr-ssh-agent.socket` must be enabled (user must run: `systemctl --user enable --now gcr-ssh-agent.socket`)
+- Desktop environment with systemd user session support (DMS, GNOME, etc.)
 - For console-only systems, additional configuration may be needed
 
-### Enabling GCR SSH Agent
+### Post-Install
 
-After provisioning, enable the systemd socket:
-
-```bash
-systemctl --user enable --now gcr-ssh-agent.socket
-```
+After provisioning and reboot, the SSH agent should be ready. If keys are not available, restart the session:
 
 ### Disabling
 

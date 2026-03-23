@@ -35,6 +35,16 @@
     state: present
   when: ssh_client_gnome_keyring_enabled
 
+- name: Enable GCR SSH agent socket
+  ansible.builtin.shell:
+    cmd: "systemctl --user enable --now gcr-ssh-agent.socket"
+  when:
+    - ssh_client_gnome_keyring_enabled
+    - user_name != "root"
+  become: true
+  become_user: "{{ user_name }}"
+  changed_when: false
+
 - name: Create environment.d directory
   ansible.builtin.file:
     path: "/home/{{ user_name }}/.config/environment.d"
