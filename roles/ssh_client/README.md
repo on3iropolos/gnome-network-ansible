@@ -97,11 +97,10 @@ The role installs and configures GCR (GNOME Crypto Runtime) SSH agent for automa
 ### How It Works
 
 1. Packages installed: `gnome-keyring` and `gcr` (provides gcr-ssh-agent)
-2. SSH_AUTH_SOCK environment configured via `~/.config/environment.d/ssh-auth-socket.conf`
-3. `gcr-ssh-agent.socket` systemd unit provides the SSH agent socket
-4. SSH keys are added to the agent via `ssh-add`
-5. Keys are cached securely in the GNOME Keyring
-6. SSH keys are available without re-entering passphrases
+2. `gcr-ssh-agent.socket` is auto-enabled by gcr package preset
+3. SSH_AUTH_SOCK environment configured via `~/.config/environment.d/ssh-auth-socket.conf`
+4. Keys are cached securely in the GNOME Keyring
+5. SSH keys available without re-entering passphrases
 
 ### Requirements
 
@@ -110,7 +109,12 @@ The role installs and configures GCR (GNOME Crypto Runtime) SSH agent for automa
 
 ### Post-Install
 
-After provisioning and reboot, the SSH agent should be ready. If keys are not available, restart the session:
+After provisioning and reboot, the SSH agent should be ready.
+
+If keys are not available after login:
+```bash
+systemctl --user restart gcr-ssh-agent.socket
+```
 
 ### Disabling
 
