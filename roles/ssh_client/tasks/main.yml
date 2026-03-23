@@ -29,6 +29,27 @@
     mode: '0600'
   when: user_ssh_identities | length > 0
 
+- name: Install GNOME Keyring packages
+  ansible.builtin.package:
+    name: "{{ ssh_client_gnome_keyring_packages }}"
+    state: present
+  when: ssh_client_gnome_keyring_enabled
+
+- name: Add SSH keys to GNOME Keyring
+  ansible.builtin.command:
+    cmd: "ssh-add ~/.ssh/{{ item.filename }}"
+  register: ssh_add_result
+  failed_when: false
+  changed_when: "'Identity added' in ssh_add_result.stdout"
+  loop: "{{ user_ssh_identities }}"
+  when:
+    - ssh_client_gnome_keyring_enabled
+    - user_ssh_identities | length > 0
+    - item.private_key | default('') | length > 0
+    - user_name != "root"
+  become: true
+  become_user: "{{ user_name }}"
+
 - name: Verification
   ansible.builtin.include_tasks: verify.yml
   tags: [verify]

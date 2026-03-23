@@ -12,6 +12,7 @@ vault_git_user_email: "john.doe@example.com"
 vault_encryption_password: ""
 
 # SSH Identities
+# Note: All keys will be added to GNOME Keyring for automatic unlock on login
 vault_user_ssh_identities: []
 # Example:
 # vault_user_ssh_identities:

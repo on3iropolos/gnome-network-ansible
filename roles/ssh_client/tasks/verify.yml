@@ -24,3 +24,17 @@
     that:
       - ssh_config_file.stat.exists
   when: user_ssh_identities | length > 0
+
+- name: Verify GNOME Keyring packages installed
+  ansible.builtin.package:
+    name: "{{ ssh_client_gnome_keyring_packages }}"
+    state: present
+  check_mode: yes
+  register: keyring_packages_check
+  when: ssh_client_gnome_keyring_enabled | default(false)
+
+- name: Assert GNOME Keyring packages installed
+  ansible.builtin.assert:
+    that:
+      - keyring_packages_check is succeeded
+  when: ssh_client_gnome_keyring_enabled | default(false)

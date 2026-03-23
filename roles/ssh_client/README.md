@@ -7,6 +7,7 @@ Manages SSH client configuration including identity deployment and SSH config ge
 - Deploys SSH private/public key pairs for various services
 - Configures SSH client config for seamless authentication
 - Supports both chroot and native environments
+- Installs and configures GNOME Keyring for automatic SSH key management
 
 ## Variables
 
@@ -16,6 +17,10 @@ Manages SSH client configuration including identity deployment and SSH config ge
 
 ### SSH Identities
 - `user_ssh_identities`: List of SSH identity configurations (default: `[]`)
+
+### GNOME Keyring
+- `ssh_client_gnome_keyring_enabled`: Enable GNOME Keyring integration (default: `true`)
+- `ssh_client_gnome_keyring_packages`: Packages to install (default: `[gnome-keyring, libsecret, pam_gnome_keyring]`)
 
 Each identity should have:
 ```yaml
@@ -57,6 +62,8 @@ user_ssh_identities:
 2. Deploys SSH public keys to `~/.ssh/` with mode 0644
 3. Generates `~/.ssh/config` with Host entries for each identity
 4. Ensures proper ownership in both chroot and native environments
+5. Installs GNOME Keyring packages (gnome-keyring, libsecret, pam_gnome_keyring)
+6. Adds SSH keys to GNOME Keyring for automatic unlock on login
 
 ## Example SSH Config Output
 
@@ -81,6 +88,30 @@ git clone git@github.com:username/repo.git
 - Public keys are deployed with mode `0644` (world-readable)
 - SSH config is deployed with mode `0600` (owner read/write only)
 - Private key content is not logged (uses `no_log: true`)
+
+## GNOME Keyring Integration
+
+The role installs and configures GNOME Keyring to automatically manage SSH keys:
+
+### How It Works
+
+1. Packages installed: `gnome-keyring`, `libsecret`, `pam_gnome_keyring`
+2. SSH keys are added to the keyring via `ssh-add`
+3. Desktop environments (GDM, DMS) automatically unlock the keyring on login
+4. SSH keys are available without re-entering passphrases
+
+### Requirements
+
+- Desktop environment with PAM support for keyring unlock (GDM, DMS, etc.)
+- For console-only systems, additional PAM configuration may be needed
+
+### Disabling
+
+To disable GNOME Keyring integration:
+
+```yaml
+ssh_client_gnome_keyring_enabled: false
+```
 
 ## Related Roles
 
