@@ -1,21 +1,30 @@
-.trunk
-.env
+# Secrets
 .vault_password
 vault.yml
+
+# Temp files
+.trunk
+.env
 *.retry
 *.scratch
-scratch
+.scratch
 test-inventory.ini
 debug.yml
 .tmp
 *.pub
 *.key
+
+# Agent memory (detailed session logs - too verbose for repo)
 .agent/memory/
 .agent/tmp/
+
+# Ansible
 .ansible
+
+# Docs
 docs/audit.json
 
-# Molecule artifacts
+# Molecule
 .molecule/
 .cache/
 __pycache__/
