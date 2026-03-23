@@ -6,3 +6,4 @@ user_ssh_identities: []
 ssh_client_gnome_keyring_enabled: true
 ssh_client_gnome_keyring_packages:
   - gnome-keyring
+  - gcr

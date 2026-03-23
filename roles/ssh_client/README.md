@@ -20,7 +20,7 @@ Manages SSH client configuration including identity deployment and SSH config ge
 
 ### GNOME Keyring
 - `ssh_client_gnome_keyring_enabled`: Enable GNOME Keyring integration (default: `true`)
-- `ssh_client_gnome_keyring_packages`: Packages to install (default: `[gnome-keyring]`)
+- `ssh_client_gnome_keyring_packages`: Packages to install (default: `[gnome-keyring, gcr]`)
 
 Each identity should have:
 ```yaml
@@ -62,9 +62,9 @@ user_ssh_identities:
 2. Deploys SSH public keys to `~/.ssh/` with mode 0644
 3. Generates `~/.ssh/config` with Host entries for each identity
 4. Ensures proper ownership in both chroot and native environments
-5. Installs GNOME Keyring package
-6. Creates autostart entry for SSH keyring agent
-7. Adds SSH keys to GNOME Keyring for automatic unlock on login
+5. Installs GNOME Keyring and GCR packages for SSH agent
+6. Configures SSH_AUTH_SOCK environment via environment.d
+7. Adds SSH keys to GCR SSH agent for automatic unlock on login
 
 ## Example SSH Config Output
 
@@ -90,22 +90,32 @@ git clone git@github.com:username/repo.git
 - SSH config is deployed with mode `0600` (owner read/write only)
 - Private key content is not logged (uses `no_log: true`)
 
-## GNOME Keyring Integration
+## GCR SSH Agent Integration
 
-The role installs and configures GNOME Keyring to automatically manage SSH keys:
+The role installs and configures GCR (GNOME Crypto Runtime) SSH agent for automatic SSH key management:
 
 ### How It Works
 
-1. Package installed: `gnome-keyring` (includes PAM module)
-2. Autostart desktop entry created: `~/.config/autostart/gnome-keyring-ssh.desktop`
-3. SSH keys are added to the keyring via `ssh-add`
-4. Desktop environments (GDM, DMS) automatically unlock the keyring on login
-5. SSH keys are available without re-entering passphrases
+1. Packages installed: `gnome-keyring` and `gcr` (provides gcr-ssh-agent)
+2. SSH_AUTH_SOCK environment configured via `~/.config/environment.d/ssh-auth-socket.conf`
+3. `gcr-ssh-agent.socket` systemd unit provides the SSH agent socket
+4. SSH keys are added to the agent via `ssh-add`
+5. Keys are cached securely in the GNOME Keyring
+6. SSH keys are available without re-entering passphrases
 
 ### Requirements
 
-- Desktop environment with PAM support for keyring unlock (GDM, DMS, etc.)
-- For console-only systems, additional PAM configuration may be needed
+- Desktop environment with systemd user session support
+- `gcr-ssh-agent.socket` must be enabled (user must run: `systemctl --user enable --now gcr-ssh-agent.socket`)
+- For console-only systems, additional configuration may be needed
+
+### Enabling GCR SSH Agent
+
+After provisioning, enable the systemd socket:
+
+```bash
+systemctl --user enable --now gcr-ssh-agent.socket
+```
 
 ### Disabling
 

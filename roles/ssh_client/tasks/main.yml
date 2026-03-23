@@ -35,9 +35,9 @@
     state: present
   when: ssh_client_gnome_keyring_enabled
 
-- name: Create GNOME Keyring SSH autostart directory
+- name: Create environment.d directory
   ansible.builtin.file:
-    path: "/home/{{ user_name }}/.config/autostart"
+    path: "/home/{{ user_name }}/.config/environment.d"
     state: directory
     mode: '0755'
     owner: "{{ user_name }}"
@@ -47,16 +47,11 @@
   become: true
   become_user: "{{ user_name }}"
 
-- name: Configure GNOME Keyring SSH autostart
+- name: Configure GCR SSH agent environment
   ansible.builtin.copy:
-    dest: "/home/{{ user_name }}/.config/autostart/gnome-keyring-ssh.desktop"
+    dest: "/home/{{ user_name }}/.config/environment.d/ssh-auth-socket.conf"
     content: |
-      [Desktop Entry]
-      Type=Application
-      Name=GNOME Keyring SSH Agent
-      Exec=/usr/bin/gnome-keyring-daemon --start --components=ssh
-      OnlyShowIn=GNOME;COSMIC;DANK;
-      X-GNOME-Autostart-enabled=true
+      SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/gcr/ssh
     owner: "{{ user_name }}"
     mode: '0644'
   when:
@@ -65,9 +60,9 @@
   become: true
   become_user: "{{ user_name }}"
 
-- name: Add SSH keys to GNOME Keyring
+- name: Add SSH keys to GCR SSH agent
   ansible.builtin.command:
-    cmd: "ssh-add ~/.ssh/{{ item.filename }}"
+    cmd: "SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/gcr/ssh ssh-add ~/.ssh/{{ item.filename }}"
   register: ssh_add_result
   failed_when: false
   changed_when: "'Identity added' in ssh_add_result.stdout"
