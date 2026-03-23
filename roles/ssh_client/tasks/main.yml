@@ -35,6 +35,36 @@
     state: present
   when: ssh_client_gnome_keyring_enabled
 
+- name: Create GNOME Keyring SSH autostart directory
+  ansible.builtin.file:
+    path: "/home/{{ user_name }}/.config/autostart"
+    state: directory
+    mode: '0755'
+    owner: "{{ user_name }}"
+  when:
+    - ssh_client_gnome_keyring_enabled
+    - user_name != "root"
+  become: true
+  become_user: "{{ user_name }}"
+
+- name: Configure GNOME Keyring SSH autostart
+  ansible.builtin.copy:
+    dest: "/home/{{ user_name }}/.config/autostart/gnome-keyring-ssh.desktop"
+    content: |
+      [Desktop Entry]
+      Type=Application
+      Name=GNOME Keyring SSH Agent
+      Exec=/usr/bin/gnome-keyring-daemon --start --components=ssh
+      OnlyShowIn=GNOME;COSMIC;DANK;
+      X-GNOME-Autostart-enabled=true
+    owner: "{{ user_name }}"
+    mode: '0644'
+  when:
+    - ssh_client_gnome_keyring_enabled
+    - user_name != "root"
+  become: true
+  become_user: "{{ user_name }}"
+
 - name: Add SSH keys to GNOME Keyring
   ansible.builtin.command:
     cmd: "ssh-add ~/.ssh/{{ item.filename }}"

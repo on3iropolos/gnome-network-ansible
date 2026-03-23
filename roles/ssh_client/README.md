@@ -20,7 +20,7 @@ Manages SSH client configuration including identity deployment and SSH config ge
 
 ### GNOME Keyring
 - `ssh_client_gnome_keyring_enabled`: Enable GNOME Keyring integration (default: `true`)
-- `ssh_client_gnome_keyring_packages`: Packages to install (default: `[gnome-keyring, libsecret, pam_gnome_keyring]`)
+- `ssh_client_gnome_keyring_packages`: Packages to install (default: `[gnome-keyring]`)
 
 Each identity should have:
 ```yaml
@@ -62,8 +62,9 @@ user_ssh_identities:
 2. Deploys SSH public keys to `~/.ssh/` with mode 0644
 3. Generates `~/.ssh/config` with Host entries for each identity
 4. Ensures proper ownership in both chroot and native environments
-5. Installs GNOME Keyring packages (gnome-keyring, libsecret, pam_gnome_keyring)
-6. Adds SSH keys to GNOME Keyring for automatic unlock on login
+5. Installs GNOME Keyring package
+6. Creates autostart entry for SSH keyring agent
+7. Adds SSH keys to GNOME Keyring for automatic unlock on login
 
 ## Example SSH Config Output
 
@@ -95,10 +96,11 @@ The role installs and configures GNOME Keyring to automatically manage SSH keys:
 
 ### How It Works
 
-1. Packages installed: `gnome-keyring`, `libsecret`, `pam_gnome_keyring`
-2. SSH keys are added to the keyring via `ssh-add`
-3. Desktop environments (GDM, DMS) automatically unlock the keyring on login
-4. SSH keys are available without re-entering passphrases
+1. Package installed: `gnome-keyring` (includes PAM module)
+2. Autostart desktop entry created: `~/.config/autostart/gnome-keyring-ssh.desktop`
+3. SSH keys are added to the keyring via `ssh-add`
+4. Desktop environments (GDM, DMS) automatically unlock the keyring on login
+5. SSH keys are available without re-entering passphrases
 
 ### Requirements
 
