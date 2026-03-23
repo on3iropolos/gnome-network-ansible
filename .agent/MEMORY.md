@@ -22,3 +22,11 @@
 - Always test on stump before merging
 - gcr package handles SSH agent socket enablement automatically
 - PAM configuration for keyring unlock is optional (DE handles it)
+
+## Multi-Workstation Notes
+- stump: COSMIC/niri desktop environment
+- whimsyforge: GNOME desktop environment
+- gnome and qemu roles restricted to whimsyforge via `when:` conditions
+- aur and spotify roles also run on whimsyforge only (review if needed)
+- User is "on3i" with fish shell on both machines
+- SSH keys managed via GCR (not keychain)

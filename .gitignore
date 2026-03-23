@@ -14,8 +14,9 @@ debug.yml
 *.pub
 *.key
 
-# Agent memory (detailed session logs - too verbose for repo)
+# Agent memory (session logs, working files - too verbose for repo)
 .agent/memory/
+.agent/sessions/
 .agent/tmp/
 
 # Ansible
