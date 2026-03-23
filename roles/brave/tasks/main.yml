@@ -1,0 +1,16 @@
+---
+- name: Install Brave Browser from AUR
+  kewlfft.aur.aur:
+    name: brave-bin
+    state: present
+  become: true
+  become_user: aur_builder
+  tags: [brave]
+
+- name: Verify Brave is installed
+  ansible.builtin.command: which brave
+  register: brave_check
+  changed_when: false
+  failed_when: brave_check.rc != 0
+  tags: [verify, brave]
+  when: verify_enabled

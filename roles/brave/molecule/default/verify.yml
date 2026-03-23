@@ -1,0 +1,16 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Verify Brave is installed
+      ansible.builtin.stat:
+        path: /usr/bin/brave
+      register: brave_check
+
+    - name: Assert Brave is installed
+      ansible.builtin.assert:
+        that:
+          - brave_check.stat.exists
+        fail_msg: "Brave binary not found"
