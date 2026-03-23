@@ -7,6 +7,7 @@ Manages SSH client configuration including identity deployment and SSH config ge
 - Deploys SSH private/public key pairs for various services
 - Configures SSH client config for seamless authentication
 - Supports both chroot and native environments
+- Installs and configures GNOME Keyring for automatic SSH key management
 
 ## Variables
 
@@ -16,6 +17,10 @@ Manages SSH client configuration including identity deployment and SSH config ge
 
 ### SSH Identities
 - `user_ssh_identities`: List of SSH identity configurations (default: `[]`)
+
+### GNOME Keyring
+- `ssh_client_gnome_keyring_enabled`: Enable GNOME Keyring integration (default: `true`)
+- `ssh_client_gnome_keyring_packages`: Packages to install (default: `[gnome-keyring, gcr]`)
 
 Each identity should have:
 ```yaml
@@ -57,6 +62,9 @@ user_ssh_identities:
 2. Deploys SSH public keys to `~/.ssh/` with mode 0644
 3. Generates `~/.ssh/config` with Host entries for each identity
 4. Ensures proper ownership in both chroot and native environments
+5. Installs GNOME Keyring and GCR packages for SSH agent
+6. Configures SSH_AUTH_SOCK environment via environment.d
+7. Adds SSH keys to GCR SSH agent for automatic unlock on login
 
 ## Example SSH Config Output
 
@@ -81,6 +89,40 @@ git clone git@github.com:username/repo.git
 - Public keys are deployed with mode `0644` (world-readable)
 - SSH config is deployed with mode `0600` (owner read/write only)
 - Private key content is not logged (uses `no_log: true`)
+
+## GCR SSH Agent Integration
+
+The role installs and configures GCR (GNOME Crypto Runtime) SSH agent for automatic SSH key management:
+
+### How It Works
+
+1. Packages installed: `gnome-keyring` and `gcr` (provides gcr-ssh-agent)
+2. `gcr-ssh-agent.socket` is auto-enabled by gcr package preset
+3. SSH_AUTH_SOCK environment configured via `~/.config/environment.d/ssh-auth-socket.conf`
+4. Keys are cached securely in the GNOME Keyring
+5. SSH keys available without re-entering passphrases
+
+### Requirements
+
+- Desktop environment with systemd user session support (DMS, GNOME, etc.)
+- For console-only systems, additional configuration may be needed
+
+### Post-Install
+
+After provisioning and reboot, the SSH agent should be ready.
+
+If keys are not available after login:
+```bash
+systemctl --user restart gcr-ssh-agent.socket
+```
+
+### Disabling
+
+To disable GNOME Keyring integration:
+
+```yaml
+ssh_client_gnome_keyring_enabled: false
+```
 
 ## Related Roles
 

@@ -1,29 +1,11 @@
 # Current Context (Layer 3)
 
 ## Active Tasks
-
-<!--
-  List current priorities and active work.
-  Update at session start and as priorities shift.
--->
-- None currently
-
-## Recent Updates
-
-<!--
-  Note recent changes, decisions, or progress.
--->
-- 
-
-## Blockers
-
-<!--
-  Document current impediments.
--->
 - None
 
-## Notes
+## Recent Updates
+- `feature/ssh-keyring-agent` merged - GCR SSH agent configured
 
-<!--
- 临时 notes for current session
--->
+## Notes
+- SSH keys managed via GCR SSH agent (gcr-ssh-agent.socket)
+- Environment configured via environment.d

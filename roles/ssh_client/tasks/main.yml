@@ -29,6 +29,52 @@
     mode: '0600'
   when: user_ssh_identities | length > 0
 
+- name: Install GNOME Keyring packages
+  ansible.builtin.package:
+    name: "{{ ssh_client_gnome_keyring_packages }}"
+    state: present
+  when: ssh_client_gnome_keyring_enabled
+
+- name: Create environment.d directory
+  ansible.builtin.file:
+    path: "/home/{{ user_name }}/.config/environment.d"
+    state: directory
+    mode: '0755'
+    owner: "{{ user_name }}"
+  when:
+    - ssh_client_gnome_keyring_enabled
+    - user_name != "root"
+  become: true
+  become_user: "{{ user_name }}"
+
+- name: Configure GCR SSH agent environment
+  ansible.builtin.copy:
+    dest: "/home/{{ user_name }}/.config/environment.d/ssh-auth-socket.conf"
+    content: |
+      SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/gcr/ssh
+    owner: "{{ user_name }}"
+    mode: '0644'
+  when:
+    - ssh_client_gnome_keyring_enabled
+    - user_name != "root"
+  become: true
+  become_user: "{{ user_name }}"
+
+- name: Add SSH keys to GCR SSH agent
+  ansible.builtin.command:
+    cmd: "SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/gcr/ssh ssh-add ~/.ssh/{{ item.filename }}"
+  register: ssh_add_result
+  failed_when: false
+  changed_when: "'Identity added' in ssh_add_result.stdout"
+  loop: "{{ user_ssh_identities }}"
+  when:
+    - ssh_client_gnome_keyring_enabled
+    - user_ssh_identities | length > 0
+    - item.private_key | default('') | length > 0
+    - user_name != "root"
+  become: true
+  become_user: "{{ user_name }}"
+
 - name: Verification
   ansible.builtin.include_tasks: verify.yml
   tags: [verify]
