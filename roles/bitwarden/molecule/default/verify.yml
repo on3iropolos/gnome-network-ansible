@@ -1,0 +1,33 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Verify Bitwarden CLI binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/bw
+      register: bw_stat
+
+    - name: Assert Bitwarden CLI binary exists
+      ansible.builtin.assert:
+        that:
+          - bw_stat.stat.exists
+        fail_msg: "Bitwarden CLI binary (bw) not found at /usr/bin/bw"
+
+    - name: Verify Bitwarden desktop package is installed
+      ansible.builtin.package:
+        name: bitwarden
+        state: present
+      check_mode: true
+      register: bitwarden_check
+
+    - name: Assert Bitwarden desktop package is installed
+      ansible.builtin.assert:
+        that:
+          - bitwarden_check is not changed
+        fail_msg: "Bitwarden desktop package is not installed"
+
+    - name: Display verification results
+      ansible.builtin.debug:
+        msg: "All bitwarden role verifications passed successfully!"
