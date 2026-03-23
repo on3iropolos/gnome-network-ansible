@@ -1,0 +1,10 @@
+---
+- name: Install GitHub CLI
+  ansible.builtin.package:
+    name: github-cli
+    state: present
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify]
+  when: verify_enabled

@@ -2,7 +2,7 @@ all:
   children:
     workstations:
       hosts:
-        whimsyforge.gnome.network:
-          ansible_connection: local
+        # whimsyforge.gnome.network:
+        #   ansible_connection: local
         stump.gnome.network:
           ansible_connection: local

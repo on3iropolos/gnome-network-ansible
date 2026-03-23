@@ -1,0 +1,19 @@
+---
+- name: Verify gh binary exists
+  ansible.builtin.stat:
+    path: "{{ install_root if install_root | length > 0 else '' }}/usr/bin/gh"
+  register: gh_stat
+
+- name: Assert gh binary exists
+  ansible.builtin.assert:
+    that:
+      - gh_stat.stat.exists
+    fail_msg: "gh binary not found at {{ install_root if install_root | length > 0 else '' }}/usr/bin/gh"
+
+- name: Verify GitHub connectivity (Functional)
+  ansible.builtin.wait_for:
+    host: github.com
+    port: 443
+    timeout: 5
+    state: started
+  when: install_root | length == 0
