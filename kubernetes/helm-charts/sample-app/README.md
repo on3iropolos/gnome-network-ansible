@@ -5,11 +5,11 @@ A Helm chart for deploying nginx to Kubernetes.
 ## Installation
 
 ```bash
-# Install the chart
-helm install nginx ./Chart
+# Install the chart (from the chart directory)
+helm install sample-app .
 
 # Install with custom values
-helm install nginx ./Chart --namespace default \
+helm install sample-app . \
   --set replicaCount=3 \
   --set ingress.host=myapp.local
 ```
@@ -31,24 +31,24 @@ helm install nginx ./Chart --namespace default \
 
 ```bash
 # Dry-run
-helm template nginx ./Chart
+helm template sample-app .
 
 # Install and test
-helm install nginx ./Chart --namespace default
-helm test nginx
+helm install sample-app .
+helm test sample-app
 
 # Uninstall
-helm uninstall nginx
+helm uninstall sample-app
 ```
 
 ## Upgrading
 
 ```bash
 # Upgrade with new values
-helm upgrade nginx ./Chart --set replicaCount=4
+helm upgrade sample-app . --set replicaCount=4
 
 # Rollback if needed
-helm rollback nginx
+helm rollback sample-app
 ```
 
 ## Related Documentation

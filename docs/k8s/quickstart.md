@@ -63,7 +63,7 @@ newgrp docker
 ### 2. Install k3d
 
 ```bash
-curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | TAG=v5.7.0 bash
+curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | TAG=v5.8.3 bash
 ```
 
 Or via pacman:
@@ -100,8 +100,8 @@ k3d cluster list
 Expected output:
 
 ```
-NAME                  STATUS   ROLES                  AGE   VERSION
-k3d-dev-cluster      Ready    control-plane,master   1m    v1.28.x
+NAME                       STATUS   ROLES                  AGE   VERSION
+k3d-dev-cluster-server-0   Ready    control-plane,master   1m    v1.31.5+k3s1
 ```
 
 ## Post-Setup Verification

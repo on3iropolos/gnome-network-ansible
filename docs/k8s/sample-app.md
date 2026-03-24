@@ -30,10 +30,10 @@ Deploy an nginx web server to demonstrate Kubernetes deployment patterns.
 ### Deploy nginx
 
 ```bash
-kubectl apply -f ../kubernetes/manifests/nginx-deployment.yaml
-kubectl apply -f ../kubernetes/manifests/nginx-service.yaml
-kubectl apply -f ../kubernetes/manifests/nginx-ingress.yaml
-kubectl apply -f ../kubernetes/manifests/app-configmap.yaml
+kubectl apply -f kubernetes/manifests/nginx-deployment.yaml
+kubectl apply -f kubernetes/manifests/nginx-service.yaml
+kubectl apply -f kubernetes/manifests/nginx-ingress.yaml
+kubectl apply -f kubernetes/manifests/app-configmap.yaml
 ```
 
 ### Verify Deployment
@@ -77,11 +77,11 @@ ingress.networking.k8s.io/nginx   traefik   nginx.local   172.19.0.2   80
 ### Install the Chart
 
 ```bash
-cd ../kubernetes/helm-charts/sample-app
-helm install nginx ./Chart --namespace default
+cd kubernetes/helm-charts/sample-app
+helm install sample-app .
 
 # Or with custom values
-helm install nginx ./Chart --namespace default \
+helm install sample-app . \
   --set replicaCount=3 \
   --set image.tag=alpine
 ```
@@ -90,14 +90,14 @@ helm install nginx ./Chart --namespace default \
 
 ```bash
 helm list
-helm status nginx
-kubectl get pods -l app.kubernetes.io/name=nginx
+helm status sample-app
+kubectl get pods -l app.kubernetes.io/name=sample-app
 ```
 
 ### Upgrade the Release
 
 ```bash
-helm upgrade nginx ./Chart --namespace default \
+helm upgrade sample-app . \
   --set replicaCount=4 \
   --set image.tag=1.25
 ```
@@ -105,7 +105,7 @@ helm upgrade nginx ./Chart --namespace default \
 ### Rollback if Needed
 
 ```bash
-helm rollback nginx
+helm rollback sample-app
 ```
 
 ## Manifest Files Explained
@@ -202,8 +202,8 @@ kubectl scale deployment nginx --replicas=4
 ### Scale with Ansible
 
 ```bash
-ansible-playbook ../kubernetes/playbooks/scale.yml \
-  -e app_name=nginx \
+ansible-playbook kubernetes/playbooks/scale.yml \
+  -e app_name=sample-app \
   -e replicas=4
 ```
 
@@ -211,10 +211,10 @@ ansible-playbook ../kubernetes/playbooks/scale.yml \
 
 ```bash
 # Remove resources
-kubectl delete -f ../kubernetes/manifests/
+kubectl delete -f kubernetes/manifests/
 
 # Or via Helm
-helm uninstall nginx
+helm uninstall sample-app
 
 # Delete cluster
 k3d cluster delete dev-cluster
@@ -227,7 +227,7 @@ k3d cluster delete dev-cluster
 
 ## Related Files
 
-- [nginx Deployment Manifest](../../kubernetes/manifests/nginx-deployment.yaml)
-- [nginx Service Manifest](../../kubernetes/manifests/nginx-service.yaml)
-- [nginx Ingress Manifest](../../kubernetes/manifests/nginx-ingress.yaml)
-- [Sample Helm Chart](../../kubernetes/helm-charts/sample-app)
+- [nginx Deployment Manifest](../kubernetes/manifests/nginx-deployment.yaml)
+- [nginx Service Manifest](../kubernetes/manifests/nginx-service.yaml)
+- [nginx Ingress Manifest](../kubernetes/manifests/nginx-ingress.yaml)
+- [Sample Helm Chart](../kubernetes/helm-charts/sample-app)
