@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       ansible_ctrl_init: ${{ steps.filter.outputs.ansible_ctrl_init }}
+      docker: ${{ steps.filter.outputs.docker }}
       network: ${{ steps.filter.outputs.network }}
       bitwarden: ${{ steps.filter.outputs.bitwarden }}
       brave: ${{ steps.filter.outputs.brave }}
@@ -38,6 +39,8 @@ jobs:
           filters: |
             ansible_ctrl_init:
               - 'roles/ansible_ctrl_init/**'
+            docker:
+              - 'roles/docker/**'
             network:
               - 'roles/network/**'
             bitwarden:
@@ -60,7 +63,7 @@ jobs:
         id: build
         run: |
           # Roles that have molecule tests
-          ROLES_WITH_TESTS=("ansible_ctrl_init" "network" "bitwarden" "brave" "role_template" "vscodium")
+          ROLES_WITH_TESTS=("ansible_ctrl_init" "docker" "network" "bitwarden" "brave" "role_template" "vscodium")
           
           # Get outputs from detect-changed-roles
           CHANGED_ROLES=""
@@ -68,6 +71,7 @@ jobs:
           for role in "${ROLES_WITH_TESTS[@]}"; do
             case $role in
               ansible_ctrl_init) changed=${{ needs.detect-changed-roles.outputs.ansible_ctrl_init }} ;;
+              docker) changed=${{ needs.detect-changed-roles.outputs.docker }} ;;
               network) changed=${{ needs.detect-changed-roles.outputs.network }} ;;
               bitwarden) changed=${{ needs.detect-changed-roles.outputs.bitwarden }} ;;
               brave) changed=${{ needs.detect-changed-roles.outputs.brave }} ;;

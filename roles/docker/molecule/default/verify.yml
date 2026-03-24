@@ -1,0 +1,33 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Verify Docker package is installed
+      ansible.builtin.package:
+        name: docker
+        state: present
+      check_mode: true
+      register: docker_package_check
+
+    - name: Assert Docker package is installed
+      ansible.builtin.assert:
+        that:
+          - docker_package_check is not changed
+        fail_msg: "Docker package is not installed"
+
+    - name: Verify Docker service is enabled
+      ansible.builtin.service_facts:
+
+    - name: Assert Docker service is enabled
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['docker.service'] is defined
+          - ansible_facts.services['docker.service'].state == 'running'
+          - ansible_facts.services['docker.service'].status == 'enabled'
+        fail_msg: "Docker service is not running or not enabled"
+
+    - name: Display verification results
+      ansible.builtin.debug:
+        msg: "All docker role verifications passed successfully!"
