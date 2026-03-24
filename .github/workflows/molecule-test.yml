@@ -6,14 +6,53 @@ on:
     branches:
       - main
       - develop
+    paths:
+      - 'roles/**'
+      - '.github/workflows/molecule-test.yml'
   pull_request:
     branches:
       - main
+    paths:
+      - 'roles/**'
+      - '.github/workflows/molecule-test.yml'
 
 jobs:
+  detect-changed-roles:
+    name: Detect Changed Roles
+    runs-on: ubuntu-latest
+    outputs:
+      ansible_ctrl_init: ${{ steps.filter.outputs.ansible_ctrl_init }}
+      network: ${{ steps.filter.outputs.network }}
+      bitwarden: ${{ steps.filter.outputs.bitwarden }}
+      brave: ${{ steps.filter.outputs.brave }}
+      role_template: ${{ steps.filter.outputs.role_template }}
+      vscodium: ${{ steps.filter.outputs.vscodium }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect changed roles
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            ansible_ctrl_init:
+              - 'roles/ansible_ctrl_init/**'
+            network:
+              - 'roles/network/**'
+            bitwarden:
+              - 'roles/bitwarden/**'
+            brave:
+              - 'roles/brave/**'
+            role_template:
+              - 'roles/role_template/**'
+            vscodium:
+              - 'roles/vscodium/**'
+
   molecule-test:
     name: Molecule Test
     runs-on: ubuntu-latest
+    needs: detect-changed-roles
     strategy:
       fail-fast: false
       matrix:
@@ -24,6 +63,20 @@ jobs:
           - brave
           - role_template
           - vscodium
+        include:
+          - role: ansible_ctrl_init
+            needs_output: ansible_ctrl_init
+          - role: network
+            needs_output: network
+          - role: bitwarden
+            needs_output: bitwarden
+          - role: brave
+            needs_output: brave
+          - role: role_template
+            needs_output: role_template
+          - role: vscodium
+            needs_output: vscodium
+    if: ${{ needs.detect-changed-roles.outputs[matrix.needs_output] == 'true' }}
 
     steps:
       - name: Checkout repository
