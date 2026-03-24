@@ -1,0 +1,23 @@
+---
+- name: Verify Obsidian binary exists
+  ansible.builtin.stat:
+    path: /usr/bin/obsidian
+  register: obsidian_stat
+
+- name: Assert Obsidian binary exists
+  ansible.builtin.assert:
+    that:
+      - obsidian_stat.stat.exists
+    fail_msg: "Obsidian binary not found at /usr/bin/obsidian"
+
+- name: Verify notes directory exists
+  ansible.builtin.stat:
+    path: "{{ lookup('env', 'HOME') }}/{{ obsidian_notes_dir }}"
+  register: notes_dir_stat
+
+- name: Assert notes directory exists
+  ansible.builtin.assert:
+    that:
+      - notes_dir_stat.stat.exists
+      - notes_dir_stat.stat.isdir
+    fail_msg: "Notes directory not found at {{ lookup('env', 'HOME') }}/{{ obsidian_notes_dir }}"

@@ -1,0 +1,16 @@
+---
+- name: Install Obsidian
+  ansible.builtin.package:
+    name: obsidian
+    state: present
+
+- name: Ensure notes directory exists
+  ansible.builtin.file:
+    path: "{{ lookup('env', 'HOME') }}/{{ obsidian_notes_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify, obsidian]
+  when: verify_enabled

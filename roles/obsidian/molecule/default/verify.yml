@@ -1,0 +1,28 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Verify Obsidian is installed
+      ansible.builtin.stat:
+        path: /usr/bin/obsidian
+      register: obsidian_check
+
+    - name: Assert Obsidian is installed
+      ansible.builtin.assert:
+        that:
+          - obsidian_check.stat.exists
+        fail_msg: "Obsidian binary not found"
+
+    - name: Verify notes directory exists
+      ansible.builtin.stat:
+        path: "/home/{{ lookup('env', 'USER') }}/notes"
+      register: notes_dir_check
+
+    - name: Assert notes directory exists
+      ansible.builtin.assert:
+        that:
+          - notes_dir_check.stat.exists
+          - notes_dir_check.stat.isdir
+        fail_msg: "Notes directory not found"
