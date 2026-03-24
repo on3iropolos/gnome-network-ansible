@@ -6,9 +6,28 @@
 
 - name: Ensure notes directory exists
   ansible.builtin.file:
-    path: "{{ lookup('env', 'HOME') }}/{{ obsidian_notes_dir }}"
+    path: "/home/{{ user_name }}/{{ obsidian_notes_dir }}"
     state: directory
     mode: '0755'
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
+  when: user_name != "root"
+
+- name: Configure Obsidian to open vault on startup
+  ansible.builtin.copy:
+    dest: "/home/{{ user_name }}/.config/obsidian/obsidian.json"
+    content: |
+      {
+        "openVault": {
+          "path": "/home/{{ user_name }}/{{ obsidian_notes_dir }}",
+          "ts": 0
+        },
+        "lastOpenPath": "/home/{{ user_name }}/{{ obsidian_notes_dir }}"
+      }
+    mode: '0644'
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
+  when: user_name != "root"
 
 - name: Verification
   ansible.builtin.include_tasks: verify.yml

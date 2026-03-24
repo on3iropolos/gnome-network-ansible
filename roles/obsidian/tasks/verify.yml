@@ -12,7 +12,7 @@
 
 - name: Verify notes directory exists
   ansible.builtin.stat:
-    path: "{{ lookup('env', 'HOME') }}/{{ obsidian_notes_dir }}"
+    path: "/home/{{ user_name }}/{{ obsidian_notes_dir }}"
   register: notes_dir_stat
 
 - name: Assert notes directory exists
@@ -20,4 +20,17 @@
     that:
       - notes_dir_stat.stat.exists
       - notes_dir_stat.stat.isdir
-    fail_msg: "Notes directory not found at {{ lookup('env', 'HOME') }}/{{ obsidian_notes_dir }}"
+    fail_msg: "Notes directory not found at /home/{{ user_name }}/{{ obsidian_notes_dir }}"
+
+- name: Verify Obsidian config exists
+  ansible.builtin.stat:
+    path: "/home/{{ user_name }}/.config/obsidian/obsidian.json"
+  register: obsidian_config_stat
+  when: user_name != "root"
+
+- name: Assert Obsidian config exists
+  ansible.builtin.assert:
+    that:
+      - obsidian_config_stat.stat.exists
+    fail_msg: "Obsidian config not found"
+  when: user_name != "root"
