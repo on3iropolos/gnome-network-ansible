@@ -49,34 +49,55 @@ jobs:
             vscodium:
               - 'roles/vscodium/**'
 
+  build-matrix:
+    name: Build Test Matrix
+    runs-on: ubuntu-latest
+    needs: detect-changed-roles
+    outputs:
+      matrix: ${{ steps.build.outputs.matrix }}
+    steps:
+      - name: Build matrix
+        id: build
+        run: |
+          # Roles that have molecule tests
+          ROLES_WITH_TESTS=("ansible_ctrl_init" "network" "bitwarden" "brave" "role_template" "vscodium")
+          
+          # Get outputs from detect-changed-roles
+          CHANGED_ROLES=""
+          
+          for role in "${ROLES_WITH_TESTS[@]}"; do
+            case $role in
+              ansible_ctrl_init) changed=${{ needs.detect-changed-roles.outputs.ansible_ctrl_init }} ;;
+              network) changed=${{ needs.detect-changed-roles.outputs.network }} ;;
+              bitwarden) changed=${{ needs.detect-changed-roles.outputs.bitwarden }} ;;
+              brave) changed=${{ needs.detect-changed-roles.outputs.brave }} ;;
+              role_template) changed=${{ needs.detect-changed-roles.outputs.role_template }} ;;
+              vscodium) changed=${{ needs.detect-changed-roles.outputs.vscodium }} ;;
+            esac
+            
+            if [ "$changed" == "true" ]; then
+              if [ -z "$CHANGED_ROLES" ]; then
+                CHANGED_ROLES="{\"role\": \"$role\"}"
+              else
+                CHANGED_ROLES="$CHANGED_ROLES, {\"role\": \"$role\"}"
+              fi
+            fi
+          done
+          
+          if [ -z "$CHANGED_ROLES" ]; then
+            echo "matrix=[]" >> $GITHUB_OUTPUT
+          else
+            echo "matrix=[$CHANGED_ROLES]" >> $GITHUB_OUTPUT
+          fi
+
   molecule-test:
     name: Molecule Test
     runs-on: ubuntu-latest
-    needs: detect-changed-roles
+    needs: build-matrix
+    if: ${{ needs.build-matrix.outputs.matrix != '[]' }}
     strategy:
       fail-fast: false
-      matrix:
-        role:
-          - ansible_ctrl_init
-          - network
-          - bitwarden
-          - brave
-          - role_template
-          - vscodium
-        include:
-          - role: ansible_ctrl_init
-            needs_output: ansible_ctrl_init
-          - role: network
-            needs_output: network
-          - role: bitwarden
-            needs_output: bitwarden
-          - role: brave
-            needs_output: brave
-          - role: role_template
-            needs_output: role_template
-          - role: vscodium
-            needs_output: vscodium
-    if: ${{ needs.detect-changed-roles.outputs[matrix.needs_output] == 'true' }}
+      matrix: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
 
     steps:
       - name: Checkout repository
