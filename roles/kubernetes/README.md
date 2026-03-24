@@ -36,6 +36,14 @@ graph TD
 
 - `docker` - Docker must be installed first
 
+## Further Documentation
+
+For full Kubernetes portfolio documentation including architecture, quickstart guides, and operational playbooks, see:
+
+- [Kubernetes Documentation](../docs/k8s/README.md)
+- [Sample Application Guide](../docs/k8s/sample-app.md)
+- [Operations Guide](../docs/k8s/operations.md)
+
 ## Example Playbook
 
 ```yaml

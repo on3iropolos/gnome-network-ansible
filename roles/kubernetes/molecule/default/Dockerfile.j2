@@ -1,0 +1,16 @@
+# Dockerfile for Kubernetes Molecule Testing
+FROM ghcr.io/archlinux/archlinux:latest
+
+RUN pacman -Sy --noconfirm && \
+    pacman -S --noconfirm \
+        base-devel \
+        python \
+        python-pip \
+        git \
+        docker \
+        kubectl \
+        helm \
+        && pip install --no-cache-dir ansible ansible-lint && \
+    systemctl enable docker
+
+CMD ["/usr/lib/systemd/systemd"]

@@ -1,0 +1,47 @@
+---
+- name: Scale Kubernetes Deployment
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    replicas: 1
+    target_namespace: default
+
+  tasks:
+    - name: Check if deployment exists
+      kubernetes.core.k8s_info:
+        kind: Deployment
+        name: "{{ app_name }}"
+        namespace: "{{ target_namespace }}"
+      register: deployment_info
+      failed_when: false
+
+    - name: Fail if deployment not found
+      ansible.builtin.fail:
+        msg: "Deployment {{ app_name }} not found in namespace {{ target_namespace }}"
+      when: deployment_info.resources | length | default(0) == 0
+
+    - name: Scale deployment
+      kubernetes.core.k8s_scale:
+        kind: Deployment
+        name: "{{ app_name }}"
+        namespace: "{{ target_namespace }}"
+        replicas: "{{ replicas }}"
+        wait: true
+        wait_timeout: 300
+      register: scale_result
+
+    - name: Display scale result
+      ansible.builtin.debug:
+        msg: "Scaled {{ app_name }} to {{ replicas }} replicas"
+
+    - name: Get deployment status
+      kubernetes.core.k8s_info:
+        kind: Deployment
+        name: "{{ app_name }}"
+        namespace: "{{ target_namespace }}"
+      register: updated_deployment
+
+    - name: Display current replicas
+      ansible.builtin.debug:
+        msg: "Current replicas: {{ updated_deployment.resources[0].spec.replicas }}"

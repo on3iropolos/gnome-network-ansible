@@ -49,6 +49,14 @@
   changed_when: false
   when: ansible_facts['user_dir'] is defined
 
+- name: Fix kubeconfig ownership
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.kube/config"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0600"
+  when: ansible_facts['user_dir'] is defined and ansible_user is defined
+
 - name: Verify cluster is running
   ansible.builtin.command: kubectl get nodes
   register: kubectl_nodes
