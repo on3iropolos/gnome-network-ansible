@@ -17,6 +17,7 @@
     - role: git
     - role: github_cli
     - role: bitwarden
+    - role: brave
 
     # AUR-based roles
     - role: aur

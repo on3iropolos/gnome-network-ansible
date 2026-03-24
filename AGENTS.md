@@ -20,6 +20,7 @@
 - **[update-docs](.opencode/skills/update-docs/SKILL.md)**: Complete workflow for updating documentation
 - **[canonical-docs](.opencode/skills/canonical-docs/SKILL.md)**: Always Link policy definition
 - **[github-branch-management](.opencode/skills/github-branch-management/SKILL.md)**: Branch and commit conventions
+- **[github-issue-management](.opencode/skills/github-issue-management/SKILL.md)**: GitHub Issues CRUD, labels, milestones
 
 ## Key Rules
 

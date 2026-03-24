@@ -21,6 +21,9 @@ jobs:
           - ansible_ctrl_init
           - network
           - bitwarden
+          - brave
+          - role_template
+          - vscodium
 
     steps:
       - name: Checkout repository
