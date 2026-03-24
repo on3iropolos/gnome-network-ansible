@@ -44,5 +44,4 @@ Note: Uses `user_name` from `inventories/group_vars/all.yml` for config and exte
 | Python | `ms-python.python` |
 | Ansible | `redhat.ansible` |
 | Terraform | `hashicorp.terraform` |
-| Go | `golang.go` |
-| Rust | `rust-lang.rust-analyzer` |
+| Docker | `ms-azuretools.vscode-docker` |

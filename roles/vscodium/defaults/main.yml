@@ -3,4 +3,5 @@ vscodium_extensions:
   - ms-python.python
   - redhat.ansible
   - hashicorp.terraform
+  - ms-azuretools.vscode-docker
 verify_enabled: false
