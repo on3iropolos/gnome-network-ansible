@@ -41,7 +41,7 @@ ansible-playbook provision.yml
 
 For Kubernetes demonstrations and portfolio showcase, see:
 
-- **[Kubernetes Documentation](docs/k8s/README.md)** - Full k8s documentation
+- **[Kubernetes Documentation](docs/kubernetes/README.md)** - Full Kubernetes documentation
 - **[kubernetes/](kubernetes/)** - Manifests, Helm charts, and playbooks
 
 ### What's Included
@@ -51,7 +51,7 @@ For Kubernetes demonstrations and portfolio showcase, see:
 | `kubernetes/manifests/` | nginx Deployment, Service, Ingress, ConfigMap |
 | `kubernetes/helm-charts/` | Production-ready Helm chart |
 | `kubernetes/playbooks/` | Ansible playbooks for deployment operations |
-| `docs/k8s/` | Architecture, quickstart, sample app, operations guide |
+| `docs/kubernetes/` | Architecture, quickstart, sample app, operations guide |
 
 ## Development
 

@@ -10,15 +10,15 @@ tags:
   - "helm"
   - "ingress"
 related:
-  - "k8s/README.md"
-  - "k8s/architecture.md"
-  - "k8s/quickstart.md"
-  - "k8s/operations.md"
+  - "kubernetes/README.md"
+  - "kubernetes/architecture.md"
+  - "kubernetes/quickstart.md"
+  - "kubernetes/operations.md"
   - "../../kubernetes/manifests"
   - "../../kubernetes/helm-charts"
 owner: "Gnome Network Ansible maintainers"
 last_reviewed: "2026-03-24"
-canonical_url: "docs/k8s/sample-app.md"
+canonical_url: "docs/kubernetes/sample-app.md"
 ---
 
 # Sample nginx Application Deployment

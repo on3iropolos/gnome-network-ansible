@@ -98,5 +98,5 @@ ansible-playbook scale.yml \
 
 ## Related Documentation
 
-- [Operations Guide](../../docs/k8s/operations.md)
-- [Sample Application Tutorial](../../docs/k8s/sample-app.md)
+- [Operations Guide](../../docs/kubernetes/operations.md)
+- [Sample Application Tutorial](../../docs/kubernetes/sample-app.md)

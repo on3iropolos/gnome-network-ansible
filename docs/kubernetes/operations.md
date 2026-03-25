@@ -10,14 +10,14 @@ tags:
   - "deployment"
   - "scaling"
 related:
-  - "k8s/README.md"
-  - "k8s/quickstart.md"
-  - "k8s/sample-app.md"
+  - "kubernetes/README.md"
+  - "kubernetes/quickstart.md"
+  - "kubernetes/sample-app.md"
   - "../../kubernetes/playbooks"
   - "../../roles/kubernetes/README.md"
 owner: "Gnome Network Ansible maintainers"
 last_reviewed: "2026-03-24"
-canonical_url: "docs/k8s/operations.md"
+canonical_url: "docs/kubernetes/operations.md"
 ---
 
 # Kubernetes Operations Guide

@@ -9,13 +9,13 @@ tags:
   - "quickstart"
   - "ansible"
 related:
-  - "k8s/README.md"
-  - "k8s/architecture.md"
-  - "k8s/sample-app.md"
+  - "kubernetes/README.md"
+  - "kubernetes/architecture.md"
+  - "kubernetes/sample-app.md"
   - "../roles/kubernetes/README.md"
 owner: "Gnome Network Ansible maintainers"
 last_reviewed: "2026-03-24"
-canonical_url: "docs/k8s/quickstart.md"
+canonical_url: "docs/kubernetes/quickstart.md"
 ---
 
 # Kubernetes Quickstart Guide

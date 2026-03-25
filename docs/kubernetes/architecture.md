@@ -9,8 +9,8 @@ tags:
   - "architecture"
   - "docker"
 related:
-  - "k8s/README.md"
-  - "k8s/quickstart.md"
+  - "kubernetes/README.md"
+  - "kubernetes/quickstart.md"
   - "../roles/kubernetes/README.md"
 owner: "Gnome Network Ansible maintainers"
 last_reviewed: "2026-03-24"

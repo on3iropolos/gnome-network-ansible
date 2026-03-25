@@ -1,6 +1,6 @@
 # Kubernetes Portfolio
 
-This directory contains Kubernetes-related content for demonstrating k8s operations experience.
+This directory contains Kubernetes-related content for demonstrating Kubernetes operations experience.
 
 ## Structure
 
@@ -27,9 +27,9 @@ kubernetes/
 
 ## Quick Start
 
-1. [Setup k3d cluster](../../docs/k8s/quickstart.md)
-2. [Deploy sample application](../../docs/k8s/sample-app.md)
-3. [Explore operations](../../docs/k8s/operations.md)
+1. [Setup k3d cluster](../../docs/kubernetes/quickstart.md)
+2. [Deploy sample application](../../docs/kubernetes/sample-app.md)
+3. [Explore operations](../../docs/kubernetes/operations.md)
 
 ## Contents
 
@@ -57,9 +57,9 @@ Ansible playbooks for:
 
 ## Documentation
 
-Full documentation is available in `docs/k8s/`:
-- [README](docs/k8s/README.md) - Overview
-- [Architecture](docs/k8s/architecture.md) - Cluster architecture
-- [Quickstart](docs/k8s/quickstart.md) - Setup guide
-- [Sample App](docs/k8s/sample-app.md) - Deployment walkthrough
-- [Operations](docs/k8s/operations.md) - Common operations
+Full documentation is available in `docs/kubernetes/`:
+- [README](docs/kubernetes/README.md) - Overview
+- [Architecture](docs/kubernetes/architecture.md) - Cluster architecture
+- [Quickstart](docs/kubernetes/quickstart.md) - Setup guide
+- [Sample App](docs/kubernetes/sample-app.md) - Deployment walkthrough
+- [Operations](docs/kubernetes/operations.md) - Common operations

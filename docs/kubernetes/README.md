@@ -1,6 +1,6 @@
 ---
 title: "Kubernetes Portfolio Showcase"
-summary: "Dedicated Kubernetes operations documentation for demonstrating k8s experience in job interviews and portfolio presentations."
+summary: "Dedicated Kubernetes operations documentation for demonstrating Kubernetes experience in job interviews and portfolio presentations."
 type: "reference"
 scope: "repo"
 tags:
@@ -21,7 +21,7 @@ canonical_url: "docs/k8s/README.md"
 
 # Kubernetes Portfolio Showcase
 
-This section contains Kubernetes operations documentation for demonstrating k8s experience in job interviews and technical presentations.
+This section contains Kubernetes operations documentation for demonstrating Kubernetes experience in job interviews and technical presentations.
 
 ## Quick Links
 
@@ -67,7 +67,7 @@ kubernetes/
 │   └── scale.yml
 └── README.md
 
-docs/k8s/              # This documentation
+docs/kubernetes/              # This documentation
 ```
 
 ## Getting Started
