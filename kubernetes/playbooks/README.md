@@ -4,8 +4,27 @@ Ansible playbooks for managing Kubernetes resources.
 
 ## Prerequisites
 
+### Python Dependencies
+
+The Ansible `kubernetes.core` collection requires Python packages:
+
 ```bash
-pip install kubernetes
+# On Arch Linux (requires pip)
+pip install kubernetes kubernetes-validate --break-system-packages
+
+# Or using a virtual environment (recommended)
+python -m venv ~/.venv/k8s
+source ~/.venv/k8s/bin/activate
+pip install kubernetes kubernetes-validate
+
+# Then run ansible with the venv activated
+ansible-playbook deploy-app.yml -e manifest_file=../manifests/nginx-deployment.yaml
+```
+
+For Arch Linux, you may also need to install pip first:
+
+```bash
+sudo pacman -S python-pip
 ```
 
 ## Playbooks
@@ -25,7 +44,7 @@ ansible-playbook deploy-app.yml \
 |----------|-------------|---------|
 | `manifest_file` | Path to Kubernetes YAML manifest | Required |
 | `state` | Resource state | `present` |
-| `namespace` | Target namespace | `default` |
+| `target_namespace` | Target namespace | `default` |
 
 #### Examples
 
@@ -37,7 +56,7 @@ ansible-playbook deploy-app.yml \
 # Deploy to production namespace
 ansible-playbook deploy-app.yml \
   -e manifest_file=../manifests/nginx-deployment.yaml \
-  -e namespace=production
+  -e target_namespace=production
 
 # Delete resources
 ansible-playbook deploy-app.yml \
@@ -61,7 +80,7 @@ ansible-playbook scale.yml \
 |----------|-------------|---------|
 | `app_name` | Deployment name | Required |
 | `replicas` | Number of replicas | `1` |
-| `namespace` | Target namespace | `default` |
+| `target_namespace` | Target namespace | `default` |
 
 #### Examples
 

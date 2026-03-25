@@ -28,6 +28,26 @@ Set up a local Kubernetes cluster in under 5 minutes.
 - Internet connection
 - sudo access
 
+### Python Dependencies (for Operational Playbooks)
+
+If using the Ansible playbooks in `kubernetes/playbooks/`:
+
+```bash
+# Install pip first (if not present)
+sudo pacman -S python-pip
+
+# Install kubernetes Python packages
+pip install kubernetes kubernetes-validate --break-system-packages
+```
+
+Or use a virtual environment:
+
+```bash
+python -m venv ~/.venv/k8s
+source ~/.venv/k8s/bin/activate
+pip install kubernetes kubernetes-validate
+```
+
 ## Option 1: Automated (Recommended)
 
 Run the Ansible playbook to provision the entire cluster:
@@ -153,6 +173,19 @@ k3d_port_mapping:
 | `k3d kubeconfig merge dev-cluster` | Update kubeconfig |
 
 ## Troubleshooting
+
+### Python kubernetes library not installed
+
+If you see errors like:
+```
+Failed to import the required Python library (kubernetes)
+```
+
+Install the required packages:
+
+```bash
+pip install kubernetes kubernetes-validate --break-system-packages
+```
 
 ### Docker daemon not running
 
