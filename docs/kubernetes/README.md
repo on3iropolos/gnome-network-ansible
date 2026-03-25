@@ -9,14 +9,14 @@ tags:
   - "portfolio"
   - "ansible"
 related:
-  - "k8s/architecture.md"
-  - "k8s/quickstart.md"
-  - "k8s/sample-app.md"
-  - "k8s/operations.md"
+  - "kubernetes/architecture.md"
+  - "kubernetes/quickstart.md"
+  - "kubernetes/sample-app.md"
+  - "kubernetes/operations.md"
   - "../roles/kubernetes/README.md"
 owner: "Gnome Network Ansible maintainers"
 last_reviewed: "2026-03-24"
-canonical_url: "docs/k8s/README.md"
+canonical_url: "docs/kubernetes/README.md"
 ---
 
 # Kubernetes Portfolio Showcase

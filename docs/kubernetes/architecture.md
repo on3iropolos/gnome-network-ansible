@@ -14,7 +14,7 @@ related:
   - "../roles/kubernetes/README.md"
 owner: "Gnome Network Ansible maintainers"
 last_reviewed: "2026-03-24"
-canonical_url: "docs/k8s/architecture.md"
+canonical_url: "docs/kubernetes/architecture.md"
 ---
 
 # Kubernetes Cluster Architecture
