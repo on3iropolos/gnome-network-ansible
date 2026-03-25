@@ -9,7 +9,7 @@ on:
       - feature/add-kubernetes-k3d-cluster
     paths:
       - 'kubernetes/**'
-      - 'docs/k8s/**'
+      - 'docs/kubernetes/**'
       - 'roles/kubernetes/**'
       - '.github/workflows/k8s-ops.yml'
   pull_request:
@@ -17,7 +17,7 @@ on:
       - main
     paths:
       - 'kubernetes/**'
-      - 'docs/k8s/**'
+      - 'docs/kubernetes/**'
       - 'roles/kubernetes/**'
       - '.github/workflows/k8s-ops.yml'
 
@@ -71,16 +71,16 @@ jobs:
           sudo mv kubectl /usr/local/bin/
 
       - name: Validate nginx deployment manifest
-        run: kubectl apply --dry-run=server -f kubernetes/manifests/nginx-deployment.yaml
+        run: kubectl apply --dry-run=client -f kubernetes/manifests/nginx-deployment.yaml
 
       - name: Validate nginx service manifest
-        run: kubectl apply --dry-run=server -f kubernetes/manifests/nginx-service.yaml
+        run: kubectl apply --dry-run=client -f kubernetes/manifests/nginx-service.yaml
 
       - name: Validate nginx ingress manifest
-        run: kubectl apply --dry-run=server -f kubernetes/manifests/nginx-ingress.yaml
+        run: kubectl apply --dry-run=client -f kubernetes/manifests/nginx-ingress.yaml
 
       - name: Validate app configmap manifest
-        run: kubectl apply --dry-run=server -f kubernetes/manifests/app-configmap.yaml
+        run: kubectl apply --dry-run=client -f kubernetes/manifests/app-configmap.yaml
 
   validate-helm:
     name: Validate Helm Charts

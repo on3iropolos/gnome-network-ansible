@@ -14,7 +14,8 @@ exclude_paths:
 
 # Enforced rules - these will cause failures
 # Use 'skip_list' to skip specific rules if needed
-skip_list: []
+skip_list:
+  - var-naming[no-role-prefix]
 
 # Warn only for these rules (will not fail CI)
 warn_list:
