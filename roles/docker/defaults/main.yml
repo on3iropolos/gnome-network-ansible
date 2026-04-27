@@ -1,1 +1,3 @@
 verify_enabled: true
+
+docker_default_address_pools_base: "172.31.0.0/16"
