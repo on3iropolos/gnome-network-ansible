@@ -37,6 +37,22 @@ ansible-playbook provision.yml
 | `install.yml` | Fresh installation from Arch Live ISO |
 | `k8s.yml` | Local Kubernetes cluster (k3d) |
 
+## Kubernetes Portfolio
+
+For Kubernetes demonstrations and portfolio showcase, see:
+
+- **[Getting Started](docs/kubernetes/getting-started.md)** - Setup and deploy
+- **[kubernetes/](kubernetes/)** - Manifests, Helm charts, and playbooks
+
+### What's Included
+
+| Component | Description |
+|-----------|-------------|
+| `kubernetes/manifests/` | nginx Deployment, Service, Ingress, ConfigMap |
+| `kubernetes/helm-charts/` | Production-ready Helm chart |
+| `kubernetes/playbooks/` | Ansible playbooks for deployment operations |
+| `docs/kubernetes/` | Getting Started and Reference guides |
+
 ## Development
 
 ```bash

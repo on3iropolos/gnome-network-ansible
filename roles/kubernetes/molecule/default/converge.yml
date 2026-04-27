@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  vars:
+    verify_enabled: false
+
+  tasks:
+    - name: "Include kubernetes"
+      include_role:
+        name: "kubernetes"

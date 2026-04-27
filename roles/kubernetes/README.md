@@ -36,6 +36,11 @@ graph TD
 
 - `docker` - Docker must be installed first
 
+## Further Documentation
+
+- [Getting Started](../docs/kubernetes/getting-started.md)
+- [Reference](../docs/kubernetes/reference.md)
+
 ## Example Playbook
 
 ```yaml

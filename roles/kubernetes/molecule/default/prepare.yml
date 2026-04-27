@@ -1,0 +1,28 @@
+---
+- name: Prepare
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Update pacman package cache
+      ansible.builtin.raw: pacman -Sy --noconfirm
+      changed_when: false
+
+    - name: Install python for Ansible
+      ansible.builtin.raw: pacman -S --noconfirm python
+      changed_when: false
+
+    - name: Install Docker
+      ansible.builtin.raw: pacman -S --noconfirm docker
+      changed_when: false
+
+    - name: Start Docker service
+      ansible.builtin.raw: systemctl start docker
+      changed_when: false
+
+    - name: Enable Docker service
+      ansible.builtin.raw: systemctl enable docker
+      changed_when: false
+
+    - name: Gather facts after preparation
+      ansible.builtin.setup:
