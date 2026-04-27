@@ -38,11 +38,8 @@ graph TD
 
 ## Further Documentation
 
-For full Kubernetes portfolio documentation including architecture, quickstart guides, and operational playbooks, see:
-
-- [Kubernetes Documentation](../docs/kubernetes/README.md)
-- [Sample Application Guide](../docs/kubernetes/sample-app.md)
-- [Operations Guide](../docs/kubernetes/operations.md)
+- [Getting Started](../docs/kubernetes/getting-started.md)
+- [Reference](../docs/kubernetes/reference.md)
 
 ## Example Playbook
 

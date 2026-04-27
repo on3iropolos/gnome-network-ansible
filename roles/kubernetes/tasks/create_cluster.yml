@@ -42,20 +42,31 @@
     path: "{{ ansible_facts['user_dir'] }}/.kube"
     state: directory
     mode: "0755"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
   when: ansible_facts['user_dir'] is defined
 
-- name: Merge kubeconfig
-  ansible.builtin.command: k3d kubeconfig merge {{ k3d_cluster_name }} -o {{ ansible_facts['user_dir'] }}/.kube/config
+- name: Remove existing kubeconfig if owned by root
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.kube/config"
+    state: absent
+  when: ansible_facts['user_dir'] is defined
+  ignore_errors: true
+
+- name: Get kubeconfig
+  ansible.builtin.command: k3d kubeconfig get {{ k3d_cluster_name }}
+  register: kubeconfig_output
   changed_when: false
   when: ansible_facts['user_dir'] is defined
 
-- name: Fix kubeconfig ownership
-  ansible.builtin.file:
-    path: "{{ ansible_facts['user_dir'] }}/.kube/config"
+- name: Write kubeconfig
+  ansible.builtin.copy:
+    content: "{{ kubeconfig_output.stdout }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.kube/config"
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: "0600"
-  when: ansible_facts['user_dir'] is defined and ansible_user is defined
+  when: ansible_facts['user_dir'] is defined and kubeconfig_output.stdout is defined
 
 - name: Verify cluster is running
   ansible.builtin.command: kubectl get nodes

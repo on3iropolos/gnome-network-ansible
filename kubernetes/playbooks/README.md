@@ -98,5 +98,4 @@ ansible-playbook scale.yml \
 
 ## Related Documentation
 
-- [Operations Guide](../../docs/kubernetes/operations.md)
-- [Sample Application Tutorial](../../docs/kubernetes/sample-app.md)
+- [Getting Started](../../docs/kubernetes/getting-started.md)

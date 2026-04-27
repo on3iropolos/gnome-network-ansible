@@ -53,5 +53,4 @@ helm rollback sample-app
 
 ## Related Documentation
 
-- [Sample Application Guide](../../docs/kubernetes/sample-app.md)
-- [Helm Documentation](https://helm.sh/docs/)
+- [Getting Started](../../docs/kubernetes/getting-started.md)

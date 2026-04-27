@@ -1,6 +1,6 @@
 # Kubernetes Portfolio
 
-This directory contains Kubernetes-related content for demonstrating Kubernetes operations experience.
+Content for demonstrating Kubernetes operations experience.
 
 ## Structure
 
@@ -10,56 +10,30 @@ kubernetes/
 │   ├── nginx-deployment.yaml
 │   ├── nginx-service.yaml
 │   ├── nginx-ingress.yaml
-│   ├── app-configmap.yaml
-│   └── README.md
+│   └── app-configmap.yaml
 ├── helm-charts/        # Helm charts
 │   └── sample-app/
-│       ├── Chart.yaml
-│       ├── values.yaml
-│       ├── templates/
-│       └── README.md
 ├── playbooks/          # Ansible operational playbooks
 │   ├── deploy-app.yml
-│   ├── scale.yml
-│   └── README.md
+│   └── scale.yml
 └── README.md           # This file
 ```
 
-## Quick Start
-
-1. [Setup k3d cluster](../../docs/kubernetes/quickstart.md)
-2. [Deploy sample application](../../docs/kubernetes/sample-app.md)
-3. [Explore operations](../../docs/kubernetes/operations.md)
-
 ## Contents
 
-### Manifests
+| Directory | Description |
+|-----------|-------------|
+| `manifests/` | Raw K8s YAML (Deployment, Service, Ingress, ConfigMap) |
+| `helm-charts/sample-app/` | Production-ready Helm chart |
+| `playbooks/` | Ansible deployment & scaling playbooks |
 
-Raw Kubernetes YAML manifests for nginx deployment:
-- Deployment with 2 replicas, health checks, resource limits
-- ClusterIP service
-- Ingress with Traefik
-- ConfigMap for configuration
+## Quick Start
 
-### Helm Charts
+1. Setup cluster: `ansible-playbook k8s.yml`
+2. Deploy app: `helm install sample-app kubernetes/helm-charts/sample-app --namespace dev --create-namespace`
+3. Access: Add `127.0.0.1 nginx.local` to `/etc/hosts`, then visit `http://nginx.local`
 
-Production-ready Helm chart with:
-- Configurable replicas, image, resources
-- Health checks (liveness/readiness probes)
-- Ingress support
-- Helm tests
+## Reference
 
-### Playbooks
-
-Ansible playbooks for:
-- Deploying applications from manifests
-- Scaling deployments
-
-## Documentation
-
-Full documentation is available in `docs/kubernetes/`:
-- [README](docs/kubernetes/README.md) - Overview
-- [Architecture](docs/kubernetes/architecture.md) - Cluster architecture
-- [Quickstart](docs/kubernetes/quickstart.md) - Setup guide
-- [Sample App](docs/kubernetes/sample-app.md) - Deployment walkthrough
-- [Operations](docs/kubernetes/operations.md) - Common operations
+- [Getting Started](docs/kubernetes/getting-started.md)
+- [Reference](docs/kubernetes/reference.md)
