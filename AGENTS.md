@@ -2,9 +2,9 @@
 
 ## Quick Reference
 
-- **Start here**: [`docs/agent/INDEX.md`](docs/agent/INDEX.md:1)
-- **Contributing**: [`docs/contributing.md`](docs/contributing.md:1)
-- **Always Link policy**: [`docs/agent/policies/always-link.md`](docs/agent/policies/always-link.md:1)
+- **Start here**: Run `bd prime` or see [`docs/contributing.md`](docs/contributing.md:1)
+- **Beads (bd)**: `bd ready --json` to find work, `bd create` to track tasks
+- **Always Link policy**: [`docs/policies/always-link.md`](docs/policies/always-link.md:1)
 
 ## Agent Skills & Commands
 
