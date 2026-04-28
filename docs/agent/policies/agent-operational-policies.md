@@ -1,6 +1,6 @@
 ---
 title: "Agent Operational Policies"
-summary: "Combined workspace, working-directory, and logging rules for AI agents using the .agent/ area and repository logging standards."
+summary: "Workspace, working-directory, logging rules, and issue tracking for AI agents."
 type: "policy"
 scope: "repo"
 tags:
@@ -8,6 +8,7 @@ tags:
   - "workspace"
   - "working-directory"
   - "logging"
+  - "issue-tracking"
 related:
   - "always-link.md"
   - "general-instructions.md"
@@ -19,15 +20,13 @@ related:
   - "../../policies/log-entry-format.md"
   - "../../policies/working-directory.md"
 owner: "Gnome Network Ansible maintainers"
-last_reviewed: "2025-11-25"
+last_reviewed: "2026-04-28"
 canonical_url: "docs/agent/policies/agent-operational-policies.md"
 ---
 
-> Source: Consolidates the earlier `agent-workspace`, `agent-logging`, and `working-directory` agent policies into a single canonical document.
-
 # Agent Operational Policies
 
-This document defines how AI agents must use the repository-local `.agent/` directory as their workspace and how they must log non-trivial activity. It is the single canonical reference for workspace, working-directory, and logging behavior at the agent level. Repository-wide logging details still live under [`../../policies/INDEX.md`](../policies/INDEX.md:1).
+This document defines how AI agents must use the repository-local `.agent/` directory as their workspace, how they must log non-trivial activity, and how they must track issues using **bd (beads)**. It is the single canonical reference for workspace, working-directory, logging behavior, and issue tracking at the agent level.
 
 ## 1. Workspace and working directory
 
@@ -85,12 +84,41 @@ Log entries must be:
 - **Structured** – follow the standard entry format so tools can parse logs.
 - **Honest** – accurately describe what actions were taken and any failures encountered.
 
-## 4. Updating operational behavior
+## 4. Issue tracking with bd (beads)
 
-When you need to change how workspace or logging behaves for agents:
+This project uses **bd (beads)** for ALL issue tracking and task management.
+
+### 4.1 Core commands
+
+- **Find work:** `bd ready --json` shows unblocked issues
+- **Create issues:** `bd create "Title" -t task|bug|feature -p 0-4 --json`
+- **Claim work:** `bd update <id> --claim --json`
+- **Complete work:** `bd close <id> --reason "Done" --json`
+- **Sync:** `bd sync` at session end
+
+### 4.2 Rules
+
+- ✅ Use bd for ALL task tracking
+- ✅ Always use `--json` flag for programmatic access
+- ✅ Link discovered work with `discovered-from` dependencies
+- ✅ Check `bd ready` before asking "what should I work on?"
+- ❌ Do NOT create markdown TODO lists
+- ❌ Do NOT use external issue trackers
+- ❌ Do NOT duplicate tracking systems
+
+### 4.3 Stealth mode
+
+This repository uses **stealth mode** (`bd init --stealth`):
+- Beads database lives in `.beads/` (local-only, in `.git/info/exclude`)
+- No git hooks installed (`no-git-ops: true`)
+- Must manually run `bd sync` at session end
+
+## 5. Updating operational behavior
+
+When you need to change how workspace, logging, or issue tracking behaves for agents:
 
 1. Update this document to reflect the new expectations.
 2. Update any underlying repository-wide logging policies under `docs/policies/` as needed.
 3. Update helper scripts under `.agent/` so their behavior matches this policy.
 
-Avoid sprinkling ad hoc workspace or logging rules into individual scripts; keep the canonical behavior defined here and reference it from other docs using short link stubs.
+Avoid sprinkling ad hoc workspace, logging, or issue-tracking rules into individual scripts; keep the canonical behavior defined here and reference it from other docs using short link stubs.

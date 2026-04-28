@@ -58,17 +58,25 @@ For the full set of repository-wide policies (not just agent-focused ones), see 
 Task-oriented workflows for agents live under `docs/agent/workflows/`.
 
 - **Updating documentation**  
-  End-to-end workflow for updating docs safely using the Always Link policy and `.agent` tooling (inventory, classify, audit).  
+  End-to-end workflow for updating docs safely using the Always Link policy and tooling (inventory, classify, audit).  
   See [`docs/agent/workflows/update-docs.md`](workflows/update-docs.md:1).
 
 Additional workflows can be added to this directory as the automation surface grows.
 
 ## Agent commands and tooling
 
-Command references for `.agent/` scripts live under `docs/agent/commands/`.
+Command references for agent scripts live under `docs/agent/commands/`.
 
 - **Agent commands index**  
-  Documents the primary `.agent` scripts such as `doc_inventory.py`, `doc_classify.py`, and `doc_audit.py`, including typical usage and outputs.  
+  Documents the primary scripts such as `doc_inventory.py`, `doc_classify.py`, and `doc_audit.py`, including typical usage and outputs.  
   See [`docs/agent/commands/INDEX.md`](commands/INDEX.md:1).
 
-Remember that the scripts themselves live under `.agent/` and their outputs under `.agent/tmp/` are **ephemeral**. Canonical explanations and policies always live under `docs/`.
+## Issue tracking with bd (beads)
+
+This project uses **bd (beads)** for all issue tracking and task management.
+
+- **Beads documentation**: https://gastownhall.github.io/beads/
+- **Quick start**: `bd ready --json` to find ready work
+- **Workflow**: See AGENTS.md for complete beads workflow
+
+Remember that `.agent/` is for ephemeral working files only. Canonical explanations and policies always live under `docs/`.

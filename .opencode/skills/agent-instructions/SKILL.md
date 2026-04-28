@@ -12,11 +12,11 @@ metadata:
 
 This skill summarizes the core expectations for AI agents working in this repository.
 
-## 1. Understand the project and load memory
+## 1. Understand the project and load context
 
 Before making changes:
 
-- Load the agent-memory skill: `skill({ name: "agent-memory" })`
+- Run `bd prime` or `bd ready --json` to load beads context
 - Read the project overview in `README.md`
 - Read the agent guide in `AGENTS.md`
 - Review the Always Link policy in [canonical-docs](canonical-docs)
@@ -59,10 +59,7 @@ When instructions conflict:
 - Testing best practices: `docs/reference/testing-best-practices.md`
 
 ## Related skills
-
-- [agent-memory](agent-memory): Three-layer memory system (required at session start)
 - [canonical-docs](canonical-docs): Always Link policy
 - [update-docs](update-docs): Complete documentation update workflow
-- [doc-inventory](doc-inventory): Scan and inventory docs
-- [doc-classify](doc-classify): Classify docs and detect duplicates
-- [doc-audit](doc-audit): Audit docs for broken links and issues
+- [github-branch-management](github-branch-management): Branch and commit conventions
+- [github-issue-management](github-issue-management): GitHub Issues CRUD, labels, milestones
