@@ -14,10 +14,8 @@ debug.yml
 *.pub
 *.key
 
-# Agent memory (session logs, working files - too verbose for repo)
-.agent/memory/
-.agent/sessions/
-.agent/tmp/
+# Agent working files (not committed)
+.agent/
 
 # Ansible
 .ansible
@@ -31,3 +29,8 @@ docs/audit.json
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key
