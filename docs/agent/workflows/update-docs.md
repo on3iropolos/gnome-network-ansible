@@ -40,8 +40,8 @@ Confirm that the requested change fits the Always Link model (one canonical doc 
 
 If you are changing concepts, layout, or canonical targets:
 
-- Run inventory: `python3 .agent/doc_inventory.py`
-- Run classification: `python3 .agent/doc_classify.py`
+- Run inventory: `python3 .opencode/scripts/inventory.py`
+- Run classification: `python3 .opencode/scripts/classify.py`
 - See command reference: [`docs/agent/commands/INDEX.md`](../commands/INDEX.md:1)
 
 Use these outputs to understand existing canonical docs, duplicates, and subjects before editing.
@@ -69,7 +69,7 @@ While editing or creating docs:
 
 After your edits:
 
-- Run `python3 .agent/doc_audit.py`.
+- Run `python3 .opencode/scripts/audit.py`.
 - Inspect `.agent/tmp/audit.json` for:
   - Broken or incorrect links.
   - Oversize docs that should be split.

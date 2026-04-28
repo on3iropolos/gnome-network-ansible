@@ -30,7 +30,7 @@ Use these commands (type `/` followed by the command name):
 - Script: `.opencode/scripts/inventory.py`
 - Purpose: Scans markdown documentation and produces an inventory of "documentation units" with signatures and source pointers.
 - Usage: `/doc-inventory` or `python3 .opencode/scripts/inventory.py`
-- Output: Writes to `.agent/tmp/inventory.yaml`
+- Output: Writes to `.agent/tmp/inventory.yaml` (ephemeral)
 
 ### /doc-classify
 
@@ -38,7 +38,7 @@ Use these commands (type `/` followed by the command name):
 - Script: `.opencode/scripts/classify.py`
 - Purpose: Consumes the inventory output and classifies units by subject, type, scope, and tags
 - Usage: `/doc-classify` or `python3 .opencode/scripts/classify.py`
-- Output: Writes to `.agent/tmp/classified.yaml`
+- Output: Writes to `.agent/tmp/classified.yaml` (ephemeral)
 
 ### /doc-audit
 
@@ -46,7 +46,7 @@ Use these commands (type `/` followed by the command name):
 - Script: `.opencode/scripts/audit.py`
 - Purpose: Audits links across docs for broken links, oversize docs, and duplicates
 - Usage: `/doc-audit` or `python3 .opencode/scripts/audit.py`
-- Output: Writes to `.agent/tmp/audit.json` and `docs/audit.json`
+- Output: Writes to `.agent/tmp/audit.json` (ephemeral) and `docs/audit.json`
 
 ## Agent Skills
 
@@ -67,7 +67,7 @@ When running any of these commands as part of an automated agent task:
 
 - Follow the agent workspace policy in [`agent-workspace.md`](../policies/agent-workspace.md:1).
 - Follow the agent logging policy in [`agent-logging.md`](../policies/agent-logging.md:1).
-- Keep all temporary outputs under `.agent/tmp/`.
+- Keep all temporary outputs under `.agent/tmp/` (ephemeral).
 - Record a concise log entry for non-trivial runs under `.agent/log/` using the naming and content guidelines in:
   - [`../../policies/log-file-naming-and-location.md`](../../policies/log-file-naming-and-location.md:1)
   - [`../../policies/log-content-guidelines.md`](../../policies/log-content-guidelines.md:1)
