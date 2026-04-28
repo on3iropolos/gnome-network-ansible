@@ -9,7 +9,7 @@ tags:
   - documentation
   - architecture
 related:
-  - ../agent/policies/always-link.md
+  - always-link.md
   - ../contributing.md
 owner: docs-maintainers
 last_reviewed: 2025-11-19
