@@ -9,7 +9,6 @@ tags:
   - "policy"
 related:
   - "policies/INDEX.md"
-  - "commands/INDEX.md"
   - "../policies/INDEX.md"
   - "../contributing.md"
 owner: "Gnome Network Ansible maintainers"
@@ -28,7 +27,7 @@ Use this page as the main entrypoint when you need to discover or extend **agent
 Agent-focused policies live under `docs/agent/policies/` and are indexed at:
 
 - **Agent policies index**  
-  Overview of agent-facing policy stubs and where their canonical definitions live.  
+  Overview of agent-facing policies and where their canonical definitions live.  
   See [`docs/agent/policies/INDEX.md`](policies/INDEX.md:1).
 
 Key policies for agents:
@@ -41,29 +40,14 @@ Key policies for agents:
   High-level expectations for agents: understand the project first, respect canonical docs, prefer scripted/idempotent changes, and honor testing policies.
   See [`docs/agent/policies/general-instructions.md`](policies/general-instructions.md:1).
 
-- **Agent workspace policy**
-  Requirements for using `.agent/` as a working area and for managing transient artifacts under `.agent/`.
-  See [`agent-workspace.md`](policies/agent-workspace.md:1).
-
-- **Agent logging policy**
-  Requirements for writing concise, structured logs under `.agent/log/` so humans can reconstruct automated activity.
-  See [`agent-logging.md`](policies/agent-logging.md:1).
+- **Agent operational policies**  
+  Combined workspace and logging rules for AI agents using the `.agent/` area.
+  See [`agent-operational-policies.md`](policies/agent-operational-policies.md:1).
 
 For the full set of repository-wide policies (not just agent-focused ones), see the main policies index at  
 [`docs/policies/INDEX.md`](../policies/INDEX.md:1).
 
-## Agent workflows
-
-Task-oriented workflows for agents live under `docs/agent/workflows/`.
-
-Additional workflows can be added to this directory as the automation surface grows.
-
 ## Agent commands and tooling
 
-Command references for `.agent/` scripts live under `docs/agent/commands/`.
-
-- **Agent commands index**  
-  Documents the primary `.agent` scripts such as `doc_inventory.py`, `doc_classify.py`, and `doc_audit.py`, including typical usage and outputs.  
-  See [`docs/agent/commands/INDEX.md`](commands/INDEX.md:1).
-
-Remember that the scripts themselves live under `.agent/` and their outputs under `.agent/tmp/` are **ephemeral**. Canonical explanations and policies always live under `docs/`.
+- **Agent operational policies**  
+  See [`docs/agent/policies/agent-operational-policies.md`](policies/agent-operational-policies.md:1) for workspace and logging policies.

@@ -20,7 +20,7 @@
 
 ## Key Rules
 
-1. Use `docs/` for canonical docs - don't duplicate (Always Link policy)
+1. Use `docs/` for canonical docs - don't duplicate.
 2. User instructions win over policies
 5. Hindsight memories persist across sessions - check recall before asking
 6. Prefer `hindsight_reflect` for reasoned responses using bank's disposition

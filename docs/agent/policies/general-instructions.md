@@ -40,7 +40,7 @@ See [`always-link.md`](always-link.md:1) and [`contributing.md`](../../contribut
 
 ## 3. Prefer scripted, idempotent changes
 
-- Use repository tooling (`.agent/doc_*.py`) instead of ad-hoc edits.
+- Use repository tooling and Hindsight memory instead of ad-hoc edits.
 - Re-running should not corrupt docs or create duplicates.
 - Keep diffs focused on single logical changes.
 
