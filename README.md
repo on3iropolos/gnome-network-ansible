@@ -59,9 +59,6 @@ For Kubernetes demonstrations and portfolio showcase, see:
 Tasks are managed via [xc](https://xc.sh/) task runner. Run `xc` without arguments for the interactive task picker.
 
 ```bash
-# Install pre-commit hooks
-xc setup
-
 # Run linter
 xc lint
 
@@ -81,14 +78,6 @@ xc molecule-test <role-name>
 Open `xc` without arguments for interactive task picker.
 
 ## Tasks
-
-### setup
-
-Install pre-commit hooks (runs locally, requires pre-commit: `pip install pre-commit`).
-
-```bash
-pre-commit install
-```
 
 ### lint
 
