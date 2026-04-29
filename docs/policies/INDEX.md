@@ -26,11 +26,11 @@ Use this page as the starting point when you need to understand or update reposi
 
 - **Always Link policy**
   Canonical definition of the documentation model: one canonical doc per concept, bite-sized files, and link stubs everywhere else.
-  See Beads issue: `gnome-network-ansible-3s` (run `bd list --json` to view).
+  See [`docs/agent/policies/always-link.md`](../agent/policies/always-link.md:1).
 
 - **General instructions for AI agents**
   High-level expectations for agents: understand the project first, respect canonical docs, prefer scripted/idempotent changes, and honor testing policies.
-  See Beads issue: `gnome-network-ansible-3t` (run `bd list --json` to view).
+  See [`docs/agent/policies/general-instructions.md`](../agent/policies/general-instructions.md:1).
 
 - **Documentation contributing guide**  
   How to write new docs that comply with the Always Link system, including required front matter, subjects, and slug rules.  
