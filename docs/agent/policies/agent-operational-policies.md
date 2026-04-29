@@ -1,40 +1,36 @@
 ---
 title: "Agent Operational Policies"
-summary: "Combined workspace, working-directory, and logging rules for AI agents using the .agent/ area and repository logging standards."
+summary: "Combined workspace and logging rules for AI agents using the .agent/ area and repository logging standards."
 type: "policy"
 scope: "repo"
 tags:
   - "agent"
   - "workspace"
-  - "working-directory"
+
   - "logging"
 related:
   - "always-link.md"
   - "general-instructions.md"
-  - "agent-workspace.md"
-  - "agent-logging.md"
-  - "working-directory.md"
   - "../../policies/log-file-naming-and-location.md"
   - "../../policies/log-content-guidelines.md"
   - "../../policies/log-entry-format.md"
-  - "../../policies/working-directory.md"
 owner: "Gnome Network Ansible maintainers"
 last_reviewed: "2025-11-25"
 canonical_url: "docs/agent/policies/agent-operational-policies.md"
 ---
 
-> Source: Consolidates the earlier `agent-workspace`, `agent-logging`, and `working-directory` agent policies into a single canonical document.
+> Source: Consolidates the earlier agent workspace and logging policies into a single canonical document.
 
 # Agent Operational Policies
 
-This document defines how AI agents must use the repository-local `.agent/` directory as their workspace and how they must log non-trivial activity. It is the single canonical reference for workspace, working-directory, and logging behavior at the agent level. Repository-wide logging details still live under [`../../policies/INDEX.md`](../policies/INDEX.md:1).
+This document defines how AI agents must use the repository-local `.agent/` directory as their workspace and how they must log non-trivial activity. It is the single canonical reference for workspace and logging behavior at the agent level. Repository-wide logging details still live under [`../../policies/INDEX.md`](../policies/INDEX.md:1).
 
-## 1. Workspace and working directory
+## 1. Workspace
 
 - **Workspace root:** All transient agent files **must** live under the repository-local `.agent/` directory.
 - **No stray artifacts:** Do not write temporary YAML, JSON, logs, or scratch files into roles, `docs/`, or the repo root.
 - **Tracked vs untracked:**
-  - Version-controlled instructions and tools live under `.agent/` (for example `.agent/instructions/*.md`, `.agent/*.py`).
+  - Version-controlled instructions and tools live under `.agent/` (for example `.agent/instructions/*.md`).
   - Ephemeral outputs (for example inventories, audits, scratch notes) live under `.agent/tmp/` and are governed by `.gitignore`.
 - **Working directory:** Commands in this repository are assumed to run from the repository root; any temporary files they create must still be placed under `.agent/`.
 

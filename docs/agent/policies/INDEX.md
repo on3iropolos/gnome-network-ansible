@@ -11,9 +11,7 @@ related:
   - "../../policies/INDEX.md"
   - "always-link.md"
   - "general-instructions.md"
-  - "agent-workspace.md"
-  - "agent-logging.md"
-  - "working-directory.md"
+  - "agent-operational-policies.md"
 owner: "Gnome Network Ansible maintainers"
 last_reviewed: "2025-11-20"
 canonical_url: "docs/agent/policies/INDEX.md"
@@ -35,13 +33,9 @@ Use this page when you need to discover which high-level policies agents must fo
   High-level expectations for agents: understand the project first, respect canonical docs, prefer scripted/idempotent changes, and honor testing and logging policies.
   See `docs/agent/policies/general-instructions.md`.
 
-- **Agent workspace (.agent/)**
-  Requirements for using `.agent/` as a working area for transient artifacts, helper scripts, and other agent tooling.
-  See `docs/agent/policies/agent-workspace.md`.
-
-- **Agent logging**
-  Requirements for writing concise, structured logs under `.agent/log/` so humans can reconstruct what was done and why.
-  See `docs/agent/policies/agent-logging.md` together with the logging policies under `docs/policies/`.
+- **Agent operational policies**
+  Combined workspace and logging rules for AI agents using the `.agent/` area.
+  See `docs/agent/policies/agent-operational-policies.md` together with the logging policies under `docs/policies/`.
 
 ## Relationship to main policy index
 

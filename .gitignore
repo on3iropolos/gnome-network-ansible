@@ -14,11 +14,6 @@ debug.yml
 *.pub
 *.key
 
-# Agent memory (session logs, working files - too verbose for repo)
-.agent/memory/
-.agent/sessions/
-.agent/tmp/
-
 # Ansible
 .ansible
 
@@ -31,3 +26,4 @@ docs/audit.json
 __pycache__/
 *.pyc
 .pytest_cache/
+.agent/
