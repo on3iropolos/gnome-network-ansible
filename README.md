@@ -95,15 +95,15 @@ pre-commit install
 Run ansible-lint on all playbooks and roles.
 
 ```bash
-docker run --rm -v "$(pwd):/data" -w /data gnome-network-ansible ansible-lint install.yml provision.yml roles/
+docker compose run --rm ansible-dev ansible-lint install.yml provision.yml roles/
 ```
 
 ### docker-build
 
-Build the development Docker image using buildx.
+Build the development Docker image using docker compose.
 
 ```bash
-docker buildx build -t gnome-network-ansible .
+docker compose build
 ```
 
 ### docker-dev
@@ -111,7 +111,7 @@ docker buildx build -t gnome-network-ansible .
 Run an interactive development shell in Docker.
 
 ```bash
-docker run -it --rm -v "$(pwd):/data" -v /var/run/docker.sock:/var/run/docker.sock -v ~/.ssh:/root/.ssh:ro -w /data gnome-network-ansible
+docker compose run --rm ansible-dev
 ```
 
 ### molecule-test
@@ -121,13 +121,15 @@ Usage: `xc molecule-test <role-name>`
 Example: `xc molecule-test docker`
 
 ```bash
-docker run --rm -v "$(pwd):/data" -v /var/run/docker.sock:/var/run/docker.sock -w /data gnome-network-ansible bash -c "cd roles/$1 && molecule test"
+docker compose run --rm ansible-dev bash -c "cd roles/$1 && molecule test"
 ```
 
 ### provision
 
 Run Ansible provisioning playbook.
 Usage: `xc provision [check]` - pass "check" as argument for dry-run
+
+Note: Uses `--network=host` for container-to-host SSH (required for stump.gnome.network).
 
 ```bash
 docker run --rm --network=host \
@@ -145,7 +147,7 @@ docker run --rm --network=host \
 Run Ansible installation playbook (for fresh Arch installs).
 
 ```bash
-docker run --rm -v "$(pwd):/data" -v /var/run/docker.sock:/var/run/docker.sock -v ~/.ssh:/root/.ssh:ro -w /data gnome-network-ansible ansible-playbook install.yml
+docker compose run --rm ansible-dev ansible-playbook install.yml
 ```
 
 ### hindsight-start
