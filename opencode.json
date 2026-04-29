@@ -9,7 +9,7 @@
       "recallBudget": "mid",
       "recallMaxTokens": 2048,
       "retainEveryNTurns": 3,
-      "bankMission": "Ansible automation for stump (COSMIC/niri) and whimsyforge (GNOME). Track role purposes, config decisions, troubleshooting history, and k8s portfolio."
+      "bankMission": "Ansible automation for deploying system configurations across Gnome Network."
     }]
   ]
 }

@@ -9,7 +9,6 @@ tags:
   - "policy"
 related:
   - "policies/INDEX.md"
-  - "workflows/update-docs.md"
   - "commands/INDEX.md"
   - "../policies/INDEX.md"
   - "../contributing.md"
@@ -56,10 +55,6 @@ For the full set of repository-wide policies (not just agent-focused ones), see 
 ## Agent workflows
 
 Task-oriented workflows for agents live under `docs/agent/workflows/`.
-
-- **Updating documentation**  
-  End-to-end workflow for updating docs safely using the Always Link policy and `.agent` tooling (inventory, classify, audit).  
-  See [`docs/agent/workflows/update-docs.md`](workflows/update-docs.md:1).
 
 Additional workflows can be added to this directory as the automation surface grows.
 

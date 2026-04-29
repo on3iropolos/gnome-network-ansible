@@ -10,8 +10,6 @@
   - **API**: http://localhost:8888 | **UI**: http://localhost:9999
   - **Tools**: `hindsight_retain`, `hindsight_recall`, `hindsight_reflect`
   - **Config**: `opencode.json` (project-level plugin config)
-  - **Docs retained**: 13 canonical docs (Tier 1: 6 essential, Tier 2: 7 supporting)
-  - **Migration**: `.agent/` archived to `.agent.archived/` (replaced by Hindsight)
 
 ## Agent Skills & Commands
 
@@ -23,16 +21,13 @@
 
 ### Skills (load with `skill()`)
 
-- **[update-docs](.opencode/skills/update-docs/SKILL.md)**: Complete workflow for updating documentation
-- **[canonical-docs](.opencode/skills/canonical-docs/SKILL.md)**: Always Link policy definition
 - **[github-branch-management](.opencode/skills/github-branch-management/SKILL.md)**: Branch and commit conventions
 - **[github-issue-management](.opencode/skills/github-issue-management/SKILL.md)**: GitHub Issues CRUD, labels, milestones
 
 ## Key Rules
 
 1. Use `docs/` for canonical docs - don't duplicate (Always Link policy)
-2. Use update-docs skill for doc changes
-3. Run `/doc-audit` after doc changes
+2. Run `/doc-audit` after doc changes
 4. User instructions win over policies
 5. Hindsight memories persist across sessions - check recall before asking
 6. Prefer `hindsight_reflect` for reasoned responses using bank's disposition

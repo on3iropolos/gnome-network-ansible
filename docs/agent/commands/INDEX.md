@@ -9,7 +9,6 @@ tags:
   - "documentation"
 related:
   - "../INDEX.md"
-  - "../workflows/update-docs.md"
   - "../policies/INDEX.md"
 owner: "Gnome Network Ansible maintainers"
 last_reviewed: "2026-02-23"
@@ -18,7 +17,7 @@ canonical_url: "docs/agent/commands/INDEX.md"
 
 # Agent Commands Index
 
-This index lists the primary commands and scripts that AI agents should use when working with documentation and policies in this repository. It complements the workflow described in [`docs/agent/workflows/update-docs.md`](../workflows/update-docs.md:1).
+This index lists the primary commands and scripts that AI agents should use when working with documentation and policies in this repository.
 
 ## Documentation Commands
 
@@ -47,19 +46,6 @@ Use these commands (type `/` followed by the command name):
 - Purpose: Audits links across docs for broken links, oversize docs, and duplicates
 - Usage: `/doc-audit` or `python3 .opencode/scripts/audit.py`
 - Output: Writes to `.agent/tmp/audit.json` and `docs/audit.json`
-
-## Agent Skills
-
-For the complete documentation workflow, use the [update-docs](../../../.opencode/skills/update-docs/SKILL.md) skill:
-
-```
-skill({ name: "update-docs" })
-```
-
-Other available skills:
-
-- [canonical-docs](../../../.opencode/skills/canonical-docs/SKILL.md): Always Link policy
-- [agent-instructions](../../../.opencode/skills/agent-instructions/SKILL.md): General agent rules
 
 ## Working directory and logging
 

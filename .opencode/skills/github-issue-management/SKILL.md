@@ -684,4 +684,3 @@ If you're unsure how to accomplish a task:
 ## Related
 
 - [github-branch-management](../github-branch-management): Branch and PR management
-- [canonical-docs](../canonical-docs): Documentation system
