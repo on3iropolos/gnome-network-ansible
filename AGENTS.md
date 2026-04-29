@@ -5,10 +5,13 @@
 - **Start here**: [`docs/agent/INDEX.md`](docs/agent/INDEX.md:1)
 - **Contributing**: [`docs/contributing.md`](docs/contributing.md:1)
 - **Always Link policy**: [`docs/agent/policies/always-link.md`](docs/agent/policies/always-link.md:1)
-- **Hindsight**: Memory plugin auto-recalls on session start, auto-retains on idle
-  - Bank: `gnome-network-ansible`
-  - API: http://localhost:8888 | UI: http://localhost:9999
-  - Tools: `hindsight_retain`, `hindsight_recall`, `hindsight_reflect`
+- **Hindsight Memory**: Auto-recalls on session start, auto-retains on idle
+  - **Bank**: `gnome-network-ansible` (shared across all workstations)
+  - **API**: http://localhost:8888 | **UI**: http://localhost:9999
+  - **Tools**: `hindsight_retain`, `hindsight_recall`, `hindsight_reflect`
+  - **Config**: `opencode.json` (project-level plugin config)
+  - **Docs retained**: 13 canonical docs (Tier 1: 6 essential, Tier 2: 7 supporting)
+  - **Migration**: `.agent/` archived to `.agent.archived/` (replaced by Hindsight)
 
 ## Agent Skills & Commands
 
@@ -27,7 +30,10 @@
 
 ## Key Rules
 
-1. Use `docs/` for canonical docs - don't duplicate
+1. Use `docs/` for canonical docs - don't duplicate (Always Link policy)
 2. Use update-docs skill for doc changes
 3. Run `/doc-audit` after doc changes
 4. User instructions win over policies
+5. Hindsight memories persist across sessions - check recall before asking
+6. Prefer `hindsight_reflect` for reasoned responses using bank's disposition
+7. Use `hindsight_recall` for quick fact lookup, `hindsight_retain` for storing insights
