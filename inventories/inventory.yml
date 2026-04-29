@@ -5,4 +5,6 @@ all:
         # whimsyforge.gnome.network:
         #   ansible_connection: local
         stump.gnome.network:
-          ansible_connection: local
+          # Provision via SSH from container to host (localhost)
+          # ansible_connection: local  # Removed: uses SSH by default
+          ansible_user: "{{ lookup('env', 'USER') | default('root', true) }}"

@@ -5,6 +5,8 @@ Automated configuration for Arch Linux workstations.
 ## Requirements
 
 - Ansible: `pacman -S ansible` or `pip install ansible`
+- [xc](https://xc.sh/) - Task runner (install via AUR: `paru -S xc-bin`)
+- Docker with compose plugin (`docker compose` v2, install via `pacman -S docker-buildx` if missing)
 - Access to target machine (local or SSH)
 
 ## Setup
@@ -55,10 +57,136 @@ For Kubernetes demonstrations and portfolio showcase, see:
 
 ## Development
 
+Tasks are managed via [xc](https://xc.sh/) task runner. Run `xc` without arguments for the interactive task picker.
+
 ```bash
-make setup      # Install deps and pre-commit hooks
-make lint      # Run ansible-lint
-cd roles/<role> && molecule test  # Test a role
+# Install pre-commit hooks
+xc setup
+
+# Run linter
+xc lint
+
+# Build development Docker image
+xc docker-build
+
+# Run interactive dev shell in Docker
+xc docker-dev
+
+# Test a role with Molecule (local)
+cd roles/<role> && molecule test
+
+# Or use xc for Molecule
+xc molecule-test <role-name>
 ```
+
+Open `xc` without arguments for interactive task picker.
+
+## Tasks
+
+### setup
+
+Install pre-commit hooks.
+
+```bash
+docker run --rm -v "$(pwd):/data" -v ~/.gitconfig:/root/.gitconfig -w /data gnome-network-ansible pre-commit install
+```
+
+### lint
+
+Run ansible-lint on all playbooks and roles.
+
+```bash
+docker run --rm -v "$(pwd):/data" -w /data gnome-network-ansible ansible-lint install.yml provision.yml roles/
+```
+
+### docker-build
+
+Build the development Docker image.
+
+```bash
+docker compose build
+```
+
+### docker-dev
+
+Run an interactive development shell in Docker.
+
+```bash
+docker compose run --rm ansible-dev
+```
+
+### molecule-test
+
+Run Molecule tests for a specific role.
+Usage: `xc molecule-test <role-name>`
+Example: `xc molecule-test docker`
+
+```bash
+docker run --rm -v "$(pwd):/data" -v /var/run/docker.sock:/var/run/docker.sock -w /data gnome-network-ansible bash -c "cd roles/$1 && molecule test"
+```
+
+### provision
+
+Run Ansible provisioning playbook.
+Usage: `xc provision [check]` - pass "check" as argument for dry-run
+
+```bash
+docker run --rm --network=host \
+  -v "$(pwd):/data" \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v ~/.ssh:/root/.ssh:ro \
+  -e USER="$(whoami)" \
+  --entrypoint /bin/bash \
+  gnome-network-ansible \
+  -c "ansible-galaxy collection install -r requirements.yml && ansible-playbook provision.yml ${1:+--$1}"
+```
+
+### install
+
+Run Ansible installation playbook (for fresh Arch installs).
+
+```bash
+docker compose run --rm -v ~/.ssh:/root/.ssh:ro gnome-network-ansible ansible-playbook install.yml
+```
+
+### hindsight-start
+
+Start Hindsight memory service via Docker.
+
+```bash
+docker run -d --name hindsight \
+  -p 8888:8888 -p 9999:9999 \
+  --env-file .env \
+  -e HINDSIGHT_API_LLM_PROVIDER=gemini \
+  -v hindsight-data:/home/hindsight/.pg0 \
+  --restart unless-stopped \
+  ghcr.io/vectorize-io/hindsight:latest
+```
+
+### hindsight-stop
+
+Stop and remove Hindsight service.
+
+```bash
+docker stop hindsight && docker rm hindsight
+```
+
+### hindsight-logs
+
+View Hindsight logs.
+
+```bash
+docker logs -f hindsight
+```
+
+### hindsight-migrate
+
+Migrate `.agent/` memories to Hindsight.
+
+```bash
+python scripts/migrate-to-hindsight.py
+```
+
+## Issue Tracking with Beads (bd)
 
 Full documentation: see `docs/` directory.
