@@ -28,7 +28,7 @@ Add or update docs when you:
 
 Before writing anything new, **search for an existing canonical doc** that covers the concept. If one exists, update it or add a link stub instead of creating a second full explanation.
 
-See the Always Link policy for details: [Always Link policy](docs/policies/always-link.md).
+See the Always Link policy for details: [Always Link policy](agent/policies/always-link.md).
 
 ## File placement and naming
 
@@ -41,6 +41,7 @@ Examples:
 
 - `docs/roles/network-role-overview.md`
 - `docs/troubleshooting/molecule-common-failures.md`
+- `docs/agent/policies/agent-workspace.md`
 
 If you are unsure which subject to use, pick the one that best matches the dominant topic.
 

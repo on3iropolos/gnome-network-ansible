@@ -11,7 +11,7 @@ tags:
 related:
   - "../contributing.md"
   - "../how-to/documenting-roles-and-repository.md"
-  - "always-link.md"
+  - "../agent/policies/always-link.md"
   - "../architecture/mermaid-diagram-guidelines.md"
 owner: "Gnome Network Ansible maintainers"
 last_reviewed: "2025-11-20"
@@ -27,7 +27,7 @@ Use the docs linked here as the canonical references for **what** must be docume
 
 ## Core documentation model
 
-- [`Always Link documentation policy`](always-link.md:1)  
+- [`Always Link documentation policy`](../agent/policies/always-link.md:1)  
   Canonical definition of the documentation model:
   - Exactly one canonical doc per concept.
   - Bite-sized documents with clear front matter.

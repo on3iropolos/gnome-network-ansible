@@ -21,12 +21,12 @@ source: "docs/policies/documentation.md"
 
 > Source: This guide was migrated from the former "Documentation Policy" that previously lived under `docs/policies/documentation.md`.
 
-This guide explains how to document Ansible roles, repository structure, and non-obvious code in this repository. It builds on the Always Link system (see Beads issue `gnome-network-ansible-3s`) and the contributing guide in [`docs/contributing.md`](../contributing.md:1).
+This guide explains how to document Ansible roles, repository structure, and non-obvious code in this repository. It builds on the Always Link system described in [`docs/agent/policies/always-link.md`](../agent/policies/always-link.md:1) and the contributing guide in [`docs/contributing.md`](../contributing.md:1).
 
 ## Scope and relationship to Always Link
 
 - Use this document for **what must be documented** in roles and top-level files.
-- See Beads issue `gnome-network-ansible-3s` for **how docs are organized** (canonical docs, link stubs, front matter).
+- Use [`docs/agent/policies/always-link.md`](../agent/policies/always-link.md:1) for **how docs are organized** (canonical docs, link stubs, front matter).
 - Use [`docs/contributing.md`](../contributing.md:1) for **how to add or update docs** within the `docs/` tree.
 
 All new documentation work should:
