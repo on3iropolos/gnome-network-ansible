@@ -100,10 +100,10 @@ docker run --rm -v "$(pwd):/data" -w /data gnome-network-ansible ansible-lint in
 
 ### docker-build
 
-Build the development Docker image.
+Build the development Docker image using buildx.
 
 ```bash
-docker build -t gnome-network-ansible .
+docker buildx build -t gnome-network-ansible .
 ```
 
 ### docker-dev
