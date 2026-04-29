@@ -6,7 +6,6 @@ Automated configuration for Arch Linux workstations.
 
 - Ansible: `pacman -S ansible` or `pip install ansible`
 - [xc](https://xc.sh/) - Task runner (install via AUR: `paru -S xc-bin`)
-- Docker with compose plugin (`docker compose` v2, install via `pacman -S docker-buildx` if missing)
 - Access to target machine (local or SSH)
 
 ## Setup
@@ -85,10 +84,10 @@ Open `xc` without arguments for interactive task picker.
 
 ### setup
 
-Install pre-commit hooks.
+Install pre-commit hooks (runs locally, requires pre-commit: `pip install pre-commit`).
 
 ```bash
-docker run --rm -v "$(pwd):/data" -v ~/.gitconfig:/root/.gitconfig -w /data gnome-network-ansible pre-commit install
+pre-commit install
 ```
 
 ### lint
@@ -104,7 +103,7 @@ docker run --rm -v "$(pwd):/data" -w /data gnome-network-ansible ansible-lint in
 Build the development Docker image.
 
 ```bash
-docker compose build
+docker build -t gnome-network-ansible .
 ```
 
 ### docker-dev
@@ -112,7 +111,7 @@ docker compose build
 Run an interactive development shell in Docker.
 
 ```bash
-docker compose run --rm ansible-dev
+docker run -it --rm -v "$(pwd):/data" -v /var/run/docker.sock:/var/run/docker.sock -v ~/.ssh:/root/.ssh:ro -w /data gnome-network-ansible
 ```
 
 ### molecule-test
@@ -146,7 +145,7 @@ docker run --rm --network=host \
 Run Ansible installation playbook (for fresh Arch installs).
 
 ```bash
-docker compose run --rm -v ~/.ssh:/root/.ssh:ro gnome-network-ansible ansible-playbook install.yml
+docker run --rm -v "$(pwd):/data" -v /var/run/docker.sock:/var/run/docker.sock -v ~/.ssh:/root/.ssh:ro -w /data gnome-network-ansible ansible-playbook install.yml
 ```
 
 ### hindsight-start

@@ -5,7 +5,11 @@ RUN apk --no-cache add \
     bash \
     git \
     openssh-client \
-    docker-cli
+    docker-cli \
+    py3-pip
+
+# Install pre-commit for setup task
+RUN pip3 install --no-cache-dir --break-system-packages pre-commit
 
 WORKDIR /data
 
