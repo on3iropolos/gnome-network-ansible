@@ -13,12 +13,6 @@
 
 ## Agent Skills & Commands
 
-### Commands (run with `/command-name`)
-
-- **`/doc-inventory`**: Scan and inventory documentation
-- **`/doc-classify`**: Classify docs by subject/type/scope
-- **`/doc-audit`**: Audit docs for broken links
-
 ### Skills (load with `skill()`)
 
 - **[github-branch-management](.opencode/skills/github-branch-management/SKILL.md)**: Branch and commit conventions
@@ -27,8 +21,7 @@
 ## Key Rules
 
 1. Use `docs/` for canonical docs - don't duplicate (Always Link policy)
-2. Run `/doc-audit` after doc changes
-4. User instructions win over policies
+2. User instructions win over policies
 5. Hindsight memories persist across sessions - check recall before asking
 6. Prefer `hindsight_reflect` for reasoned responses using bank's disposition
 7. Use `hindsight_recall` for quick fact lookup, `hindsight_retain` for storing insights

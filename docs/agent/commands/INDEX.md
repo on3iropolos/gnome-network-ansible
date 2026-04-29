@@ -1,6 +1,6 @@
 ---
 title: "Agent Commands Index"
-summary: "Index of agent-facing commands and scripts for working with documentation and policies in this repository."
+summary: "Index of agent-facing commands for working with documentation and policies in this repository."
 type: "reference"
 scope: "repo"
 tags:
@@ -11,45 +11,17 @@ related:
   - "../INDEX.md"
   - "../policies/INDEX.md"
 owner: "Gnome Network Ansible maintainers"
-last_reviewed: "2026-02-23"
+last_reviewed: "2026-04-29"
 canonical_url: "docs/agent/commands/INDEX.md"
 ---
 
 # Agent Commands Index
 
-This index lists the primary commands and scripts that AI agents should use when working with documentation and policies in this repository.
-
-## Documentation Commands
-
-Use these commands (type `/` followed by the command name):
-
-### /doc-inventory
-
-- Command file: [doc-inventory](../../../.opencode/commands/doc-inventory.md)
-- Script: `.opencode/scripts/inventory.py`
-- Purpose: Scans markdown documentation and produces an inventory of "documentation units" with signatures and source pointers.
-- Usage: `/doc-inventory` or `python3 .opencode/scripts/inventory.py`
-- Output: Writes to `.agent/tmp/inventory.yaml`
-
-### /doc-classify
-
-- Command file: [doc-classify](../../../.opencode/commands/doc-classify.md)
-- Script: `.opencode/scripts/classify.py`
-- Purpose: Consumes the inventory output and classifies units by subject, type, scope, and tags
-- Usage: `/doc-classify` or `python3 .opencode/scripts/classify.py`
-- Output: Writes to `.agent/tmp/classified.yaml`
-
-### /doc-audit
-
-- Command file: [doc-audit](../../../.opencode/commands/doc-audit.md)
-- Script: `.opencode/scripts/audit.py`
-- Purpose: Audits links across docs for broken links, oversize docs, and duplicates
-- Usage: `/doc-audit` or `python3 .opencode/scripts/audit.py`
-- Output: Writes to `.agent/tmp/audit.json` and `docs/audit.json`
+This index lists the primary commands that AI agents should use when working with documentation and policies in this repository.
 
 ## Working directory and logging
 
-When running any of these commands as part of an automated agent task:
+When running automated agent tasks:
 
 - Follow the agent workspace policy in [`agent-workspace.md`](../policies/agent-workspace.md:1).
 - Follow the agent logging policy in [`agent-logging.md`](../policies/agent-logging.md:1).
