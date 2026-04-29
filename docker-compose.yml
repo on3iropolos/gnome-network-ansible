@@ -28,7 +28,8 @@ services:
       - "8888:8888"  # API
       - "9999:9999"  # Control Plane
     environment:
-      - HINDSIGHT_API_LLM_API_KEY=${OPENAI_API_KEY}
+      - HINDSIGHT_API_LLM_PROVIDER=gemini
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     volumes:
       - ${HOME}/.hindsight-docker:/home/hindsight/.pg0
 
