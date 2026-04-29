@@ -1,4 +1,4 @@
-.PHONY: lint help setup
+.PHONY: lint help setup hindsight-start hindsight-stop hindsight-logs hindsight-migrate
 
 ANSIBLE_PLAYBOOKS := install.yml provision.yml
 
@@ -10,3 +10,15 @@ setup: ## Install pre-commit hooks
 
 lint: ## Run ansible-lint on all playbooks and roles
 	ansible-lint $(ANSIBLE_PLAYBOOKS) roles/
+
+hindsight-start: ## Start Hindsight via Docker Compose
+	docker compose up -d hindsight
+
+hindsight-stop: ## Stop Hindsight
+	docker compose stop hindsight
+
+hindsight-logs: ## View Hindsight logs
+	docker compose logs -f hindsight
+
+hindsight-migrate: ## Migrate .agent/ memories to Hindsight
+	python scripts/migrate-to-hindsight.py
