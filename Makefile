@@ -11,14 +11,21 @@ setup: ## Install pre-commit hooks
 lint: ## Run ansible-lint on all playbooks and roles
 	ansible-lint $(ANSIBLE_PLAYBOOKS) roles/
 
-hindsight-start: ## Start Hindsight via Docker Compose
-	docker compose up -d hindsight
+hindsight-start: ## Start Hindsight via Docker
+	docker run -d --name hindsight \
+		-p 8888:8888 -p 9999:9999 \
+		--env-file .env \
+		-e HINDSIGHT_API_LLM_PROVIDER=gemini \
+		-e HINDSIGHT_API_LLM_API_KEY=${GEMINI_API_KEY} \
+		-v hindsight-data:/home/hindsight/.pg0 \
+		--restart unless-stopped \
+		ghcr.io/vectorize-io/hindsight:latest
 
 hindsight-stop: ## Stop Hindsight
-	docker compose stop hindsight
+	docker stop hindsight && docker rm hindsight
 
 hindsight-logs: ## View Hindsight logs
-	docker compose logs -f hindsight
+	docker logs -f hindsight
 
 hindsight-migrate: ## Migrate .agent/ memories to Hindsight
 	python scripts/migrate-to-hindsight.py
