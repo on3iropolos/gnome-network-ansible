@@ -38,7 +38,7 @@
     name: "{{ ansible_user }}"
     groups: docker
     append: true
-  when: ansible_user is defined and "'docker' not in user_groups.stdout"
+  when: ansible_user is defined and "'docker' not in user_groups.stdout" | bool
   tags: [docker]
 
 - name: Verification

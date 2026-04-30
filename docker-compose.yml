@@ -1,27 +1,4 @@
 services:
-  ansible-dev:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        GLIBC_ARCH: x86_64 # or aarch64 for ARM64 builds
-    volumes:
-      - .:/data
-      - ${HOME}/.ssh/github_ssh_key.pub:/root/.ssh/user_public_key.pub:ro
-      - ~/.gitconfig:/root/.gitconfig:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock:rw
-    stdin_open: true
-    tty: true
-    group_add:
-      - "128" # Host libvirt group GID
-    environment:
-      ANSIBLE_CONFIG: /data/ansible.cfg
-      SSH_PASSWORD: "${SSH_PASSWORD}"
-      ENCRYPTION_PASSWORD: "${ENCRYPTION_PASSWORD}"
-      USER_PASSWORD: "${USER_PASSWORD}"
-    working_dir: /data
-
   hindsight:
     image: ghcr.io/vectorize-io/hindsight:latest
     ports:
@@ -36,4 +13,3 @@ services:
 
 volumes:
   hindsight-data:
-

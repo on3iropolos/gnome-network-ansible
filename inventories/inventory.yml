@@ -6,3 +6,4 @@ all:
         #   ansible_connection: local
         stump.gnome.network:
           ansible_connection: local
+          ansible_user: "{{ lookup('env', 'USER') | default('root', true) }}"
