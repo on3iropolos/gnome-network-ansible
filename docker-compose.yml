@@ -1,23 +1,4 @@
 services:
-  ansible-dev:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/data
-      - ${HOME}/.ssh:/root/.ssh:ro
-      - ~/.gitconfig:/root/.gitconfig:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    stdin_open: true
-    tty: true
-    environment:
-      ANSIBLE_CONFIG: /data/ansible.cfg
-      SSH_PASSWORD: "${SSH_PASSWORD}"
-      ENCRYPTION_PASSWORD: "${ENCRYPTION_PASSWORD}"
-      USER_PASSWORD: "${USER_PASSWORD}"
-      USER: "${USER}"
-    working_dir: /data
-
   hindsight:
     image: ghcr.io/vectorize-io/hindsight:latest
     ports:
