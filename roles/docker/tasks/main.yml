@@ -6,13 +6,6 @@
     state: present
   tags: [docker]
 
-- name: Create Docker config directory
-  ansible.builtin.file:
-    path: /etc/docker
-    state: directory
-    mode: "0755"
-  tags: [docker]
-
 - name: Configure Docker daemon address pool
   ansible.builtin.copy:
     dest: /etc/docker/daemon.json

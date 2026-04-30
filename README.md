@@ -4,16 +4,29 @@ Automated configuration for Arch Linux workstations.
 
 ## Requirements
 
-- Ansible: `pacman -S ansible`
-- [xc](https://xc.sh/) - Task runner (install via AUR: `paru -S xc-bin`)
-- Python packages: `pip install -r requirements.txt`
-- Ansible collections: `ansible-galaxy collection install -r requirements.yml`
+### For Running Ansible (Native)
+- Ansible stack: `pacman -S ansible ansible-lint`
+- [xc](https://xc.sh/) - Task runner (AUR: `paru -S xc-bin`)
+
+### For Molecule Testing (Optional)
+- Docker: `pacman -S docker`
+- Molecule: `pacman -S molecule python-docker`
+- Docker driver: `paru -S molecule-plugins` (AUR)
+
+### Ansible Collections
+- `ansible-galaxy collection install -r requirements.yml`
 
 ## Setup
 
 ```bash
-pip install -r requirements.txt
+# Install system packages
+pacman -S ansible ansible-lint molecule python-docker pre-commit
+paru -S molecule-plugins  # AUR helper required
+
+# Install Ansible collections
 ansible-galaxy collection install -r requirements.yml
+
+# Setup vault
 cp inventories/group_vars/workstations/vault.yml.example \
    inventories/group_vars/workstations/vault.yml
 ansible-vault edit inventories/group_vars/workstations/vault.yml
