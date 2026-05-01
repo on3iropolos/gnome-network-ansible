@@ -5,10 +5,10 @@ ANSIBLE_CONFIG = "{{ config_root }}/ansible.cfg"
 [tools]
 python = "3.11"
 uv = "latest"
-ansible = { version = "latest", uvx = true }
-ansible-lint = { version = "latest", uvx = true }
-molecule = { version = "latest", uvx = true }
-yamllint = { version = "latest", uvx = true }
+"pipx:ansible-core" = "latest"
+"pipx:ansible-lint" = "latest"
+"pipx:molecule" = "latest"
+"pipx:yamllint" = "latest"
 
 [tasks.lint]
 description = "Run ansible-lint on all playbooks and roles"

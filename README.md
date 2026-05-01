@@ -14,13 +14,8 @@ Automated configuration for Arch Linux workstations.
 # Install mise (if not already installed)
 curl https://mise.run | sh
 
-# Install all tools and dependencies
-mise install
-
-# Setup vault
-cp inventories/group_vars/workstations/vault.yml.example \
-   inventories/group_vars/workstations/vault.yml
-ansible-vault edit inventories/group_vars/workstations/vault.yml
+# Complete project setup (tools, collections, vault)
+mise run setup
 ```
 
 The vault password is in `.vault_password` (gitignored).
@@ -29,10 +24,10 @@ The vault password is in `.vault_password` (gitignored).
 
 ```bash
 # Dry-run
-ansible-playbook provision.yml --check --diff
+mise run provision check
 
 # Apply
-ansible-playbook provision.yml
+mise run provision
 ```
 
 ## Playbooks
@@ -61,35 +56,13 @@ For Kubernetes demonstrations and portfolio showcase, see:
 
 ## Development
 
-Tasks are managed via [mise](https://mise.jdx.dev/). Run `mise tasks` to list available tasks.
+Tasks are managed via [mise](https://mise.jdx.dev/). Run `mise tasks` to list all available tasks.
 
 ```bash
-# Install all tools (ansible, molecule, etc.)
-mise install
+# List all tasks
+mise tasks
 
-# Run linter
-mise run lint
-
-# Test a role with Molecule
-mise run molecule-test <role-name>
-
-# Run provisioning
-mise run provision
-
-# Setup complete environment
-mise run setup
+# Run any task
+mise run <task-name>
 ```
-
-## Available Tasks
-
-| Task | Description |
-|------|-------------|
-| `mise run lint` | Run ansible-lint on all playbooks and roles |
-| `mise run molecule-test <role>` | Run Molecule tests for a specific role |
-| `mise run provision [check]` | Run Ansible provisioning (pass "check" for dry-run) |
-| `mise run install` | Run installation playbook (fresh Arch installs) |
-| `mise run setup` | Complete project setup (tools, collections, vault) |
-| `mise run hindsight-start` | Start Hindsight memory service |
-| `mise run hindsight-stop` | Stop Hindsight service |
-| `mise run hindsight-logs` | View Hindsight logs |
 
