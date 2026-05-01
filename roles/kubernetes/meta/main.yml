@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  role_name: kubernetes
+  author: Gnome Network Ansible project
+  description: Sets up a local k3d Kubernetes cluster and deploys Hindsight
+  license: MIT
+  min_ansible_version: "2.9"
+  platforms:
+    - name: ArchLinux
+      versions:
+        - all
+  galaxy_tags:
+    - kubernetes
+    - k3d
+    - hindsight
+
+dependencies:
+  - role: docker

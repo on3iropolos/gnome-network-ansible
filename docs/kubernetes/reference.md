@@ -9,10 +9,9 @@ tags:
   - "reference"
 related:
   - "getting-started.md"
-  - "kubernetes/README.md"
   - "../roles/kubernetes/README.md"
 owner: "Gnome Network Ansible maintainers"
-last_reviewed: "2026-04-27"
+last_reviewed: "2026-05-01"
 canonical_url: "docs/kubernetes/reference.md"
 ---
 
@@ -38,6 +37,7 @@ Host System
 │  │  - kubelet                  │  │
 │  │  - kube-proxy              │  │
 │  │  - Pods                    │  │
+│  │    - Hindsight Deployment  │  │
 │  └───────────────────────────────┘  │
 │  ┌───────────────────────────────┐  │
 │  │  Add-ons                     │  │
@@ -46,6 +46,9 @@ Host System
 │  │  - metrics-server          │  │
 │  └───────────────────────────────┘  │
 └─────────────────────────────────────┘
+        │                    │
+        ▼                    ▼
+    :8888 (API)         :9999 (Control)
 ```
 
 ## Cluster Components
@@ -59,21 +62,36 @@ Host System
 | Traefik | Ingress controller for HTTP routing |
 | CoreDNS | Cluster DNS for service discovery |
 
+## Hindsight Workload
+
+| Resource | Type | Purpose |
+|----------|------|---------|
+| `hindsight` namespace | Namespace | Isolates Hindsight resources |
+| `hindsight-env` | Secret | Stores environment variables from `.env` |
+| `hindsight-data` | PVC | Persistent storage for Hindsight data |
+| `hindsight` | Deployment | Runs the Hindsight container |
+| `hindsight` | Service (LoadBalancer) | Exposes API (8888) and Control Plane (9999) |
+
 ## Directory Structure
 
 ```
-kubernetes/
-├── manifests/         # Raw YAML manifests
-│   ├── nginx-deployment.yaml
-│   ├── nginx-service.yaml
-│   ├── nginx-ingress.yaml
-│   └── app-configmap.yaml
-├── helm-charts/        # Helm charts
-│   └── sample-app/
-├── playbooks/         # Ansible operations
-│   ├── deploy-app.yml
-│   └── scale.yml
-└── README.md
+roles/kubernetes/
+├── meta/main.yml              # Role metadata and dependencies
+├── tasks/
+│   ├── main.yml               # Entry point
+│   ├── install_k3d.yml        # Install k3d binary
+│   ├── install_tools.yml      # Install kubectl, helm, kubectx
+│   ├── create_cluster.yml     # Create k3d cluster
+│   ├── deploy_hindsight.yml   # Deploy Hindsight workload
+│   └── verify.yml             # Verify installation
+├── templates/
+│   ├── hindsight-namespace.yaml.j2
+│   ├── hindsight-deployment.yaml.j2
+│   ├── hindsight-service.yaml.j2
+│   └── hindsight-pvc.yaml.j2
+├── defaults/main.yml          # Role variables
+├── README.md
+└── molecule/                  # Integration tests
 ```
 
 ## Key Commands
@@ -81,7 +99,7 @@ kubernetes/
 ### Cluster Management
 
 ```bash
-k3d cluster create dev-cluster --servers 1 --agents 0 --port "80:80"
+k3d cluster create dev-cluster --servers 1 --agents 0 --port "80:80" --port "8888:8888@loadbalancer"
 k3d cluster list
 k3d cluster start dev-cluster
 k3d cluster stop dev-cluster
@@ -93,8 +111,8 @@ k3d cluster delete dev-cluster
 ```bash
 kubectl get nodes                    # List nodes
 kubectl get pods -A                  # List all pods
-kubectl get svc -A                   # List services
-kubectl get ingress -A                # List ingresses
+kubectl get pods -n hindsight        # List Hindsight pods
+kubectl get svc -n hindsight         # List Hindsight services
 kubectl get all -n <namespace>      # List all resources in namespace
 kubectl apply -f <file.yaml>        # Apply manifest
 kubectl delete -f <file.yaml>       # Delete manifest

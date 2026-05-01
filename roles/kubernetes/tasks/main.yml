@@ -1,14 +1,21 @@
 ---
 - name: Install k3d
   ansible.builtin.include_tasks: install_k3d.yml
+  tags: [kubernetes]
 
 - name: Install Kubernetes tools
   ansible.builtin.include_tasks: install_tools.yml
+  tags: [kubernetes]
 
 - name: Create k3d cluster
   ansible.builtin.include_tasks: create_cluster.yml
+  tags: [kubernetes]
+
+- name: Deploy Hindsight
+  ansible.builtin.include_tasks: deploy_hindsight.yml
+  tags: [kubernetes, hindsight]
 
 - name: Verification
   ansible.builtin.include_tasks: verify.yml
-  tags: [verify]
+  tags: [kubernetes, verify]
   when: verify_enabled

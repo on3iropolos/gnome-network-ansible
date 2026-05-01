@@ -36,16 +36,16 @@ description = "Run Ansible installation playbook (fresh Arch installs)"
 run = "ansible-playbook install.yml"
 
 [tasks.hindsight-start]
-description = "Start Hindsight memory service via Docker Compose"
-run = "docker compose up -d hindsight"
+description = "Start Hindsight memory service via Kubernetes"
+run = "kubectl scale deployment/hindsight --replicas=1 -n hindsight"
 
 [tasks.hindsight-stop]
 description = "Stop Hindsight service"
-run = "docker compose stop hindsight"
+run = "kubectl scale deployment/hindsight --replicas=0 -n hindsight"
 
 [tasks.hindsight-logs]
 description = "View Hindsight logs"
-run = "docker compose logs -f hindsight"
+run = "kubectl logs -f deployment/hindsight -n hindsight"
 
 [tasks.project-setup]
 description = "Complete project setup (install tools, collections, setup vault)"

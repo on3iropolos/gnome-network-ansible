@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hindsight
+  namespace: {{ hindsight_namespace }}
+  labels:
+    app: hindsight
+spec:
+  replicas: {{ hindsight_replicas }}
+  selector:
+    matchLabels:
+      app: hindsight
+  template:
+    metadata:
+      labels:
+        app: hindsight
+    spec:
+      containers:
+        - name: hindsight
+          image: {{ hindsight_image }}
+          ports:
+            - containerPort: 8888
+              name: api
+            - containerPort: 9999
+              name: control-plane
+          envFrom:
+            - secretRef:
+                name: hindsight-env
+          env:
+            - name: HINDSIGHT_API_LLM_PROVIDER
+              value: gemini
+          volumeMounts:
+            - name: hindsight-data
+              mountPath: /home/hindsight/.pg0
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: hindsight-data
+          persistentVolumeClaim:
+            claimName: hindsight-data

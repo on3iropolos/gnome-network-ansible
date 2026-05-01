@@ -4,6 +4,7 @@
   register: k3d_check
   changed_when: false
   failed_when: false
+  tags: [kubernetes]
 
 - name: Get latest k3d version
   ansible.builtin.uri:
@@ -12,10 +13,12 @@
   register: k3d_latest_release
   when: k3d_version == "latest"
   failed_when: false
+  tags: [kubernetes]
 
 - name: Set k3d version fact
   ansible.builtin.set_fact:
     k3d_version_to_install: "{{ k3d_version if k3d_version != 'latest' else (k3d_latest_release.json.tag_name | default('v5.7.0', true)) }}"
+  tags: [kubernetes]
 
 - name: Download k3d
   ansible.builtin.get_url:
@@ -24,3 +27,4 @@
     mode: "0755"
     force: "{{ k3d_version != 'latest' }}"
   when: k3d_check.rc != 0 or k3d_version != 'latest'
+  tags: [kubernetes]

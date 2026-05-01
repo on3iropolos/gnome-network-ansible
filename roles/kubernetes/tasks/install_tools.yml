@@ -6,3 +6,4 @@
       - helm
       - kubectx
     state: present
+  tags: [kubernetes]

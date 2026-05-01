@@ -1,0 +1,83 @@
+---
+- name: Check if .env file exists
+  ansible.builtin.stat:
+    path: "{{ hindsight_env_file }}"
+  register: env_file_stat
+  tags: [kubernetes, hindsight]
+
+- name: Fail if .env file is missing
+  ansible.builtin.fail:
+    msg: ".env file not found at {{ hindsight_env_file }}. Create it with HINDSIGHT_API_LLM_API_KEY set."
+  when: not env_file_stat.stat.exists
+  tags: [kubernetes, hindsight]
+
+- name: Read .env file
+  ansible.builtin.slurp:
+    path: "{{ hindsight_env_file }}"
+  register: env_file_content
+  when: env_file_stat.stat.exists
+  tags: [kubernetes, hindsight]
+
+- name: Parse environment variables
+  ansible.builtin.set_fact:
+    env_vars: >-
+      {{
+        env_file_content['content']
+        | b64decode
+        | split('\n')
+        | select('match', '^[A-Za-z_]+=')
+        | map('regex_replace', '^(.*?)=(.*)$', '{"key": "\\1", "value": "\\2"}')
+        | list
+      }}
+  when: env_file_stat.stat.exists
+  tags: [kubernetes, hindsight]
+
+- name: Create Hindsight namespace
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'hindsight-namespace.yaml.j2') | from_yaml }}"
+  tags: [kubernetes, hindsight]
+
+- name: Create Hindsight Secret from .env
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: hindsight-env
+        namespace: "{{ hindsight_namespace }}"
+      type: Opaque
+      stringData: "{{ dict(env_vars | map(attribute='key') | zip(env_vars | map(attribute='value'))) }}"
+  when: env_file_stat.stat.exists
+  tags: [kubernetes, hindsight]
+
+- name: Create Hindsight PVC
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'hindsight-pvc.yaml.j2') | from_yaml }}"
+  tags: [kubernetes, hindsight]
+
+- name: Create Hindsight Deployment
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'hindsight-deployment.yaml.j2') | from_yaml }}"
+  tags: [kubernetes, hindsight]
+
+- name: Create Hindsight Service
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'hindsight-service.yaml.j2') | from_yaml }}"
+  tags: [kubernetes, hindsight]
+
+- name: Wait for Hindsight Deployment to be ready
+  kubernetes.core.k8s_info:
+    api_version: apps/v1
+    kind: Deployment
+    name: hindsight
+    namespace: "{{ hindsight_namespace }}"
+  register: hindsight_deploy
+  retries: 30
+  delay: 5
+  until: hindsight_deploy.resources[0].status.readyReplicas is defined and hindsight_deploy.resources[0].status.readyReplicas == hindsight_replicas
+  tags: [kubernetes, hindsight]

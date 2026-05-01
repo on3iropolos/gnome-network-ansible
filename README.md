@@ -34,25 +34,30 @@ mise run provision
 
 | Playbook | Purpose |
 |----------|---------|
-| `provision.yml` | Configure existing Arch Linux system |
+| `provision.yml` | Configure existing Arch Linux system (includes Docker + Kubernetes + Hindsight) |
 | `install.yml` | Fresh installation from Arch Live ISO |
-| `k8s.yml` | Local Kubernetes cluster (k3d) |
 
-## Kubernetes Portfolio
+## Kubernetes & Hindsight
 
-For Kubernetes demonstrations and portfolio showcase, see:
+Running `provision.yml` sets up a local k3d cluster and deploys the Hindsight memory service.
 
-- **[Getting Started](docs/kubernetes/getting-started.md)** - Setup and deploy
-- **[kubernetes/](kubernetes/)** - Manifests, Helm charts, and playbooks
+- **[Getting Started](docs/kubernetes/getting-started.md)** - Setup and usage
+- **[Reference](docs/kubernetes/reference.md)** - Architecture and commands
 
-### What's Included
+### Access Hindsight
 
-| Component | Description |
-|-----------|-------------|
-| `kubernetes/manifests/` | nginx Deployment, Service, Ingress, ConfigMap |
-| `kubernetes/helm-charts/` | Production-ready Helm chart |
-| `kubernetes/playbooks/` | Ansible playbooks for deployment operations |
-| `docs/kubernetes/` | Getting Started and Reference guides |
+| Service | URL |
+|---------|-----|
+| API | `http://localhost:8888` |
+| Control Plane | `http://localhost:9999` |
+
+### Mise Tasks
+
+```bash
+mise run hindsight-start    # Scale Hindsight to 1 replica
+mise run hindsight-stop     # Scale Hindsight to 0 replicas
+mise run hindsight-logs     # Tail Hindsight logs
+```
 
 ## Development
 
@@ -78,4 +83,3 @@ mise run <task-name>
 | `mise run hindsight-start` | Start Hindsight memory service |
 | `mise run hindsight-stop` | Stop Hindsight service |
 | `mise run hindsight-logs` | View Hindsight logs |
-
