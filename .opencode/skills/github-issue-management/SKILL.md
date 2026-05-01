@@ -118,6 +118,46 @@ gh issue create --title "New feature" --label enhancement --label feature
 gh issue create --title "Urgent" --assignee @user --milestone "v1.0"
 ```
 
+### Multiline Bodies
+
+When creating issues with multiline content, **do not use inline strings with `\n` escape sequences**. GitHub will render literal `\n` characters instead of actual line breaks, resulting in a single block of unformatted text.
+
+Use a HEREDOC to preserve multiline formatting:
+
+```bash
+gh issue create --title "<title>" --body "$(cat <<'EOF'
+First paragraph.
+
+Second paragraph with **markdown**.
+
+- Bullet point
+- Another point
+EOF
+)"
+```
+
+**Examples:**
+```bash
+gh issue create --title "Document deployment process" --body "$(cat <<'EOF'
+We need to document the deployment process for new team members.
+
+## Current State
+The deployment process is currently undocumented and relies on tribal knowledge.
+
+## Proposed Content
+- Prerequisites and environment setup
+- Step-by-step deployment instructions
+- Rollback procedures
+- Common issues and troubleshooting
+EOF
+)"
+```
+
+This approach ensures:
+- Proper line breaks and paragraph separation
+- Markdown formatting renders correctly
+- Lists, code blocks, and headers display as intended
+
 ### Interactive Create
 
 If run without flags, `gh issue create` opens an interactive editor:
@@ -583,6 +623,7 @@ gh issue list --label enhancement --json title,number | jq -r '.[] | "\(.number)
 5. **JSON for automation**: Use `--json` for scripts, jq for filtering
 6. **Search before creating**: Check for existing issues before creating duplicates
 7. **Assign relevant people**: Assignee should be the person responsible for resolution
+8. **Verify body formatting**: After creating an issue with a multiline body, verify it renders correctly on GitHub. Use HEREDOC syntax (see "Multiline Bodies" section) to ensure proper line breaks and markdown rendering.
 
 ## Common Patterns
 
