@@ -62,7 +62,9 @@
 
 - name: Add SSH keys to GCR SSH agent
   ansible.builtin.command:
-    cmd: "SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/gcr/ssh ssh-add ~/.ssh/{{ item.filename }}"
+    cmd: "ssh-add ~/.ssh/{{ item.filename }}"
+  environment:
+    SSH_AUTH_SOCK: "{{ lookup('env', 'XDG_RUNTIME_DIR') }}/gcr/ssh"
   register: ssh_add_result
   failed_when: false
   changed_when: "'Identity added' in ssh_add_result.stdout"

@@ -10,10 +10,10 @@
     - role: partition
     - role: encryption
     - role: filesystem
-    
+
     # OS Installation
     - role: pacstrap
-    
+
     # Configuration
     - role: time
     - role: locale
@@ -22,7 +22,7 @@
     - role: sshd
     - role: user
     - role: ssh_client
-    
+
     # Boot
     - role: initramfs
     - role: bootloader
@@ -38,4 +38,4 @@
       copy:
         src: "{{ playbook_dir }}/"
         dest: "{{ install_root }}/root/ansible/"
-        remote_src: yes
+        remote_src: true
