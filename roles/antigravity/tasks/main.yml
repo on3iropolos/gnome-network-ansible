@@ -1,6 +1,7 @@
 ---
 - name: Install Antigravity from AUR (Native)
   ansible.builtin.command: yay -S --noconfirm antigravity
+  become: true
   become_user: "{{ user_name }}"
   when: install_root | length == 0
   changed_when: true

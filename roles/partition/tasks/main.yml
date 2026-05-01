@@ -8,7 +8,7 @@
       fi
     done
     swapoff -a || true
-    
+
     # Wipe disk and all partitions
     sgdisk --zap-all "{{ install_drive }}"
     wipefs --force --all "{{ install_drive }}"

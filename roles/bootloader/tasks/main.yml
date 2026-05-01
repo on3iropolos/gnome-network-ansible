@@ -1,18 +1,18 @@
 ---
 - name: Configure Cryptodisk
+  when: encryption_enabled | default(true)
   block:
     - name: Enable Cryptodisk
       ansible.builtin.lineinfile:
         dest: /mnt/etc/default/grub
         line: "GRUB_ENABLE_CRYPTODISK=y"
         regexp: "^#?GRUB_ENABLE_CRYPTODISK"
-        
+
     - name: Kernel Params
       ansible.builtin.lineinfile:
         dest: /mnt/etc/default/grub
         regexp: "^#?GRUB_CMDLINE_LINUX="
         line: 'GRUB_CMDLINE_LINUX="cryptdevice={{ encryption_device }}:cryptroot:allow-discards cryptkey=/crypto_keyfile.bin"'
-  when: encryption_enabled | default(true)
 
 - name: Install GRUB (UEFI)
   ansible.builtin.command: >

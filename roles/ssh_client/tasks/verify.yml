@@ -8,7 +8,7 @@
 
 - name: Assert SSH keys exist
   ansible.builtin.assert:
-    that: 
+    that:
       - item.stat.exists
   loop: "{{ ssh_key_files.results }}"
   when: not item.skipped | default(false)
@@ -29,7 +29,7 @@
   ansible.builtin.package:
     name: "{{ ssh_client_gnome_keyring_packages }}"
     state: present
-  check_mode: yes
+  check_mode: true
   register: keyring_check
   when: ssh_client_gnome_keyring_enabled | default(false)
 

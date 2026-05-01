@@ -15,6 +15,7 @@
   when: boot_mode == 'bios'
 
 - name: Format Root (BTRFS)
+  when: filesystem_type == 'btrfs'
   block:
     - name: Mkfs BTRFS
       community.general.filesystem:
@@ -22,14 +23,14 @@
         fstype: btrfs
         opts: -L ArchLinux
         force: true
-        
+
     - name: Mount temp
       ansible.posix.mount:
         path: /mnt
         src: "{{ filesystem_root_device }}"
         fstype: btrfs
         state: mounted
-        
+
     - name: Create Subvols
       ansible.builtin.command: "btrfs subvolume create /mnt/{{ item.sub }}"
       loop: "{{ filesystem_btrfs_subvols }}"
@@ -38,7 +39,7 @@
       ansible.posix.mount:
         path: /mnt
         state: unmounted
-        
+
     - name: Mount Root (@)
       ansible.posix.mount:
         path: /mnt
@@ -46,14 +47,14 @@
         fstype: btrfs
         opts: "compress=zstd,discard=async,subvol=@"
         state: mounted
-        
+
     - name: Create Mountpoints
       ansible.builtin.file:
         path: "/mnt/{{ item.path }}"
         state: directory
       loop: "{{ filesystem_btrfs_subvols }}"
       when: item.path is defined
-      
+
     - name: Mount Subvols
       ansible.posix.mount:
         path: "/mnt/{{ item.path }}"
@@ -63,9 +64,9 @@
         state: mounted
       loop: "{{ filesystem_btrfs_subvols }}"
       when: item.path is defined
-  when: filesystem_type == 'btrfs'
 
 - name: Format Root (Ext4)
+  when: filesystem_type == 'ext4'
   block:
     - name: Mkfs Ext4
       community.general.filesystem:
@@ -79,9 +80,9 @@
         src: "{{ filesystem_root_device }}"
         fstype: ext4
         state: mounted
-  when: filesystem_type == 'ext4'
 
 - name: Mount Boot (UEFI)
+  when: boot_mode == 'uefi'
   block:
     - name: Mkdir /mnt/boot/efi
       ansible.builtin.file:
@@ -93,9 +94,9 @@
         src: "{{ filesystem_esp_device }}"
         fstype: vfat
         state: mounted
-  when: boot_mode == 'uefi'
 
 - name: Mount Boot (BIOS)
+  when: boot_mode == 'bios'
   block:
     - name: Mkdir /mnt/boot
       ansible.builtin.file:
@@ -107,7 +108,6 @@
         src: "{{ filesystem_boot_device }}"
         fstype: ext4
         state: mounted
-  when: boot_mode == 'bios'
 
 - name: Verification
   ansible.builtin.include_tasks: verify.yml

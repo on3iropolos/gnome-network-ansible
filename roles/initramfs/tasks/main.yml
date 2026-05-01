@@ -7,21 +7,22 @@
   when: initramfs_btrfs
 
 - name: Configure Encryption
+  when: initramfs_encryption
   block:
     - name: Generate Keyfile
       ansible.builtin.command: "dd if=/dev/urandom of={{ initramfs_keyfile_path }} bs=1024 count={{ initramfs_keyfile_size_kb }}"
       changed_when: true
-      
+
     - name: Secure Keyfile
       ansible.builtin.file:
         path: "{{ initramfs_keyfile_path }}"
         mode: '0000'
-        
+
     - name: Add Key to LUKS
       ansible.builtin.shell: |
          echo -n "{{ encryption_password }}" | cryptsetup luksAddKey {{ encryption_device }} {{ initramfs_keyfile_path }} -
       no_log: true
-      
+
     - name: Add Keyfile to Initramfs
       ansible.builtin.lineinfile:
         dest: /mnt/etc/mkinitcpio.conf
@@ -31,14 +32,13 @@
         # Actually, when running inside chroot, it takes path relative to chroot root.
         # But we are editing /mnt/etc/mkinitcpio.conf.
         # If we run mkinitcpio inside chroot, files should be at /crypto_keyfile.bin (relative to chroot).
-        
+
     - name: Add Encrypt Hook
       ansible.builtin.lineinfile:
         dest: /mnt/etc/mkinitcpio.conf
         regexp: ^HOOKS=
-        line: 'HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)' 
+        line: 'HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)'
         # CAUTION: destroying existing hooks line.
-  when: initramfs_encryption
 
 - name: Build Initramfs
   ansible.builtin.command: arch-chroot /mnt mkinitcpio -P
