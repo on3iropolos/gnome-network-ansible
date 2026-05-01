@@ -1,0 +1,27 @@
+---
+- name: Verify workspace directory exists
+  ansible.builtin.stat:
+    path: "{{ workspace_base }}/personal"
+  register: workspace_stat
+
+- name: Assert workspace directory exists
+  ansible.builtin.assert:
+    that:
+      - workspace_stat.stat.exists
+      - workspace_stat.stat.isdir
+    fail_msg: "Workspace directory not found at {{ workspace_base }}/personal"
+
+- name: Verify cloned repositories
+  ansible.builtin.stat:
+    path: "{{ workspace_base }}/personal/{{ item.name }}/.git"
+  loop: "{{ workspace_repos }}"
+  register: repo_stat
+
+- name: Assert repositories are cloned
+  ansible.builtin.assert:
+    that:
+      - repo_stat.results[item_index].stat.exists
+    fail_msg: "Repository {{ item.name }} not found at {{ workspace_base }}/personal/{{ item.name }}"
+  loop: "{{ workspace_repos }}"
+  loop_control:
+    index_var: item_index

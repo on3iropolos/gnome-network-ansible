@@ -1,0 +1,10 @@
+---
+workspace_base: "/home/{{ user_name }}/projects"
+workspace_repos:
+  - name: gnome-network-ansible
+    url: "git@github.com:on3iropolos/gnome-network-ansible.git"
+  - name: gnome-network-web
+    url: "git@github.com:on3iropolos/gnome-network-web.git"
+  - name: hugo-theme-tty
+    url: "git@github.com:on3iropolos/hugo-theme-tty.git"
+verify_enabled: true

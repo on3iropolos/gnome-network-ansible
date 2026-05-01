@@ -1,0 +1,23 @@
+---
+- name: Create workspace directories
+  ansible.builtin.file:
+    path: "{{ workspace_base }}/personal"
+    state: directory
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
+    mode: '0755'
+
+- name: Clone repositories
+  ansible.builtin.git:
+    repo: "{{ item.url }}"
+    dest: "{{ workspace_base }}/personal/{{ item.name }}"
+    clone: true
+    update: false
+  loop: "{{ workspace_repos }}"
+  become: true
+  become_user: "{{ user_name }}"
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify]
+  when: verify_enabled
