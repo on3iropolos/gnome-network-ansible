@@ -16,13 +16,15 @@ run = "ansible-lint install.yml provision.yml roles/"
 
 [tasks.molecule]
 description = "Run Molecule tests for a specific role"
-run = "cd roles/$1 && molecule test"
+usage = 'arg "<role>" help="Role name to test"'
+run = "cd roles/${usage_role?} && molecule test"
 
 [tasks.provision-playbook]
 description = "Run Ansible provisioning playbook"
+usage = 'flag "--check" help="Dry-run mode"'
 run = """
 ansible-galaxy collection install -r requirements.yml
-ansible-playbook provision.yml ${1:+--$1}
+ansible-playbook provision.yml ${usage_check:+--check}
 """
 
 [tasks.install-playbook]
