@@ -17,6 +17,7 @@
 
 - **[github-branch-management](.opencode/skills/github-branch-management/SKILL.md)**: Branch and commit conventions
 - **[github-issue-management](.opencode/skills/github-issue-management/SKILL.md)**: GitHub Issues CRUD, labels, milestones
+- **[session-learning](.opencode/skills/session-learning/SKILL.md)**: End-of-session reflection and knowledge extraction to Hindsight
 
 ## Key Rules
 
