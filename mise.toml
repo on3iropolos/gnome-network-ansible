@@ -41,7 +41,7 @@ run = "docker compose stop hindsight"
 description = "View Hindsight logs"
 run = "docker compose logs -f hindsight"
 
-[tasks.setup]
+[tasks.project-setup]
 description = "Complete project setup (install tools, collections, setup vault)"
 run = """
 ansible-galaxy collection install -r requirements.yml

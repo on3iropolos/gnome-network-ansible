@@ -15,7 +15,7 @@ Automated configuration for Arch Linux workstations.
 curl https://mise.run | sh
 
 # Complete project setup (tools, collections, vault)
-mise run setup
+mise run project-setup
 ```
 
 The vault password is in `.vault_password` (gitignored).
@@ -74,7 +74,7 @@ mise run <task-name>
 | `mise run molecule <role>` | Run Molecule tests for a specific role |
 | `mise run provision-playbook [check]` | Run Ansible provisioning (pass "check" for dry-run) |
 | `mise run install-playbook` | Run installation playbook (fresh Arch installs) |
-| `mise run setup` | Complete project setup (tools, collections, vault) |
+| `mise run project-setup` | Complete project setup (tools, collections, vault) |
 | `mise run hindsight-start` | Start Hindsight memory service |
 | `mise run hindsight-stop` | Stop Hindsight service |
 | `mise run hindsight-logs` | View Hindsight logs |
