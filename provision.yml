@@ -19,12 +19,12 @@
     - role: dev-workspace
     - role: bitwarden
     - role: obsidian
-    - role: brave
 
     # AUR-based roles
     - role: aur
     - role: spotify
     - role: vscodium
+    - role: brave
 
     # whimsyforge only
     - role: qemu
