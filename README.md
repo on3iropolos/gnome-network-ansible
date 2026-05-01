@@ -66,3 +66,16 @@ mise tasks
 mise run <task-name>
 ```
 
+## Available Tasks
+
+| Task | Description |
+|------|-------------|
+| `mise run lint` | Run ansible-lint on all playbooks and roles |
+| `mise run molecule <role>` | Run Molecule tests for a specific role |
+| `mise run provision-playbook [check]` | Run Ansible provisioning (pass "check" for dry-run) |
+| `mise run install-playbook` | Run installation playbook (fresh Arch installs) |
+| `mise run setup` | Complete project setup (tools, collections, vault) |
+| `mise run hindsight-start` | Start Hindsight memory service |
+| `mise run hindsight-stop` | Stop Hindsight service |
+| `mise run hindsight-logs` | View Hindsight logs |
+

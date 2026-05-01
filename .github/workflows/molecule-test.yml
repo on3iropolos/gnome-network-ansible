@@ -118,7 +118,7 @@ jobs:
         uses: docker/setup-buildx-action@v4
 
       - name: Run Molecule tests
-        run: mise run molecule-test ${{ matrix.role }}
+        run: mise run molecule ${{ matrix.role }}
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'

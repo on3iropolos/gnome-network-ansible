@@ -14,18 +14,18 @@ uv = "latest"
 description = "Run ansible-lint on all playbooks and roles"
 run = "ansible-lint install.yml provision.yml roles/"
 
-[tasks.molecule-test]
+[tasks.molecule]
 description = "Run Molecule tests for a specific role"
 run = "cd roles/$1 && molecule test"
 
-[tasks.provision]
+[tasks.provision-playbook]
 description = "Run Ansible provisioning playbook"
 run = """
 ansible-galaxy collection install -r requirements.yml
 ansible-playbook provision.yml ${1:+--$1}
 """
 
-[tasks.install]
+[tasks.install-playbook]
 description = "Run Ansible installation playbook (fresh Arch installs)"
 run = "ansible-playbook install.yml"
 
