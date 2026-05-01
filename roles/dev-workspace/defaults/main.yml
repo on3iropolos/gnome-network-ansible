@@ -1,5 +1,7 @@
 ---
 workspace_base: "/home/{{ user_name }}/projects"
+workspace_org: "on3iropolos"
+workspace_dynamic_clone: true
 workspace_repos:
   - name: gnome-network-ansible
     url: "git@github.com:on3iropolos/gnome-network-ansible.git"

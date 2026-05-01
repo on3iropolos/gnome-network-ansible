@@ -11,17 +11,29 @@
       - workspace_stat.stat.isdir
     fail_msg: "Workspace directory not found at {{ workspace_base }}/personal"
 
+- name: Set dynamic repo names for verification
+  ansible.builtin.set_fact:
+    verify_repos: "{{ repos_to_clone | map('regex_replace', '^.+:(.+?)\\.git$', '\\1') | map('basename') | list }}"
+  when:
+    - workspace_dynamic_clone
+    - repos_to_clone is defined
+
+- name: Set static repo names for verification
+  ansible.builtin.set_fact:
+    verify_repos: "{{ workspace_repos | map(attribute='name') | list }}"
+  when: not workspace_dynamic_clone or repos_to_clone is not defined
+
 - name: Verify cloned repositories
   ansible.builtin.stat:
-    path: "{{ workspace_base }}/personal/{{ item.name }}/.git"
-  loop: "{{ workspace_repos }}"
+    path: "{{ workspace_base }}/personal/{{ item }}/.git"
+  loop: "{{ verify_repos }}"
   register: repo_stat
 
 - name: Assert repositories are cloned
   ansible.builtin.assert:
     that:
       - repo_stat.results[item_index].stat.exists
-    fail_msg: "Repository {{ item.name }} not found at {{ workspace_base }}/personal/{{ item.name }}"
-  loop: "{{ workspace_repos }}"
+    fail_msg: "Repository {{ item }} not found at {{ workspace_base }}/personal/{{ item }}"
+  loop: "{{ verify_repos }}"
   loop_control:
     index_var: item_index

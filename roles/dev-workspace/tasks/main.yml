@@ -7,7 +7,43 @@
     group: "{{ user_name }}"
     mode: '0755'
 
-- name: Clone repositories
+- name: Set default repos fact
+  ansible.builtin.set_fact:
+    repos_to_clone: "{{ workspace_repos }}"
+
+- name: Fetch org repositories using gh CLI
+  ansible.builtin.shell: |
+    gh repo list {{ workspace_org }} --json name,sshUrl,isArchived --limit 100
+  register: gh_repo_list
+  changed_when: false
+  when: workspace_dynamic_clone
+  become: true
+  become_user: "{{ user_name }}"
+
+- name: Parse and filter repositories
+  ansible.builtin.set_fact:
+    repos_to_clone: >-
+      {{ (gh_repo_list.stdout | from_json)
+         | rejectattr('isArchived')
+         | map(attribute='sshUrl')
+         | list }}
+  when:
+    - workspace_dynamic_clone
+    - gh_repo_list is succeeded
+    - gh_repo_list.stdout | length > 0
+
+- name: Clone repositories (dynamic)
+  ansible.builtin.git:
+    repo: "{{ item }}"
+    dest: "{{ workspace_base }}/personal/{{ item | regex_replace('^.+:(.+?)\\.git$', '\\1') | basename }}"
+    clone: true
+    update: false
+  loop: "{{ repos_to_clone }}"
+  become: true
+  become_user: "{{ user_name }}"
+  when: workspace_dynamic_clone and gh_repo_list is succeeded
+
+- name: Clone repositories (static fallback)
   ansible.builtin.git:
     repo: "{{ item.url }}"
     dest: "{{ workspace_base }}/personal/{{ item.name }}"
@@ -16,6 +52,7 @@
   loop: "{{ workspace_repos }}"
   become: true
   become_user: "{{ user_name }}"
+  when: not workspace_dynamic_clone or gh_repo_list is failed
 
 - name: Verification
   ansible.builtin.include_tasks: verify.yml
