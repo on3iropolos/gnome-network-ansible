@@ -17,7 +17,10 @@ run = "ansible-lint install.yml provision.yml roles/"
 [tasks.molecule]
 description = "Run Molecule tests for a specific role"
 usage = 'arg "<role>" help="Role name to test"'
-run = "cd roles/${usage_role?} && molecule test"
+run = """
+pipx install --include-deps "molecule[docker]"
+cd roles/${usage_role?} && molecule test
+"""
 
 [tasks.provision-playbook]
 description = "Run Ansible provisioning playbook"
