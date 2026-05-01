@@ -36,6 +36,9 @@ jobs:
       - name: Create dummy vault password
         run: echo "dummy" > .vault_password
 
+      - name: Install Ansible collections
+        run: ansible-galaxy collection install -r requirements.yml
+
       - name: Run ansible-lint
         run: ansible-lint install.yml provision.yml roles/
         env:
