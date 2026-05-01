@@ -1,0 +1,56 @@
+[env]
+VAULT_PASSWORD_FILE = ".vault_password"
+ANSIBLE_CONFIG = "{{ config_root }}/ansible.cfg"
+
+[tools]
+python = "latest"
+uv = "latest"
+"pipx:ansible-core" = "latest"
+"pipx:ansible-lint" = "latest"
+"pipx:molecule" = "latest"
+"pipx:yamllint" = "latest"
+
+[tasks.lint]
+description = "Run ansible-lint on all playbooks and roles"
+run = "ansible-lint install.yml provision.yml roles/"
+
+[tasks.molecule]
+description = "Run Molecule tests for a specific role"
+usage = 'arg "<role>" help="Role name to test"'
+run = """
+python -m pip install molecule molecule-plugins docker
+cd roles/${usage_role?} && molecule test
+"""
+
+[tasks.provision-playbook]
+description = "Run Ansible provisioning playbook"
+usage = 'flag "--check" help="Dry-run mode"'
+run = """
+python -m pip install passlib
+ansible-galaxy collection install -r requirements.yml
+ansible-playbook provision.yml ${usage_check:+--check}
+"""
+
+[tasks.install-playbook]
+description = "Run Ansible installation playbook (fresh Arch installs)"
+run = "ansible-playbook install.yml"
+
+[tasks.hindsight-start]
+description = "Start Hindsight memory service via Docker Compose"
+run = "docker compose up -d hindsight"
+
+[tasks.hindsight-stop]
+description = "Stop Hindsight service"
+run = "docker compose stop hindsight"
+
+[tasks.hindsight-logs]
+description = "View Hindsight logs"
+run = "docker compose logs -f hindsight"
+
+[tasks.project-setup]
+description = "Complete project setup (install tools, collections, setup vault)"
+run = """
+ansible-galaxy collection install -r requirements.yml
+cp -n inventories/group_vars/workstations/vault.yml.example inventories/group_vars/workstations/vault.yml
+echo "Remember to edit vault: ansible-vault edit inventories/group_vars/workstations/vault.yml"
+"""
