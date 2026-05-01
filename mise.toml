@@ -18,7 +18,7 @@ run = "ansible-lint install.yml provision.yml roles/"
 description = "Run Molecule tests for a specific role"
 usage = 'arg "<role>" help="Role name to test"'
 run = """
-pipx install --include-deps "molecule[docker]"
+python -m pip install molecule molecule-plugins docker
 cd roles/${usage_role?} && molecule test
 """
 
