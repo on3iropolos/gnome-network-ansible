@@ -33,6 +33,9 @@ jobs:
       - name: Display ansible-lint version
         run: ansible-lint --version
 
+      - name: Create dummy vault password
+        run: echo "dummy" > .vault_password
+
       - name: Run ansible-lint
         run: ansible-lint install.yml provision.yml roles/
         env:
