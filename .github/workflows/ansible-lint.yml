@@ -14,17 +14,13 @@ jobs:
   lint:
     name: Lint Ansible Code
     runs-on: ubuntu-latest
-    container: ghcr.io/jdx/mise:alpine
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Trust mise config
-        run: mise trust mise.toml
-
-      - name: Install tools
-        run: mise install
+      - name: Install mise
+        uses: jdx/mise-action@v2
 
       - name: Create dummy vault password
         run: echo "dummy" > .vault_password
