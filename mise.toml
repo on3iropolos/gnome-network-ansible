@@ -1,0 +1,50 @@
+[env]
+VAULT_PASSWORD_FILE = ".vault_password"
+ANSIBLE_CONFIG = "{{ config_root }}/ansible.cfg"
+
+[tools]
+python = "3.11"
+uv = "latest"
+ansible = { version = "latest", uvx = true }
+ansible-lint = { version = "latest", uvx = true }
+molecule = { version = "latest", uvx = true }
+yamllint = { version = "latest", uvx = true }
+
+[tasks.lint]
+description = "Run ansible-lint on all playbooks and roles"
+run = "ansible-lint install.yml provision.yml roles/"
+
+[tasks.molecule-test]
+description = "Run Molecule tests for a specific role"
+run = "cd roles/$1 && molecule test"
+
+[tasks.provision]
+description = "Run Ansible provisioning playbook"
+run = """
+ansible-galaxy collection install -r requirements.yml
+ansible-playbook provision.yml ${1:+--$1}
+"""
+
+[tasks.install]
+description = "Run Ansible installation playbook (fresh Arch installs)"
+run = "ansible-playbook install.yml"
+
+[tasks.hindsight-start]
+description = "Start Hindsight memory service via Docker Compose"
+run = "docker compose up -d hindsight"
+
+[tasks.hindsight-stop]
+description = "Stop Hindsight service"
+run = "docker compose stop hindsight"
+
+[tasks.hindsight-logs]
+description = "View Hindsight logs"
+run = "docker compose logs -f hindsight"
+
+[tasks.setup]
+description = "Complete project setup (install tools, collections, setup vault)"
+run = """
+ansible-galaxy collection install -r requirements.yml
+cp -n inventories/group_vars/workstations/vault.yml.example inventories/group_vars/workstations/vault.yml
+echo "Remember to edit vault: ansible-vault edit inventories/group_vars/workstations/vault.yml"
+"""

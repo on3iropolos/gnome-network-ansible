@@ -4,27 +4,18 @@ Automated configuration for Arch Linux workstations.
 
 ## Requirements
 
-### For Running Ansible (Native)
-- Ansible stack: `pacman -S ansible ansible-lint`
-- [xc](https://xc.sh/) - Task runner (AUR: `paru -S xc-bin`)
+### Prerequisites
+- [mise](https://mise.jdx.dev/) - Dev tool manager and task runner
+- Docker: `pacman -S docker` (for Molecule testing)
 
-### For Molecule Testing (Optional)
-- Docker: `pacman -S docker`
-- Molecule: `pacman -S molecule python-docker`
-- Docker driver: `paru -S molecule-plugins` (AUR)
-
-### Ansible Collections
-- `ansible-galaxy collection install -r requirements.yml`
-
-## Setup
+### Quick Setup
 
 ```bash
-# Install system packages
-pacman -S ansible ansible-lint molecule python-docker pre-commit
-paru -S molecule-plugins  # AUR helper required
+# Install mise (if not already installed)
+curl https://mise.run | sh
 
-# Install Ansible collections
-ansible-galaxy collection install -r requirements.yml
+# Install all tools and dependencies
+mise install
 
 # Setup vault
 cp inventories/group_vars/workstations/vault.yml.example \
@@ -70,79 +61,35 @@ For Kubernetes demonstrations and portfolio showcase, see:
 
 ## Development
 
-Tasks are managed via [xc](https://xc.sh/) task runner. Run `xc` without arguments for the interactive task picker.
+Tasks are managed via [mise](https://mise.jdx.dev/). Run `mise tasks` to list available tasks.
 
 ```bash
+# Install all tools (ansible, molecule, etc.)
+mise install
+
 # Run linter
-xc lint
+mise run lint
 
-# Test a role with Molecule (local)
-cd roles/<role> && molecule test
+# Test a role with Molecule
+mise run molecule-test <role-name>
 
-# Or use xc for Molecule
-xc molecule-test <role-name>
+# Run provisioning
+mise run provision
+
+# Setup complete environment
+mise run setup
 ```
 
-Open `xc` without arguments for interactive task picker.
+## Available Tasks
 
-## Tasks
-
-### lint
-
-Run ansible-lint on all playbooks and roles.
-
-```bash
-ansible-lint install.yml provision.yml roles/
-```
-
-### molecule-test
-
-Run Molecule tests for a specific role (requires molecule installed).
-Usage: `xc molecule-test <role-name>`
-Example: `xc molecule-test <role>`
-
-```bash
-cd roles/$1 && molecule test
-```
-
-### provision
-
-Run Ansible provisioning playbook.
-Usage: `xc provision [check]` - pass "check" as argument for dry-run
-
-```bash
-ansible-galaxy collection install -r requirements.yml && ansible-playbook provision.yml ${1:+--$1}
-```
-
-### install
-
-Run Ansible installation playbook (for fresh Arch installs).
-
-```bash
-ansible-playbook install.yml
-```
-
-### hindsight-start
-
-Start Hindsight memory service via Docker Compose.
-
-```bash
-docker compose up -d hindsight
-```
-
-### hindsight-stop
-
-Stop Hindsight service.
-
-```bash
-docker compose stop hindsight
-```
-
-### hindsight-logs
-
-View Hindsight logs.
-
-```bash
-docker compose logs -f hindsight
-```
+| Task | Description |
+|------|-------------|
+| `mise run lint` | Run ansible-lint on all playbooks and roles |
+| `mise run molecule-test <role>` | Run Molecule tests for a specific role |
+| `mise run provision [check]` | Run Ansible provisioning (pass "check" for dry-run) |
+| `mise run install` | Run installation playbook (fresh Arch installs) |
+| `mise run setup` | Complete project setup (tools, collections, vault) |
+| `mise run hindsight-start` | Start Hindsight memory service |
+| `mise run hindsight-stop` | Stop Hindsight service |
+| `mise run hindsight-logs` | View Hindsight logs |
 

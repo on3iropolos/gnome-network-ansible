@@ -1,2 +1,2 @@
-ansible-core>=2.14.0
-ansible-lint>=24.0.0
+# Python dependencies are now managed by mise
+# See mise.toml for tool versions (ansible, ansible-lint, molecule, yamllint)
