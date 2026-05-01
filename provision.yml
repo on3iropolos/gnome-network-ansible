@@ -16,6 +16,7 @@
     - role: ssh_client
     - role: git
     - role: github_cli
+    - role: dev-workspace
     - role: bitwarden
     - role: obsidian
     - role: brave
