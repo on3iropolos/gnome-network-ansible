@@ -99,33 +99,16 @@
 - name: Fix CoreDNS (remove broken hosts.override with root SOA)
   when: coredns_custom_exists.rc == 0
   block:
-    - name: Remove hosts.override and additional-dns.db from coredns-custom
+    - name: Remove broken keys from coredns-custom ConfigMap
       ansible.builtin.shell:
         cmd: |
-          kubectl get configmap coredns-custom -n kube-system -o json | \
-            python3 -c "
-import json, sys
-cm = json.load(sys.stdin)
-data = cm.get('data', {})
-removed = []
-for key in ('hosts.override', 'additional-dns.db'):
-    if key in data:
-        del data[key]
-        removed.append(key)
-cm['data'] = data
-json.dump(cm, sys.stdout)
-print('', file=sys.stderr)
-print('removed: ' + ','.join(removed) if removed else 'none', file=sys.stderr)
-" | kubectl apply -f -
+          kubectl patch configmap coredns-custom -n kube-system --type=json \
+            -p '[{"op":"remove","path":"/data/hosts.override"},{"op":"remove","path":"/data/additional-dns.db"}]' \
+            2>/dev/null; echo "exit: $?"
       register: coredns_fix
-      changed_when: "'removed: none' not in coredns_fix.stderr"
+      changed_when: "'exit: 0' in coredns_fix.stdout"
 
-    - name: Restart CoreDNS if ConfigMap changed
+    - name: Restart CoreDNS if changed
       when: coredns_fix.changed
-      block:
-        - name: Restart CoreDNS deployment
-          ansible.builtin.command: kubectl rollout restart deployment/coredns -n kube-system
-
-        - name: Wait for CoreDNS rollout
-          ansible.builtin.command: kubectl rollout status deployment/coredns -n kube-system --timeout=60s
+      ansible.builtin.command: kubectl rollout restart deployment/coredns -n kube-system
   tags: [kubernetes]
