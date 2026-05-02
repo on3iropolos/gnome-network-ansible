@@ -31,13 +31,14 @@ graph TD
 | `k3d_server_nodes` | `1` | Number of server nodes |
 | `k3d_worker_nodes` | `0` | Number of worker nodes |
 | `k3d_k3s_version` | `""` | Optional k3s version to pin |
+| `k3d_fix_dns` | `"0"` | Disable k3d DNS fix (broken with systemd-resolved) |
 | `k3d_port_mapping` | `["80:80", "443:443", "8888:8888@loadbalancer", "9999:9999@loadbalancer"]` | Port mappings for ingress and Hindsight |
 | `hindsight_namespace` | `hindsight` | Kubernetes namespace for Hindsight |
 | `hindsight_image` | `ghcr.io/vectorize-io/hindsight:latest` | Hindsight container image |
 | `hindsight_replicas` | `1` | Number of Hindsight replicas |
 | `hindsight_pvc_size` | `10Gi` | PVC size for Hindsight data |
 | `hindsight_pvc_storage_class` | `local-path` | Storage class for PVC |
-| `hindsight_env_file` | `{{ playbook_dir }}/../.env` | Path to `.env` file for Kubernetes Secret |
+| `hindsight_env_file` | `{{ playbook_dir | default('.') }}/.env` | Path to `.env` file for Kubernetes Secret |
 
 ## Dependencies
 
