@@ -18,6 +18,7 @@ spec:
       containers:
         - name: hindsight
           image: {{ hindsight_image }}
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8888
               name: api
@@ -29,16 +30,30 @@ spec:
           env:
             - name: HINDSIGHT_API_LLM_PROVIDER
               value: gemini
+            - name: HINDSIGHT_API_STARTUP_WAIT_SECONDS
+              value: "600"
           volumeMounts:
             - name: hindsight-data
               mountPath: /home/hindsight/.pg0
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "250m"
-            limits:
-              memory: "512Mi"
+              memory: "1Gi"
               cpu: "500m"
+            limits:
+              memory: "4Gi"
+              cpu: "2000m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8888
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8888
+            initialDelaySeconds: 10
+            periodSeconds: 5
       volumes:
         - name: hindsight-data
           persistentVolumeClaim:

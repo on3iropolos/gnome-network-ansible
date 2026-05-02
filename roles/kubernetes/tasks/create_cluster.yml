@@ -39,6 +39,8 @@
 
 - name: Create k3d cluster
   ansible.builtin.command: k3d {{ k3d_cluster_args | join(' ') }}
+  environment:
+    K3D_FIX_DNS: "{{ k3d_fix_dns }}"
   when: not cluster_exists
   changed_when: true
   tags: [kubernetes]
@@ -85,4 +87,22 @@
   retries: 30
   delay: 2
   until: kubectl_nodes.rc == 0
+  tags: [kubernetes]
+
+- name: Fix CoreDNS (remove broken hosts.override with root SOA)
+  ansible.builtin.shell:
+    cmd: |
+      kubectl get configmap coredns-custom -n kube-system -o json | \
+        python3 -c "
+import json, sys
+cm = json.load(sys.stdin)
+if 'hosts.override' in cm.get('data', {}):
+    del cm['data']['hosts.override']
+if 'additional-dns.db' in cm.get('data', {}):
+    del cm['data']['additional-dns.db']
+json.dump(cm, sys.stdout)
+" | kubectl apply -f -
+      kubectl rollout restart deployment/coredns -n kube-system
+      kubectl rollout status deployment/coredns -n kube-system --timeout=60s
+  changed_when: true
   tags: [kubernetes]

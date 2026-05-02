@@ -11,27 +11,6 @@
   when: not env_file_stat.stat.exists
   tags: [kubernetes, hindsight]
 
-- name: Read .env file
-  ansible.builtin.slurp:
-    path: "{{ hindsight_env_file }}"
-  register: env_file_content
-  when: env_file_stat.stat.exists
-  tags: [kubernetes, hindsight]
-
-- name: Parse environment variables
-  ansible.builtin.set_fact:
-    env_vars: >-
-      {{
-        env_file_content['content']
-        | b64decode
-        | split('\n')
-        | select('match', '^[A-Za-z_]+=')
-        | map('regex_replace', '^(.*?)=(.*)$', '{"key": "\\1", "value": "\\2"}')
-        | list
-      }}
-  when: env_file_stat.stat.exists
-  tags: [kubernetes, hindsight]
-
 - name: Create Hindsight namespace
   kubernetes.core.k8s:
     state: present
@@ -39,17 +18,10 @@
   tags: [kubernetes, hindsight]
 
 - name: Create Hindsight Secret from .env
-  kubernetes.core.k8s:
-    state: present
-    definition:
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        name: hindsight-env
-        namespace: "{{ hindsight_namespace }}"
-      type: Opaque
-      stringData: "{{ dict(env_vars | map(attribute='key') | zip(env_vars | map(attribute='value'))) }}"
+  ansible.builtin.shell:
+    cmd: kubectl create secret generic hindsight-env --from-env-file={{ hindsight_env_file }} -n {{ hindsight_namespace }} --dry-run=client -o yaml | kubectl apply -f -
   when: env_file_stat.stat.exists
+  changed_when: true
   tags: [kubernetes, hindsight]
 
 - name: Create Hindsight PVC
