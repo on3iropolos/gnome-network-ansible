@@ -12,16 +12,24 @@ canonical_url: "docs/kubernetes/reference.md"
 
 ## Architecture
 
-```
-Host
- │
- ├─ k3d serverlb (nginx proxy)    → localhost:80,443,8888,9999
- ├─ k3d server-0 (k3s node)       → cluster networking + pods
- │   ├─ Traefik (ingress on :80/:443)
- │   ├─ CoreDNS (cluster DNS)
- │   ├─ ServiceLB (klipper-lb for LoadBalancer)
- │   └─ Hindsight pod (:8888 api, :9999 control-plane)
- └─ local-path-provisioner (PVC storage)
+```mermaid
+graph TD
+    Host[Host]
+    LB[k3d serverlb<br/>nginx proxy<br/>:80 :443 :8888 :9999]
+    Server[k3d server-0<br/>k3s node]
+    Traefik[Traefik<br/>ingress :80/:443]
+    CoreDNS[CoreDNS]
+    ServiceLB[ServiceLB<br/>klipper-lb]
+    Hindsight[Hindsight pod<br/>:8888 api :9999 ui]
+    Storage[local-path-provisioner<br/>PVC storage]
+
+    Host --> LB
+    Host --> Server
+    Server --> Traefik
+    Server --> CoreDNS
+    Server --> ServiceLB
+    Server --> Hindsight
+    Server --> Storage
 ```
 
 ## Hindsight Resources

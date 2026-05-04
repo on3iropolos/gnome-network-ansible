@@ -34,7 +34,7 @@ mise run provision
 
 | Playbook | Purpose |
 |----------|---------|
-| `provision.yml` | Configure existing Arch Linux system (includes Docker + Kubernetes + Hindsight) |
+| `provision.yml` | Configure existing Arch Linux system |
 | `install.yml` | Fresh installation from Arch Live ISO |
 
 ## Kubernetes & Hindsight
