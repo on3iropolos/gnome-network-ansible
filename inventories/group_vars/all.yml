@@ -18,6 +18,7 @@ initramfs_btrfs: true
 user_name: "{{ vault_user_name | default('user') }}"
 user_password: "{{ vault_user_password | default('') }}"
 user_ssh_key: "{{ vault_user_ssh_key | default('') }}"
+user_sudo_nopasswd: true
 
 # Git Config (from vault)
 git_user_name: "{{ vault_git_user_name | default('') }}"

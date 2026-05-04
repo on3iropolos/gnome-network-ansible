@@ -23,12 +23,22 @@
 
 - name: Sudoers
   ansible.builtin.copy:
-    dest: "/etc/sudoers.d/wheel"
+    dest: "/etc/sudoers.d/10-wheel"
     content: "%wheel ALL=(ALL) ALL"
     mode: '0440'
     owner: root
     group: root
     validate: 'visudo -cf %s'
+
+- name: User NOPASSWD sudo
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/12-{{ user_name }}-nopasswd"
+    content: "{{ user_name }} ALL=(ALL) NOPASSWD: ALL"
+    mode: '0440'
+    owner: root
+    group: root
+    validate: 'visudo -cf %s'
+  when: user_sudo_nopasswd | default(false) | bool
 
 - name: SSH Directory
   ansible.builtin.file:
