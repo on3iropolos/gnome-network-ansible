@@ -1,0 +1,30 @@
+---
+- name: Validate target device
+  ansible.builtin.fail:
+    msg: "Target device {{ partition_device }} does not exist or is not a block device"
+  when: not partition_device_stat.stat.exists or not partition_device_stat.stat.isblk
+
+- name: Check if target is mounted
+  ansible.builtin.command: "findmnt {{ partition_device }}"
+  register: mount_check
+  changed_when: false
+  failed_when: false
+
+- name: Fail if target is mounted
+  ansible.builtin.fail:
+    msg: "Target device {{ partition_device }} is currently mounted. Unmount before proceeding."
+  when: mount_check.rc == 0
+
+- name: Get target device info
+  ansible.builtin.command: "lsblk -no TYPE {{ partition_device }}"
+  register: device_type
+  changed_when: false
+
+- name: Warn if target is not a disk
+  ansible.builtin.debug:
+    msg: "WARNING: Target {{ partition_device }} is a {{ device_type.stdout }}, not a disk. Ensure this is intended."
+  when: device_type.stdout not in ['disk', 'loop']
+
+- name: Set partition_device fact
+  ansible.builtin.set_fact:
+    partition_device: "{{ install_drive }}"

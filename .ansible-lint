@@ -27,7 +27,7 @@ offline: false
 
 # Profile to use (min, basic, moderate, safety, shared, production)
 # 'production' is strictest, 'min' is most lenient
-profile: moderate
+profile: safety
 
 # Specify Ansible version for rules compatibility
 # Leave empty to auto-detect from ansible-core version

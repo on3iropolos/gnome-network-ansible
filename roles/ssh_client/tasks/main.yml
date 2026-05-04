@@ -19,6 +19,7 @@
     mode: '0644'
   loop: "{{ user_ssh_identities }}"
   when: item.public_key | default('') | length > 0
+  no_log: true
 
 - name: Configure SSH Config
   ansible.builtin.template:
@@ -71,11 +72,12 @@
   loop: "{{ user_ssh_identities }}"
   when:
     - ssh_client_gnome_keyring_enabled
-    - user_ssh_identities | length > 0
-    - item.private_key | default('') | length > 0
+    - user_ssh_identities | length >0
+    - item.private_key | default('') | length >0
     - user_name != "root"
   become: true
   become_user: "{{ user_name }}"
+  no_log: true
 
 - name: Verification
   ansible.builtin.include_tasks: verify.yml

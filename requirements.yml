@@ -1,5 +1,9 @@
 collections:
   - name: community.general
+    version: "9.5.0"
   - name: kewlfft.aur
+    version: "0.13.0"
   - name: ansible.posix
+    version: "2.1.0"
   - name: kubernetes.core
+    version: "6.4.0"

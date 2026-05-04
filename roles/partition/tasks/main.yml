@@ -1,4 +1,12 @@
 ---
+- name: Check if target device exists
+  ansible.builtin.stat:
+    path: "{{ install_drive }}"
+  register: partition_device_stat
+
+- name: Validate target device
+  ansible.builtin.include_tasks: validate_target.yml
+
 - name: Wipe disk
   ansible.builtin.shell: |
     # Unmount anything currently mounted on the drive

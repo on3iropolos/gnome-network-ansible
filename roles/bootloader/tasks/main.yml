@@ -1,4 +1,7 @@
 ---
+- name: Validate arch-chroot target
+  ansible.builtin.include_tasks: validate_chroot.yml
+
 - name: Configure Cryptodisk
   when: encryption_enabled | default(true)
   block:
@@ -8,11 +11,15 @@
         line: "GRUB_ENABLE_CRYPTODISK=y"
         regexp: "^#?GRUB_ENABLE_CRYPTODISK"
 
+    - name: Set discard parameter
+      ansible.builtin.set_fact:
+        grub_discard_param: "{{ 'allow-discards' if bootloader_allow_discards else '' }}"
+
     - name: Kernel Params
       ansible.builtin.lineinfile:
         dest: /mnt/etc/default/grub
         regexp: "^#?GRUB_CMDLINE_LINUX="
-        line: 'GRUB_CMDLINE_LINUX="cryptdevice={{ encryption_device }}:cryptroot:allow-discards cryptkey=/crypto_keyfile.bin"'
+        line: 'GRUB_CMDLINE_LINUX="cryptdevice={{ encryption_device }}:cryptroot:{{ grub_discard_param }} cryptkey=/crypto_keyfile.bin"'
 
 - name: Install GRUB (UEFI)
   ansible.builtin.command: >

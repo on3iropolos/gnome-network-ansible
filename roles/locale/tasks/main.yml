@@ -11,6 +11,7 @@
     line: "LANG={{ locale }}"
     create: true
     state: present
+    mode: '0644'
 
 - name: Keymap
   ansible.builtin.lineinfile:
@@ -19,6 +20,7 @@
     line: "KEYMAP={{ keymap }}"
     create: true
     state: present
+    mode: '0644'
 
 - name: Verification
   ansible.builtin.include_tasks: verify.yml

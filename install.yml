@@ -4,6 +4,14 @@
   become: true
   vars:
     install_root: /mnt
+    # Security: Validate target before installation
+    validate_target: true
+
+  pre_tasks:
+    - name: Validate installation target
+      ansible.builtin.fail:
+        msg: "Installation target validation failed or not confirmed. Set validate_target=true to proceed."
+      when: not validate_target | bool
 
   roles:
     # Storage Stack
@@ -39,3 +47,4 @@
         src: "{{ playbook_dir }}/"
         dest: "{{ install_root }}/root/ansible/"
         remote_src: true
+        mode: preserve

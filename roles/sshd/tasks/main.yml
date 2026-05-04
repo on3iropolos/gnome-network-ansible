@@ -1,8 +1,24 @@
 ---
-- name: Enable SSHD
+- name: Install OpenSSH
+  ansible.builtin.package:
+    name: openssh
+    state: present
+
+- name: Configure SSHD
+  ansible.builtin.template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '0600'
+    validate: 'sshd -t -f %s'
+  notify: Restart SSHD
+
+- name: Enable and start SSHD
   ansible.builtin.service:
     name: sshd
     enabled: true
+    state: started
 
 - name: Verification
   ansible.builtin.include_tasks: verify.yml

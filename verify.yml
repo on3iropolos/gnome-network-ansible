@@ -1,0 +1,4 @@
+---
+- name: Stub task to pass ansible-lint load check
+  ansible.builtin.debug:
+    msg: "verify.yml stub"

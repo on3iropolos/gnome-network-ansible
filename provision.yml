@@ -6,6 +6,7 @@
     verify_enabled: false
 
   roles:
+    - role: firewall
     - role: docker
     - role: kubernetes
       vars:

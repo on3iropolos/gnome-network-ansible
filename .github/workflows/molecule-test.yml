@@ -20,6 +20,8 @@ jobs:
   detect-changed-roles:
     name: Detect Changed Roles
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       ansible_ctrl_init: ${{ steps.filter.outputs.ansible_ctrl_init }}
       docker: ${{ steps.filter.outputs.docker }}
@@ -61,6 +63,8 @@ jobs:
     needs: detect-changed-roles
     outputs:
       matrix: ${{ steps.build.outputs.matrix }}
+    permissions:
+      contents: read
     steps:
       - name: Build matrix
         id: build
@@ -106,7 +110,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
-
+    permissions:
+      contents: read
+      packages: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6

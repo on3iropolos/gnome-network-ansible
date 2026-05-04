@@ -1,0 +1,16 @@
+---
+dependencies: []
+galaxy_info:
+  role_name: sshd
+  author: gnome-network
+  description: Hardened SSH daemon configuration
+  license: MIT
+  min_ansible_version: "2.14"
+  platforms:
+    - name: ArchLinux
+      versions:
+        - all
+  galaxy_tags:
+    - ssh
+    - security
+    - sshd

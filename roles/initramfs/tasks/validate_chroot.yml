@@ -1,0 +1,21 @@
+---
+- name: Check if target directory exists for arch-chroot
+  ansible.builtin.stat:
+    path: /mnt
+  register: chroot_dir_stat
+
+- name: Fail if arch-chroot target does not exist
+  ansible.builtin.fail:
+    msg: "arch-chroot target /mnt does not exist"
+  when: not chroot_dir_stat.stat.exists or not chroot_dir_stat.stat.isdir
+
+- name: Check if target is mounted
+  ansible.builtin.command: "findmnt /mnt"
+  register: chroot_mount_check
+  changed_when: false
+  failed_when: false
+
+- name: Fail if target is not mounted
+  ansible.builtin.fail:
+    msg: "Target /mnt does not appear to be mounted. arch-chroot requires a mounted system."
+  when: chroot_mount_check.rc != 0
