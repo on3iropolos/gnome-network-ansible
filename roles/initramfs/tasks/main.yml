@@ -25,7 +25,7 @@
 
     - name: Add Key to LUKS
       ansible.builtin.shell: |
-         echo -n "{{ encryption_password }}" | cryptsetup luksAddKey {{ encryption_device }} {{ initramfs_keyfile_path }} -
+         set -o pipefail && echo -n "{{ encryption_password }}" | cryptsetup luksAddKey {{ encryption_device }} {{ initramfs_keyfile_path }} -
       no_log: true
 
     - name: Add Keyfile to Initramfs

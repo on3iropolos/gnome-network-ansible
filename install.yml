@@ -47,3 +47,4 @@
         src: "{{ playbook_dir }}/"
         dest: "{{ install_root }}/root/ansible/"
         remote_src: true
+        mode: preserve

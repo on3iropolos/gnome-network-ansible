@@ -3,6 +3,7 @@
   ansible.builtin.copy:
     dest: "/etc/hostname"
     content: "{{ hostname }}"
+    mode: '0644'
 
 - name: Set Hosts
   ansible.builtin.shell: |

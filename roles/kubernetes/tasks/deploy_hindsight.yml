@@ -20,6 +20,7 @@
 - name: Create Hindsight Secret from .env
   ansible.builtin.shell:
     cmd: >-
+      set -o pipefail &&
       kubectl create secret generic hindsight-env
       --from-env-file={{ hindsight_env_file }}
       -n {{ hindsight_namespace }}

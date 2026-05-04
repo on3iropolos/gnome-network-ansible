@@ -52,6 +52,7 @@
       ansible.builtin.file:
         path: "/mnt/{{ item.path }}"
         state: directory
+        mode: '0755'
       loop: "{{ filesystem_btrfs_subvols }}"
       when: item.path is defined
 
@@ -88,6 +89,7 @@
       ansible.builtin.file:
         path: /mnt/boot/efi
         state: directory
+        mode: '0755'
     - name: Mount ESP
       ansible.posix.mount:
         path: /mnt/boot/efi
@@ -102,6 +104,7 @@
       ansible.builtin.file:
         path: /mnt/boot
         state: directory
+        mode: '0755'
     - name: Mount Boot
       ansible.posix.mount:
         path: /mnt/boot
