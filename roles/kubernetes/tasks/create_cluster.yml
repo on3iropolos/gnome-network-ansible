@@ -112,4 +112,3 @@
     - name: Restart CoreDNS if changed
       when: coredns_fix.changed
       ansible.builtin.command: kubectl rollout restart deployment/coredns -n kube-system
-  tags: [kubernetes]
