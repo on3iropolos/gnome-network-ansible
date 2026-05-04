@@ -12,14 +12,15 @@ The network role Molecule tests verify that the role correctly:
 
 ## Test Structure
 
-```
-molecule/default/
-├── molecule.yml       # Molecule configuration
-├── Dockerfile.j2      # Container image template (Arch Linux + systemd)
-├── prepare.yml        # Environment preparation (install Python)
-├── converge.yml       # Apply the network role
-├── verify.yml         # Verify role worked correctly
-└── README.md          # This file
+```mermaid
+graph TD
+    A[molecule/default/]
+    A --> B[molecule.yml<br/>Molecule configuration]
+    A --> C[Dockerfile.j2<br/>Container image template<br/>Arch Linux + systemd]
+    A --> D[prepare.yml<br/>Environment preparation<br/>install Python]
+    A --> E[converge.yml<br/>Apply the network role]
+    A --> F[verify.yml<br/>Verify role worked correctly]
+    A --> G[README.md<br/>This file]
 ```
 
 ## Running Tests
