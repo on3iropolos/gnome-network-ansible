@@ -98,6 +98,7 @@
 
 - name: Fix CoreDNS (remove broken hosts.override with root SOA)
   when: coredns_custom_exists.rc == 0
+  tags: [kubernetes]
   block:
     - name: Remove broken keys from coredns-custom ConfigMap
       ansible.builtin.shell:

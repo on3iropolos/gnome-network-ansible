@@ -19,7 +19,11 @@
 
 - name: Create Hindsight Secret from .env
   ansible.builtin.shell:
-    cmd: kubectl create secret generic hindsight-env --from-env-file={{ hindsight_env_file }} -n {{ hindsight_namespace }} --dry-run=client -o yaml | kubectl apply -f -
+    cmd: >-
+      kubectl create secret generic hindsight-env
+      --from-env-file={{ hindsight_env_file }}
+      -n {{ hindsight_namespace }}
+      --dry-run=client -o yaml | kubectl apply -f -
   when: env_file_stat.stat.exists
   changed_when: true
   tags: [kubernetes, hindsight]
