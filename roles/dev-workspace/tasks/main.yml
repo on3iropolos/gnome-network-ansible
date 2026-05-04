@@ -38,7 +38,7 @@
     dest: "{{ workspace_base }}/personal/{{ item | regex_replace('^.+:(.+?)\\.git$', '\\1') | basename }}"
     clone: true
     update: false
-    version: HEAD
+    version: main
   loop: "{{ repos_to_clone }}"
   become: true
   become_user: "{{ user_name }}"
@@ -50,7 +50,7 @@
     dest: "{{ workspace_base }}/personal/{{ item.name }}"
     clone: true
     update: false
-    version: HEAD
+    version: main
   loop: "{{ workspace_repos }}"
   become: true
   become_user: "{{ user_name }}"
