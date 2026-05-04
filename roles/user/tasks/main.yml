@@ -1,4 +1,10 @@
 ---
+# NOTE: password_hash filter requires passlib Python package in Ansible controller's Python environment
+# When using mise with pipx:ansible-core, passlib must be symlinked into the pipx venv:
+# ln -s ~/.local/share/mise/installs/python/X.Y.Z/lib/pythonX.Y/site-packages/passlib \
+#        ~/.local/share/mise/installs/pipx-ansible-core/VERSION/ansible-core/lib/pythonX.Y/site-packages/passlib
+# Alternative: pre-compute hash and use vault to avoid runtime passlib dependency
+
 - name: Create User
   ansible.builtin.user:
     name: "{{ user_name }}"
