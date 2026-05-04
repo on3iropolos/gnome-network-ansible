@@ -1,0 +1,5 @@
+---
+# Firewall configuration
+firewall_ssh_port: 22
+firewall_allowed_services: []
+firewall_enabled: true

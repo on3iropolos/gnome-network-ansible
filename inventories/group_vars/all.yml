@@ -8,7 +8,7 @@ filesystem_type: btrfs
 # Encryption
 encryption_enabled: false
 encryption_password: "{{ vault_encryption_password | default('') }}"
-encryption_format: luks1
+encryption_format: luks2
 
 # Initramfs
 initramfs_encryption: "{{ encryption_enabled }}"

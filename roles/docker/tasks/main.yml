@@ -20,10 +20,20 @@
       {
         "default-address-pools": [
           { "base": "{{ docker_default_address_pools_base }}", "size": 24 }
-        ]
+        ],
+        "live-restore": true,
+        "userland-proxy": false
       }
     mode: "0644"
   notify: Restart Docker
+  tags: [docker]
+
+- name: Secure Docker socket
+  ansible.builtin.file:
+    path: /var/run/docker.sock
+    mode: '0660'
+    owner: root
+    group: docker
   tags: [docker]
 
 - name: Enable and start Docker service

@@ -11,6 +11,7 @@
         printf "%s" "{{ encryption_password }}" | cryptsetup luksFormat --type "{{ encryption_format }}" -q "{{ encryption_device }}" -
       register: luks_frm
       failed_when: luks_frm.rc != 0
+      no_log: true
 
     - name: Settle udev
       ansible.builtin.command: udevadm settle
@@ -25,6 +26,7 @@
          printf "%s" "{{ encryption_password }}" | cryptsetup open "{{ encryption_device }}" cryptroot -
       register: luks_opn
       failed_when: luks_opn.rc != 0
+      no_log: true
 
     - name: Set mapped device fact
       ansible.builtin.set_fact:

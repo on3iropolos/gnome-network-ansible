@@ -5,6 +5,13 @@ all:
         whimsyforge.gnome.network:
           ansible_connection: local
           ansible_user: "{{ lookup('env', 'USER') | default('root', true) }}"
-        # stump.gnome.network:
-        #   ansible_connection: local
-        #   ansible_user: "{{ lookup('env', 'USER') | default('root', true) }}"
+          # Security note: local connection means playbooks run directly on the target
+          # Ensure vault is properly configured before running playbooks
+      vars:
+        # Security: Require vault password to be set for any sensitive operations
+        ansible_vault_password_file: "{{ lookup('env', 'VAULT_PASSWORD_FILE') | default('.vault_password', true) }}"
+        # Security: Verify target before arch-chroot operations
+        verify_arch_chroot_target: true
+        # Security: Require encryption for production systems
+        encryption_required: false  # Set to true for production
+

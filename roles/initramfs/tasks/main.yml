@@ -1,4 +1,7 @@
 ---
+- name: Validate arch-chroot target
+  ansible.builtin.include_tasks: validate_chroot.yml
+
 - name: Add BTRFS Binary
   ansible.builtin.lineinfile:
     dest: /mnt/etc/mkinitcpio.conf
@@ -16,7 +19,9 @@
     - name: Secure Keyfile
       ansible.builtin.file:
         path: "{{ initramfs_keyfile_path }}"
-        mode: '0000'
+        mode: '0400'
+        owner: root
+        group: root
 
     - name: Add Key to LUKS
       ansible.builtin.shell: |

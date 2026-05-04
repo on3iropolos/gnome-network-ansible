@@ -24,7 +24,11 @@
 - name: Sudoers
   ansible.builtin.copy:
     dest: "/etc/sudoers.d/wheel"
-    content: "%wheel ALL=(ALL) NOPASSWD: ALL"
+    content: "%wheel ALL=(ALL) ALL"
+    mode: '0440'
+    owner: root
+    group: root
+    validate: 'visudo -cf %s'
 
 - name: SSH Directory
   ansible.builtin.file:

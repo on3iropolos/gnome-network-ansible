@@ -1,0 +1,21 @@
+---
+- name: Check if target directory exists for arch-chroot
+  ansible.builtin.stat:
+    path: "{{ install_root }}"
+  register: chroot_dir_stat
+
+- name: Fail if arch-chroot target does not exist
+  ansible.builtin.fail:
+    msg: "arch-chroot target {{ install_root }} does not exist"
+  when: not chroot_dir_stat.stat.exists or not chroot_dir_stat.stat.isdir
+
+- name: Check if target is mounted
+  ansible.builtin.command: "findmnt {{ install_root }}"
+  register: chroot_mount_check
+  changed_when: false
+  failed_when: false
+
+- name: Warn if target might not be a proper system root
+  ansible.builtin.debug:
+    msg: "WARNING: {{ install_root }} does not appear to be a mounted filesystem. arch-chroot may fail."
+  when: chroot_mount_check.rc != 0
