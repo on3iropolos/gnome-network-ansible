@@ -7,6 +7,9 @@
 
   roles:
     - role: docker
+    - role: kubernetes
+      vars:
+        verify_enabled: false
     - role: time
     - role: locale
     - role: hosts

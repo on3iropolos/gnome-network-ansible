@@ -1,101 +1,58 @@
 ---
 title: "Kubernetes Getting Started"
-summary: "Set up a local k3d cluster and deploy your first application."
+summary: "Set up a local k3d cluster with Hindsight."
 type: "tutorial"
 scope: "repo"
-tags:
-  - "kubernetes"
-  - "k3d"
-  - "quickstart"
-related:
-  - "kubernetes/README.md"
-  - "../roles/kubernetes/README.md"
-owner: "Gnome Network Ansible maintainers"
-last_reviewed: "2026-04-27"
+tags: ["kubernetes", "k3d", "quickstart"]
+last_reviewed: "2026-05-01"
 canonical_url: "docs/kubernetes/getting-started.md"
 ---
 
 # Kubernetes Getting Started
 
-Set up a local Kubernetes cluster and deploy a sample application.
+Set up a local k3d cluster and deploy the Hindsight memory service.
 
 ## Prerequisites
 
-- Arch Linux (or compatible distribution)
-- Docker installed and running
-- Ansible installed
-- Internet connection
-- sudo access
+- Arch Linux with Docker installed and running
+- Ansible and sudo access
+- `.env` file at project root with `HINDSIGHT_API_LLM_API_KEY`
 
-## Setup Cluster
-
-Run the Ansible playbook:
+## Setup
 
 ```bash
-ansible-playbook k8s.yml
+ansible-playbook provision.yml
 ```
 
-This installs: Docker, k3d, kubectl, helm, kubectx, and creates the `dev-cluster`.
+Installs Docker, k3d, kubectl, helm, creates the `dev-cluster`, and deploys Hindsight.
 
-### Verify
+Verify:
 
 ```bash
 kubectl get nodes
-kubectl get pods -A
+kubectl get pods -n hindsight
 ```
 
-## Deploy Sample App
+## Access
 
-### Option 1: Helm Chart (Recommended)
-
-```bash
-helm install sample-app kubernetes/helm-charts/sample-app \
-  --namespace dev --create-namespace
-```
-
-### Option 2: Raw Manifests
-
-```bash
-kubectl apply -f kubernetes/manifests/
-kubectl apply -f docs/kubernetes-ingress.yaml
-```
-
-## Access the Application
-
-Add to `/etc/hosts`:
-```
-127.0.0.1 nginx.local
-```
-
-Then access: `http://nginx.local`
+- **API**: `http://localhost:8888`
+- **Control Plane UI**: `http://localhost:9999`
 
 ## Common Operations
 
 | Task | Command |
 |------|---------|
-| Scale app | `kubectl scale deployment sample-app --replicas=5 -n dev` |
-| View pods | `kubectl get pods -n dev` |
-| View logs | `kubectl logs -n dev -l app.kubernetes.io/instance=sample-app` |
-| Delete app | `helm uninstall sample-app -n dev` |
+| View pods | `kubectl get pods -n hindsight` |
+| View logs | `kubectl logs -f deployment/hindsight -n hindsight` |
+| Scale down | `kubectl scale deployment/hindsight --replicas=0 -n hindsight` |
 | Stop cluster | `k3d cluster stop dev-cluster` |
 | Start cluster | `k3d cluster start dev-cluster` |
 | Delete cluster | `k3d cluster delete dev-cluster` |
 
 ## Troubleshooting
 
-### Pods not starting
 ```bash
-kubectl describe pod <pod-name> -n dev
-kubectl logs <pod-name> -n dev
-```
-
-### Can't connect to cluster
-```bash
+kubectl describe pod <name> -n hindsight
+kubectl logs <name> -n hindsight
 k3d kubeconfig get dev-cluster > ~/.kube/config
-kubectl config use-context k3d-dev-cluster
-```
-
-### Traefik not routing
-```bash
-kubectl rollout restart deployment -n kube-system traefik
 ```

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hindsight-data
+  namespace: {{ hindsight_namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ hindsight_pvc_storage_class }}
+  resources:
+    requests:
+      storage: {{ hindsight_pvc_size }}

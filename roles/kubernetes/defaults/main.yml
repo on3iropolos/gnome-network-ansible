@@ -5,6 +5,16 @@ k3d_cluster_name: "dev-cluster"
 k3d_server_nodes: 1
 k3d_worker_nodes: 0
 k3d_k3s_version: ""
+k3d_fix_dns: "0"
 k3d_port_mapping:
   - "80:80"
   - "443:443"
+  - "8888:8888@loadbalancer"
+  - "9999:9999@loadbalancer"
+
+hindsight_namespace: "hindsight"
+hindsight_image: "ghcr.io/vectorize-io/hindsight:latest"
+hindsight_replicas: 1
+hindsight_pvc_size: "10Gi"
+hindsight_pvc_storage_class: "local-path"
+hindsight_env_file: "{{ playbook_dir | default('.') }}/.env"

@@ -2,8 +2,9 @@ all:
   children:
     workstations:
       hosts:
-        # whimsyforge.gnome.network:
-        #   ansible_connection: local
-        stump.gnome.network:
+        whimsyforge.gnome.network:
           ansible_connection: local
           ansible_user: "{{ lookup('env', 'USER') | default('root', true) }}"
+        # stump.gnome.network:
+        #   ansible_connection: local
+        #   ansible_user: "{{ lookup('env', 'USER') | default('root', true) }}"

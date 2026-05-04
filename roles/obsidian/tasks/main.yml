@@ -13,6 +13,15 @@
     group: "{{ user_name }}"
   when: user_name != "root"
 
+- name: Ensure Obsidian config directory exists
+  ansible.builtin.file:
+    path: "/home/{{ user_name }}/.config/obsidian"
+    state: directory
+    mode: '0755'
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
+  when: user_name != "root"
+
 - name: Configure Obsidian to open vault on startup
   ansible.builtin.template:
     src: obsidian.json.j2

@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hindsight
+  namespace: {{ hindsight_namespace }}
+  labels:
+    app: hindsight
+spec:
+  replicas: {{ hindsight_replicas }}
+  selector:
+    matchLabels:
+      app: hindsight
+  template:
+    metadata:
+      labels:
+        app: hindsight
+    spec:
+      containers:
+        - name: hindsight
+          image: {{ hindsight_image }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8888
+              name: api
+            - containerPort: 9999
+              name: control-plane
+          envFrom:
+            - secretRef:
+                name: hindsight-env
+          env:
+            - name: HINDSIGHT_API_LLM_PROVIDER
+              value: gemini
+            - name: HINDSIGHT_API_STARTUP_WAIT_SECONDS
+              value: "600"
+          volumeMounts:
+            - name: hindsight-data
+              mountPath: /home/hindsight/.pg0
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "4Gi"
+              cpu: "2000m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8888
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8888
+            initialDelaySeconds: 10
+            periodSeconds: 5
+      volumes:
+        - name: hindsight-data
+          persistentVolumeClaim:
+            claimName: hindsight-data

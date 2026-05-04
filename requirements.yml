@@ -2,3 +2,4 @@ collections:
   - name: community.general
   - name: kewlfft.aur
   - name: ansible.posix
+  - name: kubernetes.core
