@@ -1,0 +1,35 @@
+---
+- name: Verify Ollama binary exists
+  ansible.builtin.stat:
+    path: /usr/bin/ollama
+  register: ollama_stat
+
+- name: Assert Ollama binary exists
+  ansible.builtin.assert:
+    that:
+      - ollama_stat.stat.exists
+    fail_msg: "Ollama binary not found"
+
+- name: Verify Ollama service is running
+  ansible.builtin.systemd:
+    name: ollama
+  register: ollama_service
+
+- name: Assert Ollama service is active
+  ansible.builtin.assert:
+    that:
+      - ollama_service.status.ActiveState == "active"
+    fail_msg: "Ollama service is not running"
+
+- name: Verify model is available (if pull enabled)
+  ansible.builtin.command: ollama list
+  register: ollama_models
+  changed_when: false
+  when: ollama_pull_model | bool
+
+- name: Assert model is pulled
+  ansible.builtin.assert:
+    that:
+      - "'{{ ollama_model }}' in ollama_models.stdout"
+    fail_msg: "{{ ollama_model }} model not found"
+  when: ollama_pull_model | bool

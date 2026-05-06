@@ -1,0 +1,18 @@
+---
+- name: Install OpenCode
+  ansible.builtin.package:
+    name: opencode
+    state: present
+  tags: [opencode]
+
+- name: Create OpenCode config directory
+  ansible.builtin.file:
+    path: "{{ opencode_config_dir }}"
+    state: directory
+    mode: "0755"
+  tags: [opencode]
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify, opencode]
+  when: verify_enabled

@@ -1,0 +1,11 @@
+---
+- name: Verify OpenCode binary exists
+  ansible.builtin.stat:
+    path: /usr/bin/opencode
+  register: opencode_stat
+
+- name: Assert OpenCode binary exists
+  ansible.builtin.assert:
+    that:
+      - opencode_stat.stat.exists
+    fail_msg: "OpenCode binary not found"

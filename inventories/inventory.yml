@@ -7,6 +7,9 @@ all:
           ansible_user: "{{ lookup('env', 'USER') | default('root', true) }}"
           # Security note: local connection means playbooks run directly on the target
           # Ensure vault is properly configured before running playbooks
+        # stump.gnome.network:
+        #   ansible_connection: local
+        #   ansible_user: "{{ lookup('env', 'USER') | default('root', true) }}"
       vars:
         # Security: Require vault password to be set for any sensitive operations
         ansible_vault_password_file: "{{ lookup('env', 'VAULT_PASSWORD_FILE') | default('.vault_password', true) }}"

@@ -30,6 +30,10 @@
     - role: vscodium
     - role: brave
 
+    # Local AI coding assistant (all machines)
+    - role: opencode
+    - role: ollama
+
     # whimsyforge only
     - role: qemu
       when: inventory_hostname == 'whimsyforge.gnome.network'

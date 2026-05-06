@@ -1,0 +1,70 @@
+---
+- name: Install Ollama
+  ansible.builtin.package:
+    name: ollama
+    state: present
+  tags: [ollama]
+
+- name: Enable and start Ollama service
+  ansible.builtin.systemd:
+    name: ollama
+    enabled: true
+    state: started
+  notify: Restart Ollama
+  tags: [ollama]
+
+- name: Pull Ollama model
+  ansible.builtin.command:
+    cmd: ollama pull {{ ollama_model }}
+    creates: /var/lib/ollama/models/manifests/registry.ollama.ai/library/{{ ollama_model | replace(':', '/') }}
+  become: true
+  become_user: ollama
+  when: ollama_pull_model | bool
+  tags: [ollama]
+
+- name: Check if OpenCode config exists
+  ansible.builtin.stat:
+    path: "{{ opencode_config_dir }}/opencode.json"
+  register: opencode_config_stat
+  tags: [ollama, opencode]
+
+- name: Read existing OpenCode config
+  ansible.builtin.slurp:
+    src: "{{ opencode_config_dir }}/opencode.json"
+  register: opencode_existing_config
+  when: opencode_config_stat.stat.exists
+  tags: [ollama, opencode]
+
+- name: Set Ollama config fragment
+  ansible.builtin.set_fact:
+    ollama_config:
+      provider:
+        openai:
+          baseURL: "http://localhost:11434/v1"
+          apiKey: "ollama"
+      model: "openai/{{ ollama_model }}"
+  tags: [ollama, opencode]
+
+- name: Merge Ollama config into existing config
+  ansible.builtin.set_fact:
+    final_config: "{{ opencode_existing_config.content | b64decode | from_json | combine(ollama_config, recursive=True) }}"
+  when: opencode_config_stat.stat.exists
+  tags: [ollama, opencode]
+
+- name: Use Ollama config as base (no existing config)
+  ansible.builtin.set_fact:
+    final_config: "{{ {'$schema': 'https://opencode.ai/config.json'} | combine(ollama_config) }}"
+  when: not opencode_config_stat.stat.exists
+  tags: [ollama, opencode]
+
+- name: Write merged OpenCode config
+  ansible.builtin.copy:
+    dest: "{{ opencode_config_dir }}/opencode.json"
+    content: "{{ final_config | to_nice_json(indent=2) }}"
+    mode: "0644"
+  tags: [ollama, opencode]
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify, ollama]
+  when: verify_enabled
