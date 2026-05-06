@@ -1,2 +1,2 @@
 ---
-ollama_model: "qwen2.5-coder:32b-q3_K_M"
+ollama_model: "qwen3-coder:latest"
