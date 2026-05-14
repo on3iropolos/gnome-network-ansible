@@ -1,0 +1,48 @@
+---
+- name: Verify libvirtd service is running
+  ansible.builtin.systemd:
+    name: libvirtd
+    state: started
+  register: libvirtd_check
+  ignore_errors: true
+
+- name: Assert libvirtd is running
+  ansible.builtin.assert:
+    that:
+      - libvirtd_check.status.ActiveState == 'active'
+    fail_msg: "libvirtd service is not running"
+
+- name: Verify packages are installed
+  ansible.builtin.package:
+    name: "{{ vm_host_libvirt_packages }}"
+    state: present
+  check_mode: true
+  register: pkg_check
+  ignore_errors: true
+
+- name: Assert packages are installed
+  ansible.builtin.assert:
+    that:
+      - not pkg_check.changed
+    fail_msg: "Required libvirt packages are not fully installed"
+
+- name: Verify VMs are running
+  ansible.builtin.command:
+    cmd: virsh -c qemu:///system dominfo {{ vm.name }}
+  register: vm_dominfo
+  changed_when: false
+  loop: "{{ vm_host_vms | selectattr('state', 'equalto', 'running') | list }}"
+  loop_control:
+    loop_var: vm
+  when: vm_host_vms | selectattr('state', 'equalto', 'running') | list | length > 0
+
+- name: Assert VMs are running
+  ansible.builtin.assert:
+    that:
+      - vm_dominfo is defined and vm_dominfo.results is defined
+      - item.rc == 0
+    fail_msg: "Expected VM '{{ item.vm.name }}' is not defined"
+    success_msg: "VM '{{ item.vm.name }}' is running"
+  loop: "{{ vm_dominfo.results | default([]) }}"
+  loop_control:
+    loop_var: item

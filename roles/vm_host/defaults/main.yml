@@ -1,0 +1,16 @@
+---
+vm_host_vms: []
+
+vm_host_libvirt_packages:
+  - libvirt
+  - dnsmasq
+  - qemu-desktop
+  - edk2-ovmf
+  - virt-install
+  - cloud-utils
+
+vm_host_network_name: default
+vm_host_storage_pool: /var/lib/libvirt/images
+vm_host_ssh_key: "{{ lookup('file', ansible_env.HOME + '/.ssh/id_rsa.pub') }}"
+
+verify_enabled: true

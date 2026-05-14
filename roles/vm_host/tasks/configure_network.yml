@@ -1,0 +1,24 @@
+---
+- name: Get default network status
+  ansible.builtin.command:
+    cmd: virsh -c qemu:///system net-info {{ vm_host_network_name }}
+  register: net_info
+  changed_when: false
+  failed_when: false
+
+- name: Define default network
+  ansible.builtin.command:
+    cmd: virsh -c qemu:///system net-define /etc/libvirt/qemu/networks/{{ vm_host_network_name }}.xml
+  when: net_info.rc != 0
+  changed_when: true
+
+- name: Ensure default network is autostart
+  ansible.builtin.command:
+    cmd: virsh -c qemu:///system net-autostart {{ vm_host_network_name }}
+  changed_when: false
+
+- name: Ensure default network is active
+  ansible.builtin.command:
+    cmd: virsh -c qemu:///system net-start {{ vm_host_network_name }}
+  when: net_info.rc != 0 or 'inactive' in net_info.stdout
+  changed_when: true

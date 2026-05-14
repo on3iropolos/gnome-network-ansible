@@ -1,0 +1,34 @@
+---
+- name: Check if VM exists
+  ansible.builtin.command:
+    cmd: virsh -c qemu:///system dominfo {{ vm.name }}
+  register: vm_info
+  changed_when: false
+  failed_when: false
+
+- name: Remove VM
+  when: vm_info.rc == 0
+  block:
+    - name: Destroy VM
+      ansible.builtin.command:
+        cmd: virsh -c qemu:///system destroy {{ vm.name }}
+      register: vm_destroy
+      failed_when: false
+
+    - name: Undefine VM
+      ansible.builtin.command:
+        cmd: virsh -c qemu:///system undefine {{ vm.name }}
+
+    - name: Remove disk images
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ vm_host_storage_pool }}/{{ vm.name }}.qcow2"
+        - "{{ vm_host_storage_pool }}/{{ vm.name }}-seed.iso"
+        - "{{ vm_host_storage_pool }}/{{ vm.name }}-cloudimg.qcow2"
+
+- name: VM not found
+  when: vm_info.rc != 0
+  ansible.builtin.debug:
+    msg: "VM {{ vm.name }} not found, nothing to destroy"
