@@ -59,7 +59,6 @@
           --os-variant {{ vm.os_variant | default('archlinux') }}
           --import
           --noautoconsole
-          --wait 30
       register: vm_created
 
     - name: Wait for VM to get IP address
