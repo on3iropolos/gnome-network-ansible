@@ -44,6 +44,24 @@
         dest: "/tmp/{{ vm.name }}-meta-data"
         mode: "0644"
 
+    - name: Render cloud-init network-config
+      ansible.builtin.template:
+        src: cloud_init_network_config.yml.j2
+        dest: "/tmp/{{ vm.name }}-network-config"
+        mode: "0644"
+
+    # Generate seed ISO via cloud-localds instead of using virt-install's
+    # --cloud-init flag, which has known bugs in 5.1.0:
+    # https://github.com/virt-manager/virt-manager/issues/975
+    - name: Generate cloud-init seed ISO
+      ansible.builtin.command:
+        cmd: >
+          cloud-localds
+          --network-config /tmp/{{ vm.name }}-network-config
+          {{ vm_host_storage_pool }}/{{ vm.name }}-seed.iso
+          /tmp/{{ vm.name }}-user-data
+          /tmp/{{ vm.name }}-meta-data
+
     - name: Define and start VM via virt-install
       ansible.builtin.command:
         cmd: >
@@ -53,11 +71,11 @@
           --vcpus {{ vm.vcpus | default(4) }}
           --memory {{ vm.memory_mb | default(8192) }}
           --disk {{ vm_host_storage_pool }}/{{ vm.name }}.qcow2
+          --disk {{ vm_host_storage_pool }}/{{ vm.name }}-seed.iso,device=cdrom
           --network network={{ vm_host_network_name }}
           --os-variant {{ vm.os_variant | default('archlinux') }}
           --import
           --noautoconsole
-          --cloud-init meta-data=/tmp/{{ vm.name }}-meta-data,user-data=/tmp/{{ vm.name }}-user-data
       register: vm_created
 
     - name: Wait for VM to get IP address

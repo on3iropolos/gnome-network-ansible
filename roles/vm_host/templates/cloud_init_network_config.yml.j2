@@ -1,0 +1,6 @@
+# cloud-init network-config v2
+# Enables DHCP on the primary interface (eth0 per kernel cmdline net.ifnames=0)
+version: 2
+ethernets:
+  eth0:
+    dhcp4: true
