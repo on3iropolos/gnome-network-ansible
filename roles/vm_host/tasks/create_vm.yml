@@ -38,6 +38,12 @@
         dest: "/tmp/{{ vm.name }}-user-data"
         mode: "0644"
 
+    - name: Render cloud-init meta-data
+      ansible.builtin.template:
+        src: cloud_init_meta_data.yml.j2
+        dest: "/tmp/{{ vm.name }}-meta-data"
+        mode: "0644"
+
     - name: Define and start VM via virt-install
       ansible.builtin.command:
         cmd: >
@@ -51,21 +57,21 @@
           --os-variant {{ vm.os_variant | default('archlinux') }}
           --import
           --noautoconsole
-          --cloud-init user-data=/tmp/{{ vm.name }}-user-data
+          --cloud-init meta-data=/tmp/{{ vm.name }}-meta-data,user-data=/tmp/{{ vm.name }}-user-data
       register: vm_created
 
     - name: Wait for VM to get IP address
       ansible.builtin.command:
-        cmd: virsh -c qemu:///system domifaddr {{ vm.name }}
-      register: vm_ip
-      until: vm_ip.stdout is search('\\d+\\.\\d+\\.\\d+\\.\\d+')
+        cmd: virsh -c qemu:///system net-dhcp-leases {{ vm_host_network_name }}
+      register: vm_leases
+      until: vm_leases.stdout is search(vm.name + '\\s+[\\da-f:]+\\s+ipv4\\s+\\d+\\.\\d+\\.\\d+\\.\\d+')
       retries: 30
       delay: 5
       changed_when: false
 
     - name: Extract VM IP address
       ansible.builtin.set_fact:
-        vm_ip_address: "{{ vm_ip.stdout | regex_search('(\\d+\\.\\d+\\.\\d+\\.\\d+)') }}"
+        vm_ip_address: "{{ vm_leases.stdout | regex_search(vm.name + '\\s+[\\da-f:]+\\s+ipv4\\s+(\\d+\\.\\d+\\.\\d+\\.\\d+)', '\\1') | first }}"
 
     - name: Add VM to runtime inventory
       ansible.builtin.add_host:
