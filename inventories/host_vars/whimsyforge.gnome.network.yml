@@ -1,6 +1,8 @@
 ---
 ollama_model: "qwen3-coder:latest"
 
+vm_host_ssh_key: "{{ vault_user_ssh_identities[0].public_key | default(vault_user_ssh_key) }}"
+
 vm_host_vms:
   - name: test-arch-01
     state: running

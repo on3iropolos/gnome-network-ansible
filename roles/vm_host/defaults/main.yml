@@ -11,6 +11,6 @@ vm_host_libvirt_packages:
 
 vm_host_network_name: default
 vm_host_storage_pool: /var/lib/libvirt/images
-vm_host_ssh_key: "{{ lookup('file', ansible_env.HOME + '/.ssh/id_rsa.pub') }}"
+vm_host_ssh_key: "{{ vault_user_ssh_key | default('') }}"
 
 verify_enabled: true
