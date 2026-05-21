@@ -27,7 +27,7 @@ description = "Run Ansible provisioning playbook"
 usage = 'flag "--check" help="Dry-run mode"'
 run = """
 python -m pip install passlib
-ansible-galaxy collection install -r requirements.yml
+mise run galaxy-install
 ansible-playbook provision.yml ${usage_check:+--check}
 """
 
@@ -50,7 +50,58 @@ run = "kubectl logs -f deployment/hindsight -n hindsight"
 [tasks.project-setup]
 description = "Complete project setup (install tools, collections, setup vault)"
 run = """
-ansible-galaxy collection install -r requirements.yml
+mise run galaxy-install
 cp -n inventories/group_vars/workstations/vault.yml.example inventories/group_vars/workstations/vault.yml
 echo "Remember to edit vault: ansible-vault edit inventories/group_vars/workstations/vault.yml"
+"""
+
+[tasks.deploy-playbook]
+description = "Run Ansible deploy playbook for virtual hosts"
+usage = 'flag "--check" help="Dry-run mode"'
+run = """
+mise run galaxy-install
+ansible-playbook deploy.yml ${usage_check:+--check}
+"""
+
+[tasks.yamllint]
+description = "Lint all YAML files in the project"
+run = "yamllint . --strict"
+
+[tasks.galaxy-install]
+description = "Install Ansible Galaxy collections from requirements.yml"
+run = "ansible-galaxy collection install -r requirements.yml"
+
+[tasks.vault-edit]
+description = "Edit the Ansible vault encrypted file"
+run = "ansible-vault edit inventories/group_vars/workstations/vault.yml"
+
+[tasks.vault-view]
+description = "View content of the Ansible vault encrypted file"
+run = "ansible-vault view inventories/group_vars/workstations/vault.yml"
+
+[tasks.list-roles]
+description = "List all Ansible roles in the project"
+run = "ls -1 roles/"
+
+[tasks.molecule-all]
+description = "Run Molecule tests for all roles with molecule tests"
+run = """
+for role in roles/*/; do
+  role_name=$(basename "$role")
+  if [ -d "$role/molecule/default" ]; then
+    echo "=== Testing role: $role_name ==="
+    (cd "$role" && molecule test)
+  fi
+done
+"""
+
+[tasks.hindsight-status]
+description = "Check Hindsight memory service deployment status"
+run = "kubectl get pods -n hindsight"
+
+[tasks.check]
+description = "Run all pre-commit checks (yamllint + ansible-lint)"
+run = """
+mise run yamllint
+mise run lint
 """

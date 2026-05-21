@@ -36,6 +36,7 @@ mise run provision
 |----------|---------|
 | `provision.yml` | Configure existing Arch Linux system |
 | `install.yml` | Fresh installation from Arch Live ISO |
+| `deploy.yml` | Configure virtual hosts |
 
 ## Kubernetes & Hindsight
 
@@ -51,12 +52,13 @@ Running `provision.yml` sets up a local k3d cluster and deploys the Hindsight me
 | API | `http://localhost:8888` |
 | Control Plane | `http://localhost:9999` |
 
-### Mise Tasks
+### Hindsight Tasks
 
 ```bash
 mise run hindsight-start    # Scale Hindsight to 1 replica
 mise run hindsight-stop     # Scale Hindsight to 0 replicas
 mise run hindsight-logs     # Tail Hindsight logs
+mise run hindsight-status   # Check Hindsight deployment status
 ```
 
 ## Development
@@ -76,10 +78,19 @@ mise run <task-name>
 | Task | Description |
 |------|-------------|
 | `mise run lint` | Run ansible-lint on all playbooks and roles |
+| `mise run yamllint` | Lint all YAML files in the project |
+| `mise run check` | Run all pre-commit checks (yamllint + ansible-lint) |
 | `mise run molecule <role>` | Run Molecule tests for a specific role |
+| `mise run molecule-all` | Run Molecule tests for all roles with tests |
 | `mise run provision-playbook [--check]` | Run Ansible provisioning (add --check for dry-run) |
 | `mise run install-playbook` | Run installation playbook (fresh Arch installs) |
+| `mise run deploy-playbook [--check]` | Run deploy playbook for virtual hosts |
 | `mise run project-setup` | Complete project setup (tools, collections, vault) |
+| `mise run galaxy-install` | Install Ansible Galaxy collections |
+| `mise run vault-edit` | Edit Ansible vault encrypted file |
+| `mise run vault-view` | View Ansible vault encrypted file |
+| `mise run list-roles` | List all Ansible roles |
 | `mise run hindsight-start` | Start Hindsight memory service |
 | `mise run hindsight-stop` | Stop Hindsight service |
 | `mise run hindsight-logs` | View Hindsight logs |
+| `mise run hindsight-status` | Check Hindsight deployment status |
