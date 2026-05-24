@@ -38,12 +38,19 @@
         dest: "/tmp/{{ vm.name }}-user-data"
         mode: "0644"
 
+    - name: Render cloud-init meta-data
+      ansible.builtin.template:
+        src: cloud_init_meta_data.yml.j2
+        dest: "/tmp/{{ vm.name }}-meta-data"
+        mode: "0644"
+
     - name: Generate cloud-init seed ISO
       ansible.builtin.command:
         cmd: >
           cloud-localds
           {{ vm_host_storage_pool }}/{{ vm.name }}-seed.iso
           /tmp/{{ vm.name }}-user-data
+          /tmp/{{ vm.name }}-meta-data
 
     - name: Define and start VM via virt-install
       ansible.builtin.command:
@@ -54,34 +61,21 @@
           --vcpus {{ vm.vcpus | default(4) }}
           --memory {{ vm.memory_mb | default(8192) }}
           --disk {{ vm_host_storage_pool }}/{{ vm.name }}.qcow2
-          --disk {{ vm_host_storage_pool }}/{{ vm.name }}-seed.iso
+          --disk {{ vm_host_storage_pool }}/{{ vm.name }}-seed.iso,device=cdrom
           --network network={{ vm_host_network_name }}
           --os-variant {{ vm.os_variant | default('archlinux') }}
           --import
           --noautoconsole
-          --wait 30
       register: vm_created
 
-    - name: Wait for VM to get IP address
+    - name: Wait for VM to get IP address via DHCP
       ansible.builtin.command:
-        cmd: virsh -c qemu:///system domifaddr {{ vm.name }}
-      register: vm_ip
-      until: vm_ip.stdout is search('\\d+\\.\\d+\\.\\d+\\.\\d+')
-      retries: 30
+        cmd: virsh -c qemu:///system net-dhcp-leases {{ vm_host_network_name }}
+      register: vm_leases
+      until: vm_leases.stdout is search('ipv4\\s+\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+\\s+' + vm.name)
+      retries: 60
       delay: 5
       changed_when: false
-
-    - name: Extract VM IP address
-      ansible.builtin.set_fact:
-        vm_ip_address: "{{ vm_ip.stdout | regex_search('(\\d+\\.\\d+\\.\\d+\\.\\d+)') }}"
-
-    - name: Add VM to runtime inventory
-      ansible.builtin.add_host:
-        name: "{{ vm.name }}"
-        ansible_host: "{{ vm_ip_address }}"
-        ansible_user: "{{ vm.ansible_user | default('arch') }}"
-        ansible_connection: ssh
-        groups: test_vms
 
 - name: Post creation message
   when: vm_info.rc == 0
