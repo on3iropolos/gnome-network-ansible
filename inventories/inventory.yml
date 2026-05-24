@@ -10,5 +10,12 @@ all:
         # stump.gnome.network:
         #   ansible_connection: local
         #   ansible_user: "{{ lookup('env', 'USER') | default('root', true) }}"
-
+    test_vms:
+      hosts:
+        test-arch-01.gnome.network:
+          ansible_host: 192.168.122.177
+          ansible_user: arch
+          ansible_connection: ssh
+          ansible_python_interpreter: /usr/bin/python3
+          ansible_become_password: ""
 

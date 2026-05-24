@@ -12,7 +12,7 @@ uv = "latest"
 
 [tasks.lint]
 description = "Run ansible-lint on all playbooks and roles"
-run = "ansible-lint install.yml provision.yml roles/"
+run = "ansible-lint install.yml provision.yml provision-vm.yml verify.yml roles/"
 
 [tasks.molecule]
 description = "Run Molecule tests for a specific role"
@@ -29,6 +29,13 @@ run = """
 python -m pip install passlib
 ansible-galaxy collection install -r requirements.yml
 ansible-playbook provision.yml ${usage_check:+--check}
+"""
+
+[tasks.provision-vm-playbook]
+description = "Run Ansible VM provisioning playbook (test VMs)"
+usage = 'flag "--check" help="Dry-run mode"'
+run = """
+ansible-playbook provision-vm.yml ${usage_check:+--check}
 """
 
 [tasks.install-playbook]
@@ -51,6 +58,10 @@ run = "kubectl logs -f deployment/hindsight -n hindsight"
 description = "Complete project setup (install tools, collections, setup vault)"
 run = """
 ansible-galaxy collection install -r requirements.yml
-cp -n inventories/group_vars/workstations/vault.yml.example inventories/group_vars/workstations/vault.yml
-echo "Remember to edit vault: ansible-vault edit inventories/group_vars/workstations/vault.yml"
+cp -n inventories/group_vars/workstations/vault.yml.example inventories/group_vars/all/vault.yml
+echo "Remember to edit vault: ansible-vault edit inventories/group_vars/all/vault.yml"
 """
+
+[tasks.vault-edit]
+description = "Edit the encrypted vault file with $EDITOR"
+run = "ansible-vault edit inventories/group_vars/all/vault.yml"
