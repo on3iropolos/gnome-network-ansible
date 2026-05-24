@@ -10,11 +10,12 @@ all:
         # stump.gnome.network:
         #   ansible_connection: local
         #   ansible_user: "{{ lookup('env', 'USER') | default('root', true) }}"
-      vars:
-        # Security: Require vault password to be set for any sensitive operations
-        ansible_vault_password_file: "{{ lookup('env', 'VAULT_PASSWORD_FILE') | default('.vault_password', true) }}"
-        # Security: Verify target before arch-chroot operations
-        verify_arch_chroot_target: true
-        # Security: Require encryption for production systems
-        encryption_required: false  # Set to true for production
+    test_vms:
+      hosts:
+        test-arch-01.gnome.network:
+          ansible_host: 192.168.122.177
+          ansible_user: arch
+          ansible_connection: ssh
+          ansible_python_interpreter: /usr/bin/python3
+          ansible_become_password: ""
 

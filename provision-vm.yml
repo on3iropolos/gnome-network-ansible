@@ -1,0 +1,35 @@
+---
+- name: Provision Test VMs
+  hosts: test_vms
+  become: true
+  vars:
+    verify_enabled: false
+
+  roles:
+    - role: firewall
+    - role: time
+    - role: locale
+    - role: hosts
+    - role: network
+    - role: sshd
+    - role: user
+    - role: ssh_client
+    - role: git
+    - role: github_cli
+    # dev-workspace disabled: gh CLI not authenticated on VMs — see issue #97
+    # - role: dev-workspace
+    - role: bitwarden
+    - role: obsidian
+
+    # AUR-based roles disabled: paru needs bootstrap on clean VMs — see issue #98
+    # - role: aur
+    # - role: spotify
+    # - role: vscodium
+    # - role: brave
+
+    # Local AI coding assistant
+    - role: opencode
+
+    - role: gnome
+
+    # - role: antigravity  # Disabled - to be added later

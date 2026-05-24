@@ -1,2 +1,14 @@
 ---
+hostname: whimsyforge.gnome.network
 ollama_model: "qwen3-coder:latest"
+
+vm_host_ssh_key: "{{ vault_user_ssh_identities[0].public_key | default(vault_user_ssh_key) }}"
+
+vm_host_vms:
+  - name: test-arch-01
+    state: running
+    vcpus: 4
+    memory_mb: 8192
+    disk_gb: 40
+    os_variant: archlinux
+    cloud_image_url: "https://geo.mirror.pkgbuild.com/images/latest/Arch-Linux-x86_64-cloudimg.qcow2"

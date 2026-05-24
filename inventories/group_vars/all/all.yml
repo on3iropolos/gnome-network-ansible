@@ -27,5 +27,11 @@ git_user_email: "{{ vault_git_user_email | default('') }}"
 # SSH Identities (from vault - personalized)
 user_ssh_identities: "{{ vault_user_ssh_identities | default([]) }}"
 
-# Hostname (from vault)
-hostname: "{{ vault_hostname | default('archlinux') }}"
+# Vault
+ansible_vault_password_file: "{{ lookup('env', 'VAULT_PASSWORD_FILE') | default('.vault_password', true) }}"
+
+# Security
+verify_arch_chroot_target: true
+encryption_required: false
+
+hostname: archlinux

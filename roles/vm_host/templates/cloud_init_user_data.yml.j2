@@ -1,0 +1,7 @@
+#cloud-config
+hostname: {{ vm.name }}
+users:
+  - name: arch
+    ssh_authorized_keys:
+      - {{ vm_host_ssh_key }}
+    sudo: ALL=(ALL) NOPASSWD:ALL

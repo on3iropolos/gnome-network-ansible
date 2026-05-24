@@ -24,17 +24,18 @@ The vault password is in `.vault_password` (gitignored).
 
 ```bash
 # Dry-run
-mise run provision check
+mise run provision-playbook --check
 
 # Apply
-mise run provision
+mise run provision-playbook
 ```
 
 ## Playbooks
 
 | Playbook | Purpose |
 |----------|---------|
-| `provision.yml` | Configure existing Arch Linux system |
+| `provision.yml` | Configure existing Arch Linux workstation |
+| `provision-vm.yml` | Provision a test VM (targets `test_vms` group) |
 | `install.yml` | Fresh installation from Arch Live ISO |
 
 ## Kubernetes & Hindsight
@@ -77,8 +78,10 @@ mise run <task-name>
 |------|-------------|
 | `mise run lint` | Run ansible-lint on all playbooks and roles |
 | `mise run molecule <role>` | Run Molecule tests for a specific role |
-| `mise run provision-playbook [--check]` | Run Ansible provisioning (add --check for dry-run) |
-| `mise run install-playbook` | Run installation playbook (fresh Arch installs) |
+| `mise run provision-playbook [--check]` | Provision workstations |
+| `mise run provision-vm-playbook [--check]` | Provision test VMs |
+| `mise run install-playbook` | Fresh Arch installation from Live ISO |
+| `mise run vault-edit` | Edit the encrypted vault file |
 | `mise run project-setup` | Complete project setup (tools, collections, vault) |
 | `mise run hindsight-start` | Start Hindsight memory service |
 | `mise run hindsight-stop` | Stop Hindsight service |

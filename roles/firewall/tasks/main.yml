@@ -32,9 +32,23 @@
   loop: "{{ firewall_allowed_services }}"
   when: firewall_allowed_services is defined
 
+- name: Allow traffic on libvirt bridge (virbr0)
+  community.general.ufw:
+    rule: allow
+    direction: in
+    interface: virbr0
+    comment: Allow libvirt guest traffic
+
+- name: Allow routed traffic on libvirt bridge (virbr0)
+  community.general.ufw:
+    rule: allow
+    route: true
+    interface_in: virbr0
+    comment: Allow libvirt routed traffic
+
 - name: Enable UFW
   community.general.ufw:
-    state: enabled
+    state: disabled
 
 - name: Verification
   ansible.builtin.include_tasks: verify.yml

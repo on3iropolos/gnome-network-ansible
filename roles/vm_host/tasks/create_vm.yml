@@ -1,0 +1,83 @@
+---
+- name: Check if VM already exists
+  ansible.builtin.command:
+    cmd: virsh -c qemu:///system dominfo {{ vm.name }}
+  register: vm_info
+  changed_when: false
+  failed_when: false
+
+- name: Create VM
+  when: vm_info.rc != 0
+  block:
+    - name: Ensure storage pool exists
+      ansible.builtin.file:
+        path: "{{ vm_host_storage_pool }}"
+        state: directory
+        mode: "0755"
+
+    - name: Download cloud image
+      ansible.builtin.get_url:
+        url: "{{ vm.cloud_image_url }}"
+        dest: "{{ vm_host_storage_pool }}/{{ vm.name }}-cloudimg.qcow2"
+        mode: "0644"
+      register: cloud_image_download
+
+    - name: Create overlay disk image
+      ansible.builtin.command:
+        cmd: >
+          qemu-img create -f qcow2
+          -b {{ vm_host_storage_pool }}/{{ vm.name }}-cloudimg.qcow2
+          -F qcow2
+          {{ vm_host_storage_pool }}/{{ vm.name }}.qcow2
+          {{ vm.disk_gb | default(40) }}G
+        creates: "{{ vm_host_storage_pool }}/{{ vm.name }}.qcow2"
+
+    - name: Render cloud-init user-data
+      ansible.builtin.template:
+        src: cloud_init_user_data.yml.j2
+        dest: "/tmp/{{ vm.name }}-user-data"
+        mode: "0644"
+
+    - name: Render cloud-init meta-data
+      ansible.builtin.template:
+        src: cloud_init_meta_data.yml.j2
+        dest: "/tmp/{{ vm.name }}-meta-data"
+        mode: "0644"
+
+    - name: Generate cloud-init seed ISO
+      ansible.builtin.command:
+        cmd: >
+          cloud-localds
+          {{ vm_host_storage_pool }}/{{ vm.name }}-seed.iso
+          /tmp/{{ vm.name }}-user-data
+          /tmp/{{ vm.name }}-meta-data
+
+    - name: Define and start VM via virt-install
+      ansible.builtin.command:
+        cmd: >
+          virt-install
+          --connect qemu:///system
+          --name {{ vm.name }}
+          --vcpus {{ vm.vcpus | default(4) }}
+          --memory {{ vm.memory_mb | default(8192) }}
+          --disk {{ vm_host_storage_pool }}/{{ vm.name }}.qcow2
+          --disk {{ vm_host_storage_pool }}/{{ vm.name }}-seed.iso,device=cdrom
+          --network network={{ vm_host_network_name }}
+          --os-variant {{ vm.os_variant | default('archlinux') }}
+          --import
+          --noautoconsole
+      register: vm_created
+
+    - name: Wait for VM to get IP address via DHCP
+      ansible.builtin.command:
+        cmd: virsh -c qemu:///system net-dhcp-leases {{ vm_host_network_name }}
+      register: vm_leases
+      until: vm_leases.stdout is search('ipv4\\s+\\d+\\.\\d+\\.\\d+\\.\\d+/\\d+\\s+' + vm.name)
+      retries: 60
+      delay: 5
+      changed_when: false
+
+- name: Post creation message
+  when: vm_info.rc == 0
+  ansible.builtin.debug:
+    msg: "VM {{ vm.name }} already exists, skipping creation"

@@ -1,0 +1,25 @@
+---
+- name: Install libvirt and dependencies
+  ansible.builtin.include_tasks: install_libvirt.yml
+
+- name: Configure libvirt network
+  ansible.builtin.include_tasks: configure_network.yml
+
+- name: Create VMs
+  ansible.builtin.include_tasks: create_vm.yml
+  loop: "{{ vm_host_vms }}"
+  loop_control:
+    loop_var: vm
+  when: vm.state is defined and vm.state == 'running'
+
+- name: Destroy VMs
+  ansible.builtin.include_tasks: destroy_vm.yml
+  loop: "{{ vm_host_vms }}"
+  loop_control:
+    loop_var: vm
+  when: vm.state is defined and vm.state == 'absent'
+
+- name: Verification
+  ansible.builtin.include_tasks: verify.yml
+  tags: [verify]
+  when: verify_enabled

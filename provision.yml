@@ -1,6 +1,6 @@
 ---
 - name: Provision Image
-  hosts: all
+  hosts: workstations
   become: true
   vars:
     verify_enabled: false
@@ -35,7 +35,7 @@
     - role: ollama
 
     # whimsyforge only
-    - role: qemu
+    - role: vm_host
       when: inventory_hostname == 'whimsyforge.gnome.network'
     - role: gnome
       when: inventory_hostname == 'whimsyforge.gnome.network'
