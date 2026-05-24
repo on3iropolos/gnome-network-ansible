@@ -1,6 +1,6 @@
 ---
 title: "Testing Ansible Deployment with VMs"
-summary: "Using the vm_host role to create and manage libvirt VMs for testing the full provision.yml playbook."
+summary: "Using the vm_host role to create and manage libvirt VMs, then provision them with provision-vm.yml."
 type: "how-to"
 scope: "repo"
 tags:
@@ -13,8 +13,9 @@ related:
   - "../../roles/vm_host/defaults/main.yml"
   - "../../inventories/host_vars/whimsyforge.gnome.network.yml"
   - "../../provision.yml"
+  - "../../provision-vm.yml"
 owner: "Gnome Network Ansible maintainers"
-last_reviewed: "2026-05-14"
+last_reviewed: "2026-05-24"
 canonical_url: "docs/how-to/vm-testing.md"
 ---
 
@@ -56,7 +57,14 @@ The role injects your SSH public key via cloud-init.
 mise run provision-playbook
 ```
 
-The role is idempotent — running it again skips VMs that already exist.
+The `vm_host` role (in `provision.yml`) manages the VM lifecycle on the host.
+Once the VM is created, provision it with the dedicated playbook:
+
+```bash
+mise run provision-vm-playbook
+```
+
+Both roles are idempotent — running them again skips already-completed work.
 
 ### Destroy a VM
 
@@ -80,9 +88,30 @@ ansible-playbook provision.yml \
   --tags vm_host
 ```
 
+## Provisioning a VM with provision-vm.yml
+
+Once the VM is running, the recommended way to provision it is with the
+dedicated `provision-vm.yml` playbook, which targets the `test_vms` group:
+
+```bash
+mise run provision-vm-playbook
+```
+
+This applies a curated set of roles appropriate for VMs: `firewall`, `time`,
+`locale`, `hosts`, `network`, `sshd`, `user`, `ssh_client`, `git`,
+`github_cli`, `bitwarden`, `obsidian`, `opencode`, `gnome`.
+
+Roles that require workstation-specific setup (`docker`, `kubernetes`,
+`ollama`, `vm_host`) and roles blocked on known issues
+(`dev-workspace` [#97][], `aur`/`spotify`/`vscodium`/`brave` [#98][]) are
+excluded.
+
+[#97]: https://github.com/on3iropolos/gnome-network-ansible/issues/97
+[#98]: https://github.com/on3iropolos/gnome-network-ansible/issues/98
+
 ## Testing provision.yml Against a VM
 
-Once a VM is running, you can test the full provisioning playbook on it:
+To test the full workstation provisioning playbook on a VM instead:
 
 ```bash
 # 1. Find the VM's IP address
@@ -98,7 +127,7 @@ ansible-playbook -i <VM_IP>, -u arch --ask-become-pass provision.yml
   a password by default. If you want to skip the prompt, pass `-e ansible_become_password=` 
   or configure `ansible_become_method: sudo` with `ansible_become_flags: '-S'` 
   in a host var.
-- Some roles (e.g. `gnome`, `qemu`) are conditional on `whimsyforge.gnome.network`
+- Some roles (e.g. `gnome`, `vm_host`) are conditional on `whimsyforge.gnome.network`
   and will not apply to the VM. This is expected.
 - The cloud image is minimal — roles that install AUR packages (`aur`, `spotify`,
   `vscodium`, `brave`) will build packages from source, which takes time.
@@ -106,19 +135,19 @@ ansible-playbook -i <VM_IP>, -u arch --ask-become-pass provision.yml
 ## Architecture
 
 ```
-┌─────────────────────────────────┐
-│  whimsyforge.gnome.network      │
-│                                 │
-│  ┌──────────┐  ┌─────────────┐  │
-│  │ libvirtd │  │ VM:         │  │
-│  │          │  │ test-arch-01│  │
-│  │ NAT      │◄─┤ arch user   │  │
-│  │ network  │  │ cloud image │  │
-│  │ default  │  │ overlay disk│  │
-│  └──────────┘  └─────────────┘  │
-│         ▲                       │
-│         │ SSH (key auth)        │
-│         ▼                       │
-│  Ansible (provision.yml)        │
-└─────────────────────────────────┘
+┌─────────────────────────────────────┐
+│  whimsyforge.gnome.network          │
+│                                     │
+│  ┌──────────┐  ┌─────────────────┐  │
+│  │ libvirtd │  │ VM:             │  │
+│  │          │  │ test-arch-01    │  │
+│  │ NAT      │◄─┤ arch user       │  │
+│  │ network  │  │ cloud image     │  │
+│  │ default  │  │ overlay disk    │  │
+│  └──────────┘  └─────────────────┘  │
+│         ▲              ▲            │
+│         │              │            │
+│  provision.yml   provision-vm.yml   │
+│  (lifecycle)     (configuration)    │
+└─────────────────────────────────────┘
 ```
