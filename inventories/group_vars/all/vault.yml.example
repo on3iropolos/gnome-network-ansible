@@ -1,9 +1,8 @@
 ---
-# Copy this file to group_vars/workstations/vault.yml and fill in your secrets:
-# cp group_vars/workstations/vault.yml.example group_vars/workstations/vault.yml
-# ansible-vault edit group_vars/workstations/vault.yml
+# Copy this file to group_vars/all/vault.yml and fill in your secrets:
+# cp group_vars/all/vault.yml.example group_vars/all/vault.yml
+# ansible-vault edit group_vars/all/vault.yml
 
-vault_hostname: "workstation"
 vault_user_name: "johndoe"
 vault_user_password: "supersecretpassword"
 vault_user_ssh_key: "ssh-rsa AAAA... user@example.com"
