@@ -42,23 +42,31 @@ ansible-playbook provision-vm.yml ${usage_check:+--check}
 description = "Run Ansible installation playbook (fresh Arch installs)"
 run = "ansible-playbook install.yml"
 
+[tasks.hindsight-kubeconfig]
+description = "Ensure local kubeconfig points to the k3d dev-cluster"
+hide = true
+run = "k3d kubeconfig merge dev-cluster -d --kubeconfig-switch-context=false 2>/dev/null; mkdir -p ~/.kube && k3d kubeconfig get dev-cluster > ~/.kube/config 2>/dev/null || true"
+
 [tasks.hindsight-start]
 description = "Start Hindsight memory service via Kubernetes"
+depends = ["hindsight-kubeconfig"]
 run = "kubectl scale deployment/hindsight --replicas=1 -n hindsight"
 
 [tasks.hindsight-stop]
 description = "Stop Hindsight service"
+depends = ["hindsight-kubeconfig"]
 run = "kubectl scale deployment/hindsight --replicas=0 -n hindsight"
 
 [tasks.hindsight-logs]
 description = "View Hindsight logs"
+depends = ["hindsight-kubeconfig"]
 run = "kubectl logs -f deployment/hindsight -n hindsight"
 
 [tasks.project-setup]
 description = "Complete project setup (install tools, collections, setup vault)"
 run = """
 ansible-galaxy collection install -r requirements.yml
-cp -n inventories/group_vars/workstations/vault.yml.example inventories/group_vars/all/vault.yml
+cp -n inventories/group_vars/all/vault.yml.example inventories/group_vars/all/vault.yml
 echo "Remember to edit vault: ansible-vault edit inventories/group_vars/all/vault.yml"
 """
 
