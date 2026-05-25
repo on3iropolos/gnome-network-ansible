@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  namespace: gnome_network
   role_name: kubernetes
   author: Gnome Network Ansible project
   description: Sets up a local k3d Kubernetes cluster and deploys Hindsight

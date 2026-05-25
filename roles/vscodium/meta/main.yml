@@ -1,3 +1,18 @@
 ---
+galaxy_info:
+  namespace: gnome_network
+  role_name: vscodium
+  author: Gnome Network Ansible project
+  description: Installs VSCodium editor
+  license: MIT
+  min_ansible_version: "2.9"
+  platforms:
+    - name: ArchLinux
+      versions:
+        - all
+  galaxy_tags:
+    - vscodium
+    - editor
+
 dependencies:
   - role: aur
