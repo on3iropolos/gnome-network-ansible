@@ -16,6 +16,7 @@
     gh repo list {{ workspace_org }} --json name,sshUrl,isArchived --limit 100
   register: gh_repo_list
   changed_when: false
+  check_mode: false
   when: workspace_dynamic_clone
   become: true
   become_user: "{{ user_name }}"

@@ -4,13 +4,20 @@
   register: k3d_cluster_list
   changed_when: false
   failed_when: false
+  check_mode: false
   tags: [kubernetes]
 
 - name: Parse cluster list
   ansible.builtin.set_fact:
-    k3d_clusters: "{{ k3d_cluster_list.stdout | from_json | default([], true) }}"
+    k3d_clusters: "{{ k3d_cluster_list.stdout | default('[]') | from_json | default([], true) }}"
   changed_when: false
-  when: k3d_cluster_list.rc == 0
+  when: k3d_cluster_list.stdout | default('') | length > 0
+  tags: [kubernetes]
+
+- name: Fallback to empty cluster list
+  ansible.builtin.set_fact:
+    k3d_clusters: []
+  when: k3d_cluster_list.stdout | default('') | length == 0
   tags: [kubernetes]
 
 - name: Check if target cluster exists
